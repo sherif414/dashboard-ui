@@ -29,11 +29,12 @@ export default defineConfig({
         'vue/macros',
         'vue-router',
         '@vueuse/core',
+        {
+          motion: ['animate', 'spring', 'timeline', 'stagger'],
+        },
       ],
       dts: true,
-      dirs: [
-        './src/composables',
-      ],
+      dirs: ['./src/composables'],
       vueTemplate: true,
     }),
 

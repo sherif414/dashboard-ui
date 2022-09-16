@@ -7,9 +7,23 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Counter: typeof import('./src/components/Counter.vue')['default']
-    Footer: typeof import('./src/components/Footer.vue')['default']
+    CircleChart: typeof import('./src/components/CircleChart.vue')['default']
+    GraphBar: typeof import('./src/components/GraphBar.vue')['default']
+    Header: typeof import('./src/components/Header.vue')['default']
+    IBase: typeof import('./src/components/icons/IBase.vue')['default']
+    ICustomers: typeof import('./src/components/icons/ICustomers.vue')['default']
+    IDashboard: typeof import('./src/components/icons/IDashboard.vue')['default']
+    IInventory: typeof import('./src/components/icons/IInventory.vue')['default']
+    ILogout: typeof import('./src/components/icons/ILogout.vue')['default']
+    IMessage: typeof import('./src/components/icons/IMessage.vue')['default']
+    ISetting: typeof import('./src/components/icons/ISetting.vue')['default']
+    IShoppingBag: typeof import('./src/components/icons/IShoppingBag.vue')['default']
+    IStore: typeof import('./src/components/icons/IStore.vue')['default']
+    Orders: typeof import('./src/components/orders.vue')['default']
+    RecentOrders: typeof import('./src/components/RecentOrders.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SideBar: typeof import('./src/components/SideBar.vue')['default']
+    SummaryCard: typeof import('./src/components/SummaryCard.vue')['default']
   }
 }

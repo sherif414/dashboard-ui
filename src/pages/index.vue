@@ -1,15 +1,16 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="grid justify-items-center min-h-screen">
-    <button class="i-ph-sun-fill dark:i-ph-moon-fill py-8"
-      @click="toggleDark()" />
-    <h1 class="text-4rem">
-      Hello Fucking World !
-    </h1>
-  </div>
+  <main class="overflow-auto p4 grid grid-cols-3 grid-rows-5 gap-4 ">
+    <SummaryCard class="" />
+    <SummaryCard class="" />
+    <SummaryCard class="" />
+    <CircleChart class="row-span-2" />
+    <SummaryCard class="text-white!" bg-color="bg-primary-90" />
+    <RecentOrders class="row-span-4" />
+    <SummaryCard class="" />
+    <GraphBar class="row-span-2 col-span-2" />
+  </main>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
