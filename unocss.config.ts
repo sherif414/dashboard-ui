@@ -39,6 +39,7 @@ export default defineConfig({
       },
       success: '#519C66',
       error: '#CC5F5F',
+      line: '#E1E2E9',
     },
   },
   presets: [
@@ -49,7 +50,7 @@ export default defineConfig({
     }),
     presetWebFonts({
       fonts: {
-        sans: 'Roboto',
+        sans: 'Open Sans',
       },
     }),
   ],
