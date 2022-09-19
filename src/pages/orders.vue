@@ -27,8 +27,22 @@ const data = {
       <SummaryCard />
       <SummaryCard />
     </div>
-    <div class="bg-white p4 rounded-3">
-      <DataTable title="customers orders" :data="data" />
+    <div class="bg-surface p4 rounded-3">
+      <caption class="py4 flex items-center gap-x-2 font-semibold capitalize">
+        <h1>customers orders</h1>
+        <div class="px2 py1 border text-3 rounded ml-auto border-line flex items-center gap-x-2">
+          <Isearch width="14" height="14" />
+          <input type="search" placeholder="search.." class="focus:outline-none" />
+        </div>
+        <!-- filter general menu -->
+        <FilterMenu />
+        <!-- filter by date menu  -->
+        <FilterDate />
+        <button class="border border-line px2 py1 text-3 rounded flex items-center gap-x-2">
+          Bulk Action <ICaretDown width="14" height="14" />
+        </button>
+      </caption>
+      <DataTable :data="data" />
     </div>
   </main>
 </template>

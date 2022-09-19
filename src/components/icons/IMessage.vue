@@ -1,12 +1,23 @@
 <template>
-  <div class="relative">
-    <span class="absolute bg-secondary-90 rounded-full w6 h6 grid place-items-center text-black-50 right-[-60%] top-[-60%]">3</span>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8.5 19H8c-4 0-6-1-6-6V8c0-4 2-6 6-6h8c4 0 6 2 6 6v5c0 4-2 6-6 6h-.5c-.31 0-.61.15-.8.4l-1.5 2c-.66.88-1.74.88-2.4 0l-1.5-2c-.16-.22-.53-.4-.8-.4Z" stroke="#4461f1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" /><path opacity=".4" d="M15.995 11h.008M11.995 11h.009M7.995 11h.008" stroke="#4461f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-  </div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none">
+    <path
+      opacity=".4"
+      d="M17.98 10.79v4c0 .26-.01.51-.04.75-.23 2.7-1.82 4.04-4.75 4.04h-.4c-.25 0-.49.12-.64.32l-1.2 1.6c-.53.71-1.39.71-1.92 0l-1.2-1.6a.924.924 0 0 0-.64-.32h-.4C3.6 19.58 2 18.79 2 14.79v-4c0-2.93 1.35-4.52 4.04-4.75.24-.03.49-.04.75-.04h6.4c3.19 0 4.79 1.6 4.79 4.79Z"
+      fill="#4461f1"
+    ></path>
+    <path
+      d="M9.988 14c-.56 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.44 1-1 1ZM13.488 14c-.56 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1ZM6.5 14c-.56 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1Z"
+      fill="#4461f1"
+    ></path>
+    <path
+      d="M21.98 6.79v4c0 2.94-1.35 4.52-4.04 4.75.03-.24.04-.49.04-.75v-4c0-3.19-1.6-4.79-4.79-4.79h-6.4c-.26 0-.51.01-.75.04C6.27 3.35 7.86 2 10.79 2h6.4c3.19 0 4.79 1.6 4.79 4.79Z"
+      fill="#4461f1"
+    ></path>
+  </svg>
 </template>
 
 <style scoped>
-  svg path:nth-of-type(2){
-    stroke: #53545C !important;
-  }
+svg path {
+  stroke: #53545c;
+}
 </style>

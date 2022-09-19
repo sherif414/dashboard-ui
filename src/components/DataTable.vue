@@ -1,23 +1,4 @@
 <template>
-  <caption class="py4 flex items-center gap-x-2 font-semibold capitalize">
-    <h1 class="">
-      {{ title }}
-    </h1>
-    <input
-      type="search"
-      placeholder="search.."
-      class="px2 py1 border text-3 rounded ml-auto border-line focus:outline-none"
-    />
-    <!-- filter menu -->
-    <FilterMenu />
-    <!-- filter by date menu  -->
-    <button class="border border-black-10 px2 py1 text-3 rounded flex items-center gap-x-2">
-      <ICalender width="14" height="14" /> filter
-    </button>
-    <button class="border border-black-10 px2 py1 text-3 rounded flex items-center gap-x-2">
-      Bulk Action <ICaretDown width="14" height="14" />
-    </button>
-  </caption>
   <table class="w-full text-0.8725rem">
     <thead class="border-y text-black-90 border-line capitalize">
       <tr class="text-left">
@@ -48,6 +29,5 @@
 <script setup lang="ts">
 defineProps<{
   data: { headings: string[]; rows: string[] }
-  title: string
 }>()
 </script>

@@ -1,11 +1,19 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="pl-5.5rem text-black-50 bg-#F4F5FA">
+  <div class="h-screen">
+    <Header />
     <SideBar />
-    <div class="min-h-screen grid grid-rows-[max-content_1fr]">
-      <Header />
-      <router-view />
-    </div>
+    <router-view />
   </div>
 </template>
+
+<style>
+input[type='checkbox'] {
+  accent-color: blue;
+}
+::-webkit-scrollbar {
+  display: none;
+  width: 0; /* Remove scrollbar space */
+}
+</style>

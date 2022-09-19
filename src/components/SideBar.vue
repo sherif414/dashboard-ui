@@ -1,56 +1,36 @@
-<script setup lang="ts">
-let isOpen = $ref(false)
-const sidebar = $ref<HTMLElement>()
-
-function expand() {
-  animate(sidebar, { width: '12rem' }, { duration: 0.2 }).finished.then(() => {
-    isOpen = true
-    animate('.nav-link-name', { opacity: 1 }, { duration: 0 })
-  })
-}
-function shrink() {
-  isOpen = false
-  animate(sidebar, { width: '5.5rem' }, { duration: 0.2 })
-  animate('.nav-link-name', { opacity: 0 }, { duration: 0 })
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <aside ref="sidebar" class="z-10 bg-white fixed top-0 left-0 h-full py4 flex flex-col items-start gap-y-8" @mouseenter="expand" @mouseleave="shrink">
-    <!-- logo -->
-    <div class="flex items-center mb3">
-      <img class="w14 ml4" src="/logo.svg" alt="logo"> <span v-show="isOpen" class="opacity-0 font-bold text-5 ml4 nav-link-name">Matrix</span>
-    </div>
-    <!-- navigation links -->
-    <nav class="flex flex-col justify-start w-full grow gap-y-1 px-4 text-0.875rem font-medium">
-      <router-link class="nav-link" to="/">
+  <aside class="sidebar fixed left-0 top-0 h-screen bg-dark-700 border-r border-dark-600">
+    <nav class="flex flex-col w-full grow gap-y-4 text-3 text-gray-500 font-600">
+      <router-link class="sidebar__link" to="/">
         <IDashboard />
-        <span v-show="isOpen" class="opacity-0 nav-link-name">Dashboard</span>
+        <span class="sidebar__link__name">Dashboard</span>
       </router-link>
 
-      <router-link class="nav-link" to="orders">
+      <router-link class="sidebar__link" to="orders">
         <IShoppingBag />
-        <span v-show="isOpen" class="opacity-0 nav-link-name">Orders</span>
+        <span class="sidebar__link__name">Orders</span>
       </router-link>
 
-      <router-link class="nav-link" to="customers">
+      <router-link class="sidebar__link" to="customers">
         <ICustomers />
-        <span v-show="isOpen" class="opacity-0 nav-link-name">Customers</span>
+        <span class="sidebar__link__name">Customers</span>
       </router-link>
 
-      <router-link class="nav-link" to="inventory">
+      <router-link class="sidebar__link" to="inventory">
         <IInventory />
-        <span v-show="isOpen" class="opacity-0 nav-link-name">Inventory</span>
+        <span class="sidebar__link__name">Inventory</span>
       </router-link>
 
-      <router-link class="nav-link" to="chat">
+      <router-link class="sidebar__link" to="chat">
         <IMessage />
-        <span v-show="isOpen" class="opacity-0 nav-link-name">Chat</span>
+        <span class="sidebar__link__name">Chat</span>
       </router-link>
 
-      <router-link class="nav-link" to="settings">
+      <router-link class="sidebar__link" to="settings">
         <ISetting />
-        <span v-show="isOpen" class="opacity-0 nav-link-name">Settings</span>
+        <span class="sidebar__link__name">Settings</span>
       </router-link>
     </nav>
     <!-- user control -->
@@ -61,21 +41,54 @@ function shrink() {
 </template>
 
 <style>
-.router-link-active,
-.nav-link:hover{
-  background-color: #4461f1;
-  transition: all ease 0.3s;
-  color: white;
+.sidebar {
+  width: 4rem;
+  transition: width 300ms ease;
+  display: flex;
+  flex-direction: column;
+  padding: 6.25rem 0.6rem;
+}
+.sidebar:hover {
+  width: 12rem;
 }
 
-.nav-link svg path{
-  fill: white;
-  stroke: #53545C;
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-sizing: content-box;
+  padding: 12px 0;
+}
+.router-link-active {
+  --at-apply: text-white bg-violet-600 rounded-3;
+}
+.sidebar__link:hover {
+  --at-apply: text-white transition-all duration-300;
 }
 
+.sidebar__link svg {
+  margin-left: 0.8rem;
+}
+.sidebar__link svg path {
+  --at-apply: fill-gray-500 stroke-gray-500;
+}
 .router-link-active svg path,
-.nav-link:hover svg path{
-  stroke: white;
+.sidebar__link:hover svg path {
+  --at-apply: fill-white stroke-none transition-all duration-300;
+}
+
+.sidebar__link__name {
+  position: absolute;
+  left: 4rem;
+  opacity: 0;
+  pointer-events: none;
+}
+.sidebar:hover .sidebar__link__name {
+  transition: opacity 300ms 150ms ease;
+  opacity: 1;
+}
+.sidebar svg {
+  width: 20px;
+  height: 20px;
 }
 </style>
-

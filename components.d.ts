@@ -8,8 +8,10 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ChartDonut: typeof import('./src/components/ChartDonut.vue')['default']
+    Chip: typeof import('./src/components/Chip.vue')['default']
     CircleChart: typeof import('./src/components/CircleChart.vue')['default']
     DataTable: typeof import('./src/components/DataTable.vue')['default']
+    FilterDate: typeof import('./src/components/FilterDate.vue')['default']
     FilterMenu: typeof import('./src/components/FilterMenu.vue')['default']
     GraphBar: typeof import('./src/components/GraphBar.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
@@ -23,6 +25,7 @@ declare module '@vue/runtime-core' {
     IInventory: typeof import('./src/components/icons/IInventory.vue')['default']
     ILogout: typeof import('./src/components/icons/ILogout.vue')['default']
     IMessage: typeof import('./src/components/icons/IMessage.vue')['default']
+    Isearch: typeof import('./src/components/icons/Isearch.vue')['default']
     ISetting: typeof import('./src/components/icons/ISetting.vue')['default']
     IShoppingBag: typeof import('./src/components/icons/IShoppingBag.vue')['default']
     ISort: typeof import('./src/components/icons/ISort.vue')['default']
