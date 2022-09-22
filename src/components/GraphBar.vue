@@ -40,6 +40,7 @@ const config: ChartConfiguration = {
     ],
   },
   options: {
+    responsive: true,
     scales: {
       y: {
         beginAtZero: true,
@@ -62,7 +63,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="bg-dark-600 rounded-3 p2">
-    <canvas :id="chartId" height="auto"></canvas>
+  <div class="surface rounded-3 p2 grid place-content-center">
+    <canvas :id="chartId"></canvas>
   </div>
 </template>

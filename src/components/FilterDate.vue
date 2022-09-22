@@ -2,15 +2,15 @@
   <div class="relative">
     <button
       @click="isOpen = !isOpen"
-      class="border border-line px2 py1 text-3 rounded flex items-center gap-x-2"
-      :class="{ 'border-primary-90': isOpen }"
+      class="border dark:border-line border-gray-3 px2 py1 text-3 rounded flex items-center gap-x-2"
+      :class="{ 'border-indigo-6 dark:border-violet-6': isOpen }"
     >
-      <ICalender width="14" height="14" /> filter
+      <ICalender width="14" height="14" class="[&_path]:dark:stroke-gray-1" /> filter
     </button>
     <menu
       ref="menuRef"
       v-if="isOpen"
-      class="w-15rem grid grid-cols-2 text-3 absolute bg-surface shadow-lg gap-4 left-[-100%] shadow-primary-30 rounded-3 p4"
+      class="w-15rem grid grid-cols-2 text-3 absolute bg-white shadow dark:shadow-none shadow-indigo-2 dark:bg-dark-300 shadow gap-4 left-[-100%] rounded-3 mt-2 p4"
     >
       <h2 class="col-span-2 text-left">By Date</h2>
       <div class="flex items-center gap-x-2">

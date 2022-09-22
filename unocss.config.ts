@@ -1,15 +1,18 @@
 import { defineConfig, presetUno, presetWebFonts, transformerDirectives, transformerVariantGroup } from 'unocss'
 
 export default defineConfig({
-  shortcuts: [],
+  shortcuts: [
+    { theme: 'bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100' },
+    { surface: 'dark:bg-dark-600 bg-white' },
+  ],
   theme: {
     colors: {
       primary: {
-        10: '#DBDEEE',
-        30: '#B6BFE8',
-        50: '#97A5EB',
-        70: '#7C8FEC',
-        90: '#5570F1',
+        10: 'theme("colors.indigo.200")',
+        30: 'theme("colors.indigo.300")',
+        50: 'theme("colors.indigo.400")',
+        70: 'theme("colors.indigo.500")',
+        90: 'theme("colors.indigo.600")',
       },
       secondary: {
         10: '#FEF9F2',
@@ -20,7 +23,11 @@ export default defineConfig({
       },
       success: '#519C66',
       error: '#CC5F5F',
-      line: '#E1E2E9',
+      line: 'theme("colors.dark.100")',
+      background: {
+        light: '#F0F0F0',
+        dark: 'theme("colors.dark.900")',
+      },
     },
     fontSize: {
       body: '0.875rem',
@@ -31,7 +38,7 @@ export default defineConfig({
     presetUno(),
     presetWebFonts({
       fonts: {
-        sans: 'Open Sans',
+        sans: 'Poppins',
       },
     }),
   ],

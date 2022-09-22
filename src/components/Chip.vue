@@ -1,6 +1,6 @@
 <template>
   <span
-    class="px2 py-2px rounded-full text-3"
+    class="px2 py-2px rounded-full text-3 text-gray-1"
     :class="{ 'bg-success': variant === 'completed', 'bg-error': variant === 'pending' }"
   >
     {{ variant }}

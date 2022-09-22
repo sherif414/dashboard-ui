@@ -10,10 +10,13 @@
 
 <style>
 input[type='checkbox'] {
-  accent-color: blue;
+  accent-color: theme('colors.violet.600');
 }
+
 ::-webkit-scrollbar {
-  display: none;
-  width: 0; /* Remove scrollbar space */
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  --at-apply: dark:bg-dark-50 bg-gray-3 rounded-full;
 }
 </style>
