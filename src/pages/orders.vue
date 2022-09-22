@@ -17,9 +17,43 @@ const data = {
       </button>
     </header>
     <div class="grid grid-cols-3 gap-x-4 row-span-1">
-      <SummaryCard />
-      <SummaryCard />
-      <SummaryCard />
+      <!-- orders summary -->
+      <SummaryCard
+        :data="[
+          { name: 'all orders', value: '450' },
+          { name: 'pending', value: '50' },
+          { name: 'completed', value: '400' },
+        ]"
+      >
+        <template #icon>
+          <IShoppingBag width="16" height="16" class="summary-icon" />
+        </template>
+      </SummaryCard>
+
+      <!-- orders summary -->
+      <SummaryCard
+        :data="[
+          { name: 'canceled', value: '30' },
+          { name: 'returned', value: '10' },
+          { name: 'damaged', value: '0' },
+        ]"
+      >
+        <template #icon>
+          <IShoppingBag width="16" height="16" class="summary-icon" />
+        </template>
+      </SummaryCard>
+
+      <!-- orders summary -->
+      <SummaryCard
+        :data="[
+          { name: 'abandoned carts', value: '20%' },
+          { name: 'customers', value: '30' },
+        ]"
+      >
+        <template #icon>
+          <IShoppingBag width="16" height="16" class="summary-icon" />
+        </template>
+      </SummaryCard>
     </div>
     <div class="surface p4 rounded-3 flex flex-col gap-y-4 grow overflow-auto">
       <caption class="flex items-center gap-x-2 font-semibold capitalize">

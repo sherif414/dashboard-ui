@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     IBase: typeof import('./src/components/icons/IBase.vue')['default']
     ICalender: typeof import('./src/components/icons/ICalender.vue')['default']
     ICaretDown: typeof import('./src/components/icons/ICaretDown.vue')['default']
+    IChart: typeof import('./src/components/icons/IChart.vue')['default']
     ICustomers: typeof import('./src/components/icons/ICustomers.vue')['default']
     IDashboard: typeof import('./src/components/icons/IDashboard.vue')['default']
     IFilter: typeof import('./src/components/icons/IFilter.vue')['default']

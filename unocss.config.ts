@@ -4,6 +4,10 @@ export default defineConfig({
   shortcuts: [
     { theme: 'bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100' },
     { surface: 'dark:bg-dark-600 bg-white' },
+    {
+      'summary-icon':
+        '[&_path]:dark:fill-secondary-90 [&_path]:dark:stroke-secondary-90 [&_path]:fill-none [&_path]:stroke-dark-9',
+    },
   ],
   theme: {
     colors: {
