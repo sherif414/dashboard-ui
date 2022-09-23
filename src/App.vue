@@ -9,6 +9,10 @@
 </template>
 
 <style>
+body{
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 input[type='checkbox'] {
   accent-color: theme('colors.violet.600');
 }

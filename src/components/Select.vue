@@ -2,14 +2,15 @@
   <Listbox as="div" v-model="selectedPerson">
     <div class="relative">
       <ListboxButton
-        class="rounded-md w-full bg-background-light dark:bg-dark-1 p3 text-gray-5 text-left text-3 truncate"
-        >{{ selectedPerson.name }}</ListboxButton
-      >
+        class="rounded-md w-full bg-background-light flex items-center dark:(bg-dark-1 text-gray-2) p3 text-gray-5 text-left text-3 truncate"
+        >{{ selectedPerson ? selectedPerson.name : title }}
+        <IChevronUpDown class="ml-auto" width="16" />
+      </ListboxButton>
       <ListboxOptions
-        class="absolute top-10 w-full z-99 rounded-md bg-background-light dark:bg-dark-1 py-1 text-gray-5 text-3 text-left overflow-auto max-h-40"
+        class="absolute top-12 shadow-md w-full z-99 rounded-md bg-background-light dark:(bg-dark-1 text-gray-2) py-1 text-gray-5 text-3 text-left overflow-auto max-h-40"
       >
         <ListboxOption
-          class="p-3 hover:(bg-indigo-6 text-gray-1) truncate"
+          class="p-3 dark:hover:(bg-gray-1 text-dark-9) hover:(bg-indigo-6 text-gray-1) truncate cursor-pointer"
           v-for="person in people"
           :key="person.id"
           :value="person"
@@ -22,11 +23,17 @@
   </Listbox>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
 
-const people = [
+defineProps<{ title: string }>()
+
+interface Person {
+  id: number
+  name: string
+  unavailable: boolean
+}
+const people: Person[] = [
   { id: 1, name: 'Durward Reynolds', unavailable: false },
   { id: 2, name: 'Kenton Towne', unavailable: false },
   { id: 3, name: 'Therese Wunsch', unavailable: false },
@@ -63,5 +70,5 @@ const people = [
   { id: 4, name: 'Benedict Kessler', unavailable: true },
   { id: 5, name: 'Katelyn Rohan', unavailable: false },
 ]
-const selectedPerson = ref(people[0])
+const selectedPerson = $ref<Person>()
 </script>

@@ -8,10 +8,11 @@
   },
   "editor.formatOnSave": true,
   "editor.bracketPairColorization.enabled": true,
-  "volar.codeLens.scriptSetupTools": true,
+  "volar.codeLens.scriptSetupTools": false,
   "volar.completion.preferredTagNameCase": "pascal",
   "volar.icon.preview": false,
   "volar.icon.splitEditors": false,
-  "volar.vueserver.useSecondServer": true,
-  "html.format.wrapAttributes": "force"
+  "volar.vueserver.useSecondServer": false,
+  "html.format.wrapAttributes": "force",
+  "volar.codeLens.references": false
 }

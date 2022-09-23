@@ -1,11 +1,3 @@
-<script setup lang="ts">
-const orderDialog = $ref<HTMLDialogElement>()
-const data = {
-  headings: ['customer name', 'order date', 'order type', 'tracking ID', 'order total', 'action', 'status'],
-  rows: ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
-}
-</script>
-
 <template>
   <main class="p4 flex flex-col gap-y-4 pt-16 pl-20 h-full">
     <!-- create order dialog -->
@@ -71,14 +63,19 @@ const data = {
     <div class="surface p4 rounded-3 flex flex-col gap-y-4 grow overflow-auto">
       <caption class="flex items-center gap-x-2 font-semibold capitalize">
         <h1>customers orders</h1>
+
+        <!-- search bar  -->
         <div class="px2 py1 border text-3 rounded ml-auto dark:border-line border-gray-3 flex items-center gap-x-2">
           <Isearch width="14" height="14" class="[&_path]:dark:stroke-gray-1" />
           <input type="search" placeholder="search.." class="focus:outline-none bg-inherit" />
         </div>
+
         <!-- filter by order menu -->
         <FilterMenu />
+
         <!-- filter by date menu  -->
         <FilterDate />
+
         <button class="border dark:border-line border-gray-3 px2 py1 text-3 rounded flex items-center gap-x-2">
           Bulk Action <ICaretDown width="14" height="14" class="[&_path]:dark:stroke-gray-1" />
         </button>
@@ -87,3 +84,11 @@ const data = {
     </div>
   </main>
 </template>
+
+<script setup lang="ts">
+const orderDialog = $ref<HTMLDialogElement>()
+const data = {
+  headings: ['customer name', 'order date', 'order type', 'tracking ID', 'order total', 'action', 'status'],
+  rows: ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+}
+</script>

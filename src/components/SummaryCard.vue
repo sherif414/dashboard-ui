@@ -19,7 +19,7 @@ defineProps<{
       <div v-for="{ name, value, growth } in data" :key="name">
         <h2 class="capitalize grow">{{ name }}</h2>
         <h3 class="text-4 font-medium grow">
-          ${{ value }} <span v-if="growth" class="text-(green-2 body)">{{ growth }}</span>
+          {{ value }} <span v-if="growth" class="text-(green-2 body)">{{ growth }}</span>
         </h3>
       </div>
     </div>
