@@ -42,7 +42,7 @@ export default defineConfig({
     presetUno(),
     presetWebFonts({
       fonts: {
-        sans: 'Poppins',
+        sans: 'Poppins:400,700',
       },
     }),
   ],
