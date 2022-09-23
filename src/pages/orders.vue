@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const orderDialog = $ref<HTMLDialogElement>()
 const data = {
   headings: ['customer name', 'order date', 'order type', 'tracking ID', 'order total', 'action', 'status'],
   rows: ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
@@ -7,17 +8,27 @@ const data = {
 
 <template>
   <main class="p4 flex flex-col gap-y-4 pt-16 pl-20 h-full">
+    <!-- create order dialog -->
+    <dialog
+      class="open:backdrop:backdrop-blur-4 text-body rounded-3 dark:(bg-dark-300 text-gray-3) bg-white"
+      ref="orderDialog"
+    >
+      <OrderDialog @close-dialog="orderDialog.close()" />
+    </dialog>
+
+    <!-- header -->
     <header class="flex justify-between items-center">
       <h1 class="font-semibold capitalize">orders summary</h1>
       <button
-        class="flex items-center gap-x-2 bg-primary-90 dark:bg-violet-6 rounded-3 pr4 pl2 py1 text-white text-3 capitalize"
+        class="flex items-center gap-x-2 bg-indigo-5 dark:bg-violet-6 rounded-3 pr4 pl2 py1 text-white text-3 capitalize"
+        @click="orderDialog.showModal()"
       >
         <IAdd />
         add new order
       </button>
     </header>
     <div class="grid grid-cols-3 gap-x-4 row-span-1">
-      <!-- orders summary -->
+      <!-- all orders summary -->
       <SummaryCard
         :data="[
           { name: 'all orders', value: '450' },
@@ -30,7 +41,7 @@ const data = {
         </template>
       </SummaryCard>
 
-      <!-- orders summary -->
+      <!-- orders by state summary -->
       <SummaryCard
         :data="[
           { name: 'canceled', value: '30' },
@@ -43,7 +54,7 @@ const data = {
         </template>
       </SummaryCard>
 
-      <!-- orders summary -->
+      <!-- carts summary -->
       <SummaryCard
         :data="[
           { name: 'abandoned carts', value: '20%' },
@@ -55,6 +66,8 @@ const data = {
         </template>
       </SummaryCard>
     </div>
+
+    <!-- datatable  -->
     <div class="surface p4 rounded-3 flex flex-col gap-y-4 grow overflow-auto">
       <caption class="flex items-center gap-x-2 font-semibold capitalize">
         <h1>customers orders</h1>
@@ -62,7 +75,7 @@ const data = {
           <Isearch width="14" height="14" class="[&_path]:dark:stroke-gray-1" />
           <input type="search" placeholder="search.." class="focus:outline-none bg-inherit" />
         </div>
-        <!-- filter general menu -->
+        <!-- filter by order menu -->
         <FilterMenu />
         <!-- filter by date menu  -->
         <FilterDate />
