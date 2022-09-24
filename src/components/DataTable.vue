@@ -1,9 +1,9 @@
 <template>
-  <div class="overfdark:low-auto flex flex-col">
-    <table class="text-body">
-      <thead class="border-y text-black-90 dark:border-line border-gray-3 capitalize dark:text-white">
+  <div class="overflow-auto flex flex-col">
+    <table class="typo-base">
+      <thead class="border-y text-black-90 dark:border-dark-3 border-gray-3 capitalize dark:text-white">
         <tr class="text-left">
-          <th class="py3 px1">
+          <th class="p-1">
             <input type="checkbox" />
           </th>
           <th v-for="head in data.headings" :key="head">
@@ -14,12 +14,12 @@
           </th>
         </tr>
       </thead>
-      <tbody class="text-black-30">
+      <tbody class="text-black-30 typo-sm">
         <tr v-for="x in 20" :key="x">
-          <td class="py4 px1">
+          <td class="py2 px1">
             <input type="checkbox" />
           </td>
-          <td v-for="item in data.rows" :key="item" class="py4">
+          <td v-for="item in data.rows" :key="item" class="py2">
             {{ item }}
           </td>
           <td class="dark:text-white">

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex flex-col surface divide-y dark:divide-dark-300 divide-gray-2 rounded-3 p4 text-(left body) overflow-auto"
+    class="flex flex-col surface-1 divide-y dark:divide-dark-300 divide-gray-2 rounded-3 p4 text-(left body) overflow-auto"
   >
     <h2 class="text-4 font-medium pb2">Recent Orders</h2>
     <div v-for="i in 100" :key="i" class="flex items-center justify-start gap-x-4 py2">

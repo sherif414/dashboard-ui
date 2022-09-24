@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 pl-24 pb-4 pr-4 pt-16 h-full">
+  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 pl-20 pb-4 pr-4 pt-4 h-full">
     <section class="col-span-2 grid grid-cols-2 gap-4 px-2 overflow-y-auto">
       <!-- sales summary -->
       <SummaryCard
@@ -11,7 +11,7 @@
         ]"
       >
         <template #icon>
-          <IChart width="16" height="16" class="summary-icon" />
+          <IChart width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
 
@@ -23,7 +23,7 @@
         ]"
       >
         <template #icon>
-          <ICustomers width="16" height="16" class="summary-icon" />
+          <ICustomers width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
 
@@ -36,7 +36,7 @@
         ]"
       >
         <template #icon>
-          <IShoppingBag width="16" height="16" class="summary-icon" />
+          <IShoppingBag width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
 
@@ -49,10 +49,13 @@
         class="bg-indigo-5 dark:bg-violet-6 text-gray-1"
       >
         <template #icon>
-          <IInventory width="16" height="16" class="summary-icon" />
+          <IInventory width="18" height="18" class="summary-icon fill-primary-3" />
         </template>
       </SummaryCard>
+
+      <!-- data visualzitaion -->
       <GraphBar type="line" chart-id="chart1" class="col-span-2" />
+      <GraphBar type="bar" chart-id="chart2" class="col-span-2" />
     </section>
     <RecentOrders />
   </main>

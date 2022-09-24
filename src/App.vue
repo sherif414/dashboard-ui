@@ -2,7 +2,7 @@
 
 <template>
   <div class="h-screen">
-    <Header />
+    <!-- <Header /> -->
     <SideBar />
     <router-view />
   </div>
@@ -13,12 +13,9 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-input[type='checkbox'] {
-  accent-color: theme('colors.violet.600');
-}
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
   --at-apply: dark:bg-dark-50 bg-gray-3 rounded-full;

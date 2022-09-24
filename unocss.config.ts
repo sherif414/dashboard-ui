@@ -2,39 +2,44 @@ import { defineConfig, presetUno, presetWebFonts, transformerDirectives, transfo
 
 export default defineConfig({
   shortcuts: [
-    { theme: 'bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100' },
-    { surface: 'dark:bg-dark-600 bg-white' },
+    // shortcut components
     {
-      'summary-icon':
-        '[&_path]:dark:fill-secondary-90 [&_path]:dark:stroke-secondary-90 [&_path]:fill-none [&_path]:stroke-dark-9',
+      'summary-icon': 'p2 rounded-3 dark:bg-dark-2 bg-accent-3 fill-gray-1 box-content',
     },
+
+    // typography - colors
+    { 'typo-clr-base': 'dark:text-gray-1 text-dark-9' },
+    { 'typo-clr-muted': 'dark:text-gray-4 text-dark-6' },
+    { 'typo-clr-disabled': 'dark:text-gray-7 text-dark-3' },
+    //typography - sizes
+    { 'typo-sm': 'text-3' },
+    { 'typo-base': 'text-0.875rem' },
+    { 'typo-head': 'text-4' },
+    { 'typo-lg': 'text-5' },
+
+    // background colors for surfaces
+    { 'surface-1': 'dark:bg-dark-9 bg-white' },
+    { 'surface-2': 'dark:bg-dark-6 bg-gray-1' },
+    { 'surface-3': 'dark:bg-dark-3 bg-gray-4' },
+
+    // fill primary colors
+    { 'fill-primary-1': 'dark:bg-violet-9 bg-indigo-9' },
+    { 'fill-primary-2': 'dark:bg-violet-6 bg-indigo-6' },
+    { 'fill-primary-3': 'dark:bg-violet-3 bg-indigo-3' },
   ],
   theme: {
     colors: {
-      primary: {
-        10: 'theme("colors.indigo.200")',
-        30: 'theme("colors.indigo.300")',
-        50: 'theme("colors.indigo.400")',
-        70: 'theme("colors.indigo.500")',
-        90: 'theme("colors.indigo.600")',
-      },
-      secondary: {
-        10: '#FEF9F2',
-        30: '#FFF2E2',
-        50: '#FFEAD1',
-        70: '#FFDFBA',
-        90: '#FFCC91',
+      accent: {
+        3: '#FFE5C8',
+        6: '#FFDAAE',
+        9: '#FFCC91',
       },
       success: '#519C66',
       error: '#CC5F5F',
-      line: 'theme("colors.dark.100")',
       background: {
         light: '#F0F0F0',
-        dark: 'theme("colors.dark.900")',
+        dark: 'black',
       },
-    },
-    fontSize: {
-      body: '0.875rem',
     },
   },
 

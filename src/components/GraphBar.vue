@@ -12,7 +12,7 @@ Chart.register(...registerables)
 const config: ChartConfiguration = {
   type: props.type,
   data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: ['sat', 'sun', 'mon', 'tus', 'wed', 'thu'],
     datasets: [
       {
         label: 'number of orders',
@@ -63,7 +63,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="surface rounded-3 p2 grid place-content-center">
+  <div class="surface-1 rounded-3 p2 grid place-content-center">
     <canvas :id="chartId"></canvas>
   </div>
 </template>

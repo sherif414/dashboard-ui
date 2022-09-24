@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 flex flex-col gap-y-4 pt-16 pl-20 h-full">
+  <main class="p4 flex flex-col gap-y-4 pt-4 pl-20 h-full">
     <!-- create order dialog -->
     <dialog
       class="open:backdrop:backdrop-blur-4 text-body rounded-3 dark:(bg-dark-300 text-gray-3) bg-white"
@@ -60,7 +60,7 @@
     </div>
 
     <!-- datatable  -->
-    <div class="surface p4 rounded-3 flex flex-col gap-y-4 grow overflow-auto">
+    <div class="surface-1 p4 rounded-3 flex flex-col gap-y-4 grow overflow-auto">
       <caption class="flex items-center gap-x-2 font-semibold capitalize">
         <h1>customers orders</h1>
 
