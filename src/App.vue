@@ -15,7 +15,7 @@ body{
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  --at-apply: w-6px;
 }
 ::-webkit-scrollbar-thumb {
   --at-apply: dark:bg-dark-50 bg-gray-3 rounded-full;

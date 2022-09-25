@@ -2,15 +2,15 @@
   <div class="relative">
     <button
       @click="isOpen = !isOpen"
-      class="border dark:border-line border-gray-3 px2 py1 text-3 rounded flex items-center gap-x-2"
-      :class="{ 'border-indigo-6 dark:border-violet-6': isOpen }"
+      class="border dark:border-none border-gray-3 p-2 pr-3 rounded-md flex items-center gap-x-2"
+      :class="{ 'border-indigo-6 dark:bg-dark-6': isOpen }"
     >
-      <ICalender width="14" height="14" class="[&_path]:dark:stroke-gray-1" /> filter
+      <ICalender width="14" height="14" /> date filter
     </button>
     <menu
       ref="menuRef"
-      v-if="isOpen"
-      class="w-15rem grid grid-cols-2 text-3 absolute bg-white shadow dark:shadow-none shadow-indigo-2 dark:bg-dark-300 shadow gap-4 left-[-100%] rounded-3 mt-2 p4"
+      v-show="isOpen"
+      class="w-15rem grid grid-cols-2 absolute bg-white dark:bg-dark-300 gap-4 right-[-4rem] rounded-md mt-2 p4 border dark:border-none border-gray-2"
     >
       <h2 class="col-span-2 text-left">By Date</h2>
       <div class="flex items-center gap-x-2">
@@ -37,9 +37,7 @@
         <input id="last-year-cb" type="checkbox" />
         <label for="last-year-cb">last year</label>
       </div>
-      <button class="px2 py-6px rounded-2 bg-primary-90 hover:bg-primary-70 active:bg-primary-50 text-white col-span-2">
-        Filter
-      </button>
+      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary col-span-2">Filter</button>
     </menu>
   </div>
 </template>

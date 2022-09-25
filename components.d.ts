@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BulkAction: typeof import('./src/components/BulkAction.vue')['default']
     ChartDonut: typeof import('./src/components/ChartDonut.vue')['default']
     Chip: typeof import('./src/components/Chip.vue')['default']
     CircleChart: typeof import('./src/components/CircleChart.vue')['default']

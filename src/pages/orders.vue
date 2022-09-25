@@ -1,24 +1,19 @@
 <template>
   <main class="p4 flex flex-col gap-y-4 pt-4 pl-20 h-full">
-    <!-- create order dialog -->
-    <dialog
-      class="open:backdrop:backdrop-blur-4 text-body rounded-3 dark:(bg-dark-300 text-gray-3) bg-white"
-      ref="orderDialog"
-    >
-      <OrderDialog @close-dialog="orderDialog.close()" />
-    </dialog>
-
     <!-- header -->
     <header class="flex justify-between items-center">
-      <h1 class="font-semibold capitalize">orders summary</h1>
+      <!-- Page title -->
+      <h1 class="typo-lg">Orders</h1>
       <button
-        class="flex items-center gap-x-2 bg-indigo-5 dark:bg-violet-6 rounded-3 pr4 pl2 py1 text-white text-3 capitalize"
+        class="flex items-center gap-x-2 fill-primary-2 rounded-md pl-2 pr-4 py-1 typo-clr-on-primary typo-sm"
         @click="orderDialog.showModal()"
       >
         <IAdd />
-        add new order
+        new order
       </button>
     </header>
+
+    <!-- summary cards grid -->
     <div class="grid grid-cols-3 gap-x-4 row-span-1">
       <!-- all orders summary -->
       <SummaryCard
@@ -29,20 +24,20 @@
         ]"
       >
         <template #icon>
-          <IShoppingBag width="16" height="16" class="summary-icon" />
+          <IShoppingBag width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
 
       <!-- orders by state summary -->
       <SummaryCard
         :data="[
-          { name: 'canceled', value: '30' },
+          { name: 'canceled orders', value: '30' },
           { name: 'returned', value: '10' },
           { name: 'damaged', value: '0' },
         ]"
       >
         <template #icon>
-          <IShoppingBag width="16" height="16" class="summary-icon" />
+          <IShoppingBag width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
 
@@ -54,34 +49,38 @@
         ]"
       >
         <template #icon>
-          <IShoppingBag width="16" height="16" class="summary-icon" />
+          <IShoppingBag width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
     </div>
 
     <!-- datatable  -->
-    <div class="surface-1 p4 rounded-3 flex flex-col gap-y-4 grow overflow-auto">
-      <caption class="flex items-center gap-x-2 font-semibold capitalize">
-        <h1>customers orders</h1>
+    <div class="flex flex-col grow overflow-auto p4 gap-y-4 surface-1 rounded-md">
+      <caption class="flex items-center gap-x-2 typo-sm">
+        <h1 class="typo-head">Customers Orders</h1>
 
         <!-- search bar  -->
-        <div class="px2 py1 border text-3 rounded ml-auto dark:border-line border-gray-3 flex items-center gap-x-2">
-          <Isearch width="14" height="14" class="[&_path]:dark:stroke-gray-1" />
+        <div class="p-2 surface-2 rounded-md ml-auto typo-sm flex items-center gap-x-2">
+          <Isearch width="16" height="16" />
           <input type="search" placeholder="search.." class="focus:outline-none bg-inherit" />
         </div>
-
-        <!-- filter by order menu -->
         <FilterMenu />
 
-        <!-- filter by date menu  -->
         <FilterDate />
 
-        <button class="border dark:border-line border-gray-3 px2 py1 text-3 rounded flex items-center gap-x-2">
-          Bulk Action <ICaretDown width="14" height="14" class="[&_path]:dark:stroke-gray-1" />
-        </button>
+        <BulkAction />
       </caption>
+
       <DataTable :data="data" />
     </div>
+
+    <!-- create order dialog -->
+    <dialog
+      class="open:backdrop:backdrop-blur-4 text-body rounded-3 dark:(bg-dark-300 text-gray-3) bg-white"
+      ref="orderDialog"
+    >
+      <OrderDialog @close-dialog="orderDialog.close()" />
+    </dialog>
   </main>
 </template>
 

@@ -4,23 +4,24 @@ export default defineConfig({
   shortcuts: [
     // shortcut components
     {
-      'summary-icon': 'p2 rounded-3 dark:bg-dark-2 bg-accent-3 fill-gray-1 box-content',
+      'summary-icon': 'p2 rounded-3 dark:bg-dark-2 bg-accent-3 box-content',
     },
 
     // typography - colors
-    { 'typo-clr-base': 'dark:text-gray-1 text-dark-9' },
-    { 'typo-clr-muted': 'dark:text-gray-4 text-dark-6' },
-    { 'typo-clr-disabled': 'dark:text-gray-7 text-dark-3' },
+    { 'typo-clr-on-primary': 'text-gray-1' },
+    { 'typo-clr-base': 'dark:text-gray-1 text-gray-9' },
+    { 'typo-clr-muted': 'text-gray-4' },
+    { 'typo-clr-disabled': 'dark:text-gray-7 text-gray-3' },
     //typography - sizes
     { 'typo-sm': 'text-3' },
     { 'typo-base': 'text-0.875rem' },
-    { 'typo-head': 'text-4' },
-    { 'typo-lg': 'text-5' },
+    { 'typo-head': 'text-4 font-medium' },
+    { 'typo-lg': 'text-5 font-bold' },
 
     // background colors for surfaces
     { 'surface-1': 'dark:bg-dark-9 bg-white' },
     { 'surface-2': 'dark:bg-dark-6 bg-gray-1' },
-    { 'surface-3': 'dark:bg-dark-3 bg-gray-4' },
+    { 'surface-3': 'dark:bg-dark-3 bg-gray-1' },
 
     // fill primary colors
     { 'fill-primary-1': 'dark:bg-violet-9 bg-indigo-9' },
@@ -29,13 +30,14 @@ export default defineConfig({
   ],
   theme: {
     colors: {
+      success: '#2DD881',
+      error: '#e63946',
+      warn: '#fb8500',
       accent: {
         3: '#FFE5C8',
         6: '#FFDAAE',
         9: '#FFCC91',
       },
-      success: '#519C66',
-      error: '#CC5F5F',
       background: {
         light: '#F0F0F0',
         dark: 'black',
