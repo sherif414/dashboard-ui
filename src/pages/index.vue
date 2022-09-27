@@ -52,8 +52,8 @@
       </SummaryCard>
 
       <!-- data visualization -->
-      <GraphBar type="line" chart-id="chart1" class="col-span-2" />
-      <GraphBar type="bar" chart-id="chart2" class="col-span-2" />
+      <ChartLine class="col-span-full" />
+      <ChartBar class="col-span-full" />
     </section>
     <RecentOrders />
   </main>

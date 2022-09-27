@@ -6,7 +6,7 @@
       <h1 class="typo-lg">Orders</h1>
       <button
         class="flex items-center gap-x-2 fill-primary-2 rounded-md pl-2 pr-4 py-1 typo-clr-on-primary typo-sm"
-        @click="orderDialog.showModal()"
+        @click="orderDialogRef?.openModal"
       >
         <IAdd />
         new order
@@ -72,22 +72,33 @@
       </caption>
 
       <DataTable :data="data" />
+      <div class="border-t border-gray-2 dark:border-dark-3 flex items-center pt-2 mt-auto">
+        <span>10 items per page</span>
+        <span class="ml-8">1 - 10 of 200 items</span>
+        <span class="ml-auto">1 of 44 pages</span>
+        <ICaretDown wdith="16" height="16" class="rotate-90" />
+        <ICaretDown wdith="16" height="16" class="rotate-270" />
+      </div>
     </div>
 
     <!-- create order dialog -->
-    <dialog
-      class="open:backdrop:backdrop-blur-4 text-body rounded-3 dark:(bg-dark-300 text-gray-3) bg-white"
-      ref="orderDialog"
-    >
-      <OrderDialog @close-dialog="orderDialog.close()" />
-    </dialog>
+    <OrderDialog ref="orderDialogRef" />
   </main>
 </template>
 
 <script setup lang="ts">
-const orderDialog = $ref<HTMLDialogElement>()
-const data = {
-  headings: ['customer name', 'order date', 'order type', 'tracking ID', 'order total', 'action', 'status'],
-  rows: ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
-}
+import OrderDialog from '../components/OrderDialog.vue'
+const orderDialogRef = $ref<InstanceType<typeof OrderDialog> | null>(null)
+const data = [
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+  ['sherif hassan idris', '12 Aug 2022 - 12:25 am', 'home delivary', '9348fjr73', '₦25,000.00'],
+]
 </script>

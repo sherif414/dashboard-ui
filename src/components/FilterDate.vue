@@ -52,11 +52,9 @@ onClickOutside(menuRef, () => {
 
 <style scoped>
 input[type='checkbox'] + label {
-  color: #8b8d97;
   font-weight: 400;
 }
 input[type='checkbox']:checked + label {
-  color: #53545c;
-  font-weight: 900;
+  font-weight: bold;
 }
 </style>
