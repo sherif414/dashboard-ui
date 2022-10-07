@@ -10,27 +10,27 @@
         <span class="sidebar__link__name">Dashboard</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="orders">
+      <router-link class="sidebar__link" to="/orders">
         <IShoppingBag />
         <span class="sidebar__link__name">Orders</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="customers">
+      <router-link class="sidebar__link" to="/customers">
         <ICustomers />
         <span class="sidebar__link__name">Customers</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="inventory">
+      <router-link class="sidebar__link" to="/products">
         <IInventory />
-        <span class="sidebar__link__name">Inventory</span>
+        <span class="sidebar__link__name">products</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="chat">
+      <router-link class="sidebar__link" to="/chat">
         <IMessage />
         <span class="sidebar__link__name">Chat</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="settings">
+      <router-link class="sidebar__link" to="/settings">
         <ISetting />
         <span class="sidebar__link__name">Settings</span>
       </router-link>

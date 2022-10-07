@@ -1,5 +1,5 @@
 <template>
-  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 p4 pl-20 h-full">
+  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 p4 h-screen">
     <section class="col-span-2 grid grid-cols-2 pr-2 gap-4 overflow-y-auto">
       <!-- sales summary -->
       <SummaryCard
@@ -16,7 +16,7 @@
       <!-- customers summary -->
       <SummaryCard
         :data="[
-          { name: 'cusomters', value: '1,250', growth: '+100' },
+          { name: 'cusomters', value: customers ? customers.length : '', growth: '+1' },
           { name: 'active', value: '1,050', growth: '+80' },
         ]"
       >
@@ -41,7 +41,7 @@
       <!-- products summary -->
       <SummaryCard
         :data="[
-          { name: 'all products', value: '90' },
+          { name: 'all products', value: products ? products.length : '' },
           { name: 'active', value: '50', growth: '+20%' },
         ]"
         fill="fill-primary-2 typo-clr-on-primary"
@@ -58,3 +58,12 @@
     <RecentOrders />
   </main>
 </template>
+
+<script setup lang="ts">
+import { useProductsStore } from '~/store/products'
+import { useCustomersStore } from '~/store/customers'
+import { storeToRefs } from 'pinia'
+
+const { productsList: products } = storeToRefs(useProductsStore())
+const { customersList: customers } = storeToRefs(useCustomersStore())
+</script>

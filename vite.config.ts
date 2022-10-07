@@ -3,8 +3,8 @@
 import path from 'path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
-import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 
@@ -19,9 +19,6 @@ export default defineConfig({
       reactivityTransform: true,
     }),
 
-    // https://github.com/hannoeru/vite-plugin-pages
-    Pages(),
-
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
       imports: [
@@ -32,6 +29,9 @@ export default defineConfig({
         {
           motion: ['animate', 'spring', 'timeline', 'stagger'],
         },
+        {
+          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+        },
       ],
       dts: true,
       dirs: ['./src/composables'],
@@ -41,6 +41,7 @@ export default defineConfig({
     // https://github.com/antfu/vite-plugin-components
     Components({
       dts: true,
+      resolvers: [NaiveUiResolver()],
     }),
 
     // https://github.com/antfu/unocss

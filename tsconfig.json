@@ -16,8 +16,8 @@
     "forceConsistentCasingInFileNames": true,
     "types": [
       "vite/client",
-      "vite-plugin-pages/client",
-      "chart.js/types"
+      "chart.js/types",
+      "naive-ui/volar"
     ],
     "paths": {
       "~/*": ["src/*"]

@@ -1,9 +1,9 @@
 <template>
-  <!-- dialog header -->
   <dialog
     class="open:backdrop:backdrop-blur-4 text-body rounded-3 dark:(bg-dark-300 text-gray-3) bg-white"
     ref="target"
   >
+    <!-- dialog header -->
     <div class="my-2">
       <h2 class="text-black dark:text-gray-1 font-medium text-4 mb-4">Create New Order</h2>
     </div>

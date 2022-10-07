@@ -1,9 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="h-screen">
-    <!-- <Header /> -->
-    <SideBar />
+  <!-- <Header /> -->
+  <SideBar />
+  <div class="pl-4rem">
     <router-view />
   </div>
 </template>

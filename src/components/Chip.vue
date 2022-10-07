@@ -1,14 +1,14 @@
 <template>
   <span
     class="px2 py-2px rounded-full typo-sm bg-opacity-12"
-    :class="{ 'bg-success text-success': variant === 'completed', 'bg-warn text-warn': variant === 'pending' }"
+    :class="{ 'bg-success text-success': status, 'bg-warn text-warn': !status }"
   >
-    {{ variant }}
+    <slot></slot>
   </span>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  variant: 'completed' | 'pending'
+  status: boolean
 }>()
 </script>
