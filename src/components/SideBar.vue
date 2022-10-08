@@ -47,7 +47,7 @@
   --at-apply: flex items-center box-content p-2 duration-300 hover:dark:(text-gray-1 fill-gray-1 stroke-none);
 }
 .router-link-active {
-  --at-apply: text-gray-1 fill-primary-2 rounded-3;
+  --at-apply: text-gray-1 fill-primary-2 rounded-12px;
 }
 .router-link-active svg{
   --at-apply: stroke-none fill-gray-1;

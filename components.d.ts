@@ -20,7 +20,6 @@ declare module '@vue/runtime-core' {
     FilterDate: typeof import('./src/components/FilterDate.vue')['default']
     FilterMenu: typeof import('./src/components/FilterMenu.vue')['default']
     GraphBar: typeof import('./src/components/GraphBar.vue')['default']
-    Header: typeof import('./src/components/Header.vue')['default']
     IAdd: typeof import('./src/components/icons/IAdd.vue')['default']
     ICalender: typeof import('./src/components/icons/ICalender.vue')['default']
     ICaretDown: typeof import('./src/components/icons/ICaretDown.vue')['default']
@@ -30,6 +29,7 @@ declare module '@vue/runtime-core' {
     ICustomers: typeof import('./src/components/icons/ICustomers.vue')['default']
     IDashboard: typeof import('./src/components/icons/IDashboard.vue')['default']
     IFilter: typeof import('./src/components/icons/IFilter.vue')['default']
+    IImg: typeof import('./src/components/icons/IImg.vue')['default']
     IInventory: typeof import('./src/components/icons/IInventory.vue')['default']
     ILogout: typeof import('./src/components/icons/ILogout.vue')['default']
     IMessage: typeof import('./src/components/icons/IMessage.vue')['default']
@@ -37,6 +37,9 @@ declare module '@vue/runtime-core' {
     ISetting: typeof import('./src/components/icons/ISetting.vue')['default']
     IShoppingBag: typeof import('./src/components/icons/IShoppingBag.vue')['default']
     ISort: typeof import('./src/components/icons/ISort.vue')['default']
+    IUpload: typeof import('./src/components/icons/IUpload.vue')['default']
+    NConfigProvider: typeof import('naive-ui')['NConfigProvider']
+    NInput: typeof import('naive-ui')['NInput']
     OrderDialog: typeof import('./src/components/OrderDialog.vue')['default']
     OrdersTable: typeof import('./src/components/OrdersTable.vue')['default']
     ProductsTable: typeof import('./src/components/ProductsTable.vue')['default']
@@ -47,6 +50,7 @@ declare module '@vue/runtime-core' {
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     SummaryCard: typeof import('./src/components/SummaryCard.vue')['default']
     TempComp: typeof import('./src/components/TempComp.vue')['default']
+    TheHeader: typeof import('./src/components/TheHeader.vue')['default']
     Toggle: typeof import('./src/components/Toggle.vue')['default']
   }
 }

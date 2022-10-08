@@ -5,7 +5,7 @@
         :class="{ 'py-2': compact, 'typo-clr-muted': !selectedOption }"
         class="rounded-md w-full border surface-1 dark:border-dark-3 flex items-center p3 text-left truncate"
         >{{ selectedOption ? selectedOption : title }}
-        <IChevronUpDown class="ml-auto" width="16" />
+        <ICaretDown class="ml-auto" width="16" height="16" />
       </ListboxButton>
       <ListboxOptions
         :class="{ 'top-9': compact }"

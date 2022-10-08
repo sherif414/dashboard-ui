@@ -1,11 +1,45 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui'
+
+const lightThemeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: 'rgb(79, 70, 229)',
+  },
+  Input: {
+    color: 'rgb(243, 244, 246)',
+    colorFocus: 'none',
+    borderFocus: 'none',
+    borderHover: 'none',
+  },
+}
+
+const darkThemeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: 'rgb(124, 58, 237)',
+  },
+  Input: {
+    colorFocus: '',
+    border: 'none',
+    caretColor: 'none',
+    color: 'var(--n-primary-color)',
+    borderFocus: 'none',
+    borderHover: 'none',
+  },
+}
+
+const theme = null
+// ...
+</script>
 
 <template>
-  <!-- <Header /> -->
-  <SideBar />
-  <div class="pl-4rem">
-    <router-view />
-  </div>
+  <NConfigProvider :theme="theme" :theme-overrides="isDark ? darkThemeOverrides : lightThemeOverrides">
+    <!-- <Header /> -->
+
+    <SideBar />
+    <div class="pl-4rem">
+      <RouterView />
+    </div>
+  </NConfigProvider>
 </template>
 
 <style>
@@ -19,5 +53,9 @@ body{
 }
 ::-webkit-scrollbar-thumb {
   --at-apply: dark:bg-dark-50 bg-gray-3 rounded-full;
+}
+
+.dark input {
+  color-scheme: dark;
 }
 </style>

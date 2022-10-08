@@ -30,7 +30,7 @@ import {
   ComboboxOptions,
 } from '@headlessui/vue'
 
-let selectedOption = $ref('selected')
+let selectedOption = $ref('')
 
 defineProps<{
   options: string[]
