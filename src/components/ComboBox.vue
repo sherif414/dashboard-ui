@@ -1,13 +1,14 @@
 <template>
-  <box as="div" v-model="selectedOption" class="relative">
+  <box as="div" class="relative">
+    <ComboboxLabel class="pb-1" v-if="label">{{ label }}</ComboboxLabel>
     <ComboboxInput
-      placeholder="select a category"
+      :placeholder="placeHolder"
       class="border surface-1 dark:border-dark-3 focus:outline-none p3 w-full rounded-md"
     />
-    <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+    <ComboboxButton class="absolute right-0 flex top-31px pr-2">
       <IChevronUpDown width="20" height="20" />
     </ComboboxButton>
-    <ComboboxOptions class="absolute z-99 surface-3 w-full top-12 py-2 shadow rounded-md">
+    <ComboboxOptions class="absolute z-99 surface-3 w-full top-17 py-2 shadow rounded-md max-h-45 overflow-y-auto">
       <ComboboxOption
         v-slot="{ selected }"
         class="p2 hover:fill-primary-2 hover:typo-clr-on-primary"
@@ -25,14 +26,14 @@ import {
   Combobox as box,
   ComboboxButton,
   ComboboxInput,
-  // ComboboxLabel,
+  ComboboxLabel,
   ComboboxOption,
   ComboboxOptions,
 } from '@headlessui/vue'
 
-let selectedOption = $ref('')
-
 defineProps<{
   options: string[]
+  label?: string
+  placeHolder?: string
 }>()
 </script>

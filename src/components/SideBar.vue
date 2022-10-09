@@ -2,7 +2,7 @@
 
 <template>
   <aside
-    class="sidebar h-screen fixed top-0 left-0 w-4rem hover:w-12rem transition-width duration-300 flex flex-col py-6rem px-3 surface-1 z-20 typo-clr-base"
+    class="sidebar h-screen fixed top-0 left-0 w-4rem hover:w-12rem transition-width duration-300 flex flex-col py-6rem px-3 surface-1 z-100 typo-clr-base"
   >
     <nav class="flex flex-col w-full grow gap-y-4 text-3 text-gray-500">
       <router-link class="sidebar__link" to="/">

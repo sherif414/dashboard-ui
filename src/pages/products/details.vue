@@ -15,10 +15,8 @@
             product name
             <input type="text" placeholder="muse be at least 3 characters" class="form-input" required />
           </label>
-          <label class="flex flex-col w-full gap-y-1">
-            category
-            <ComboBox :options="categorys" />
-          </label>
+
+          <ComboBox place-holder="select category" v-model="categoryValue" label="category" :options="categorys" />
           <div class="grid grid-cols-2 gap-4">
             <input type="number" placeholder="selling price" class="form-input" />
             <input type="number" placeholder="cost price" class="form-input" />
@@ -55,33 +53,28 @@
       </div>
 
       <!-- picture form  -->
-      <div class="p4 rounded-md surface-1 flex flex-col gap-y-4">
-        <div
-          class="rounded-3 border dark:border-dark-3 surface-2 grid place-items-center gap-4 py-12 px-4 text-center typo-sm"
-        >
-          <div class="bg-violet-1 rounded-3 p-1 box-content">
-            <IImg width="32" stroke="none" height="32" class="fill-indigo-6 dark:fill-violet-6" />
-          </div>
-          <div class="flex flex-col typo-clr-muted">
-            <span class="text-indigo dark-text-violet typo-base mb-3 flex mx-auto"
-              ><IUpload width="16" height="16" class="mr-2" /> Upload Image</span
-            >
-            <span>Upload a cover image for your product.</span>
-            <span>File Format jpeg, png Recommened Size 600x600 (1:1)</span>
-          </div>
-        </div>
+      <div class="p4 rounded-md surface-1 flex flex-col gap-y-4 overflow-auto">
+        <n-upload :max="5">
+          <n-upload-dragger>
+            <div style="margin-bottom: 12px">
+              <n-icon size="48" :depth="3">
+                <IUpload />
+              </n-icon>
+            </div>
+            <n-text style="font-size: 16px"> Click or drag a file to this area to upload </n-text>
+            <n-p depth="3" style="margin: 8px 0 0 0">
+              Strictly prohibit from uploading sensitive information. For example, your bank card PIN or your credit
+              card expiry date.
+            </n-p>
+          </n-upload-dragger>
+        </n-upload>
 
         <span class="mt-2">additional images</span>
-        <div class="grid grid-cols-2 gap-x-4 typo-sm">
-          <div class="px6 py8 grid place-items-center gap2 border dark-border-dark-3 rounded-3 surface-2">
-            <div class="bg-violet-1 rounded-3 p-1 box-content">
-              <IImg width="32" stroke="none" height="32" class="fill-indigo-6 dark:fill-violet-6" />
-            </div>
-            <span class="text-indigo dark-text-violet mb-3 flex mx-auto"
-              ><IUpload width="16" height="16" class="mr-2" /> Upload Image</span
-            >
-          </div>
-          <div class="border border-dashed dark-border-dark-3 rounded-3"></div>
+        <n-upload :theme-overrides="uploadOverrides" v-model:file-list="files" list-type="image-card">
+          Click to Upload
+        </n-upload>
+        <div>
+          {{ files }}
         </div>
       </div>
     </main>
@@ -89,5 +82,12 @@
 </template>
 
 <script setup lang="ts">
+import type { UploadFileInfo, UploadProps } from 'naive-ui'
+
+let categoryValue = $ref()
+let files = $ref<UploadFileInfo[]>()
+
+let uploadOverrides: NonNullable<UploadProps['themeOverrides']> = {}
+
 const categorys = ['phone', 'computer', 'laptop', 'clothes', 'shoes', 'accessory', 'gadget']
 </script>
