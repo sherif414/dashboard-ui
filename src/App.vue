@@ -11,6 +11,9 @@ const lightThemeOverrides: GlobalThemeOverrides = {
     borderFocus: 'none',
     borderHover: 'none',
   },
+  Upload: {
+    draggerColor: 'rgb(243, 244, 246)', //gray-1
+  },
 }
 
 const darkThemeOverrides: GlobalThemeOverrides = {
@@ -24,6 +27,9 @@ const darkThemeOverrides: GlobalThemeOverrides = {
     color: 'var(--n-primary-color)',
     borderFocus: 'none',
     borderHover: 'none',
+  },
+  Upload: {
+    draggerColor: ' rgb(28, 28, 30)', // dark-6
   },
 }
 
