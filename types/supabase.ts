@@ -4,332 +4,353 @@
  */
 
 export interface paths {
-  "/": {
+  '/': {
     get: {
       responses: {
         /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/products": {
+        200: unknown
+      }
+    }
+  }
+  '/products': {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.products.id"];
-          created_at?: parameters["rowFilter.products.created_at"];
-          name?: parameters["rowFilter.products.name"];
-          price?: parameters["rowFilter.products.price"];
-          stock?: parameters["rowFilter.products.stock"];
-          discount?: parameters["rowFilter.products.discount"];
-          published?: parameters["rowFilter.products.published"];
-          category?: parameters["rowFilter.products.category"];
+          id?: parameters['rowFilter.products.id']
+          created_at?: parameters['rowFilter.products.created_at']
+          name?: parameters['rowFilter.products.name']
+          stock?: parameters['rowFilter.products.stock']
+          published?: parameters['rowFilter.products.published']
+          category?: parameters['rowFilter.products.category']
+          sell_price?: parameters['rowFilter.products.sell_price']
+          cost_price?: parameters['rowFilter.products.cost_price']
+          discount_type?: parameters['rowFilter.products.discount_type']
+          discount_value?: parameters['rowFilter.products.discount_value']
+          description?: parameters['rowFilter.products.description']
+          expiration_date?: parameters['rowFilter.products.expiration_date']
+          image?: parameters['rowFilter.products.image']
+          additional_images?: parameters['rowFilter.products.additional_images']
+          delivery_type?: parameters['rowFilter.products.delivery_type']
           /** Filtering Columns */
-          select?: parameters["select"];
+          select?: parameters['select']
           /** Ordering */
-          order?: parameters["order"];
+          order?: parameters['order']
           /** Limiting and Pagination */
-          offset?: parameters["offset"];
+          offset?: parameters['offset']
           /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
+          limit?: parameters['limit']
+        }
         header: {
           /** Limiting and Pagination */
-          Range?: parameters["range"];
+          Range?: parameters['range']
           /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
+          'Range-Unit'?: parameters['rangeUnit']
           /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
+          Prefer?: parameters['preferCount']
+        }
+      }
       responses: {
         /** OK */
         200: {
-          schema: definitions["products"][];
-        };
+          schema: definitions['products'][]
+        }
         /** Partial Content */
-        206: unknown;
-      };
-    };
+        206: unknown
+      }
+    }
     post: {
       parameters: {
         body: {
           /** products */
-          products?: definitions["products"];
-        };
+          products?: definitions['products']
+        }
         query: {
           /** Filtering Columns */
-          select?: parameters["select"];
-        };
+          select?: parameters['select']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** Created */
-        201: unknown;
-      };
-    };
+        201: unknown
+      }
+    }
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.products.id"];
-          created_at?: parameters["rowFilter.products.created_at"];
-          name?: parameters["rowFilter.products.name"];
-          price?: parameters["rowFilter.products.price"];
-          stock?: parameters["rowFilter.products.stock"];
-          discount?: parameters["rowFilter.products.discount"];
-          published?: parameters["rowFilter.products.published"];
-          category?: parameters["rowFilter.products.category"];
-        };
+          id?: parameters['rowFilter.products.id']
+          created_at?: parameters['rowFilter.products.created_at']
+          name?: parameters['rowFilter.products.name']
+          stock?: parameters['rowFilter.products.stock']
+          published?: parameters['rowFilter.products.published']
+          category?: parameters['rowFilter.products.category']
+          sell_price?: parameters['rowFilter.products.sell_price']
+          cost_price?: parameters['rowFilter.products.cost_price']
+          discount_type?: parameters['rowFilter.products.discount_type']
+          discount_value?: parameters['rowFilter.products.discount_value']
+          description?: parameters['rowFilter.products.description']
+          expiration_date?: parameters['rowFilter.products.expiration_date']
+          image?: parameters['rowFilter.products.image']
+          additional_images?: parameters['rowFilter.products.additional_images']
+          delivery_type?: parameters['rowFilter.products.delivery_type']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** No Content */
-        204: never;
-      };
-    };
+        204: never
+      }
+    }
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.products.id"];
-          created_at?: parameters["rowFilter.products.created_at"];
-          name?: parameters["rowFilter.products.name"];
-          price?: parameters["rowFilter.products.price"];
-          stock?: parameters["rowFilter.products.stock"];
-          discount?: parameters["rowFilter.products.discount"];
-          published?: parameters["rowFilter.products.published"];
-          category?: parameters["rowFilter.products.category"];
-        };
+          id?: parameters['rowFilter.products.id']
+          created_at?: parameters['rowFilter.products.created_at']
+          name?: parameters['rowFilter.products.name']
+          stock?: parameters['rowFilter.products.stock']
+          published?: parameters['rowFilter.products.published']
+          category?: parameters['rowFilter.products.category']
+          sell_price?: parameters['rowFilter.products.sell_price']
+          cost_price?: parameters['rowFilter.products.cost_price']
+          discount_type?: parameters['rowFilter.products.discount_type']
+          discount_value?: parameters['rowFilter.products.discount_value']
+          description?: parameters['rowFilter.products.description']
+          expiration_date?: parameters['rowFilter.products.expiration_date']
+          image?: parameters['rowFilter.products.image']
+          additional_images?: parameters['rowFilter.products.additional_images']
+          delivery_type?: parameters['rowFilter.products.delivery_type']
+        }
         body: {
           /** products */
-          products?: definitions["products"];
-        };
+          products?: definitions['products']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** No Content */
-        204: never;
-      };
-    };
-  };
-  "/orders": {
+        204: never
+      }
+    }
+  }
+  '/orders': {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.orders.id"];
-          created_at?: parameters["rowFilter.orders.created_at"];
+          id?: parameters['rowFilter.orders.id']
+          created_at?: parameters['rowFilter.orders.created_at']
           /** the order owner */
-          owner?: parameters["rowFilter.orders.owner"];
-          type?: parameters["rowFilter.orders.type"];
-          status?: parameters["rowFilter.orders.status"];
+          owner?: parameters['rowFilter.orders.owner']
+          type?: parameters['rowFilter.orders.type']
+          status?: parameters['rowFilter.orders.status']
           /** the customer's purchases */
-          purchases?: parameters["rowFilter.orders.purchases"];
+          purchases?: parameters['rowFilter.orders.purchases']
           /** Filtering Columns */
-          select?: parameters["select"];
+          select?: parameters['select']
           /** Ordering */
-          order?: parameters["order"];
+          order?: parameters['order']
           /** Limiting and Pagination */
-          offset?: parameters["offset"];
+          offset?: parameters['offset']
           /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
+          limit?: parameters['limit']
+        }
         header: {
           /** Limiting and Pagination */
-          Range?: parameters["range"];
+          Range?: parameters['range']
           /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
+          'Range-Unit'?: parameters['rangeUnit']
           /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
+          Prefer?: parameters['preferCount']
+        }
+      }
       responses: {
         /** OK */
         200: {
-          schema: definitions["orders"][];
-        };
+          schema: definitions['orders'][]
+        }
         /** Partial Content */
-        206: unknown;
-      };
-    };
+        206: unknown
+      }
+    }
     post: {
       parameters: {
         body: {
           /** orders */
-          orders?: definitions["orders"];
-        };
+          orders?: definitions['orders']
+        }
         query: {
           /** Filtering Columns */
-          select?: parameters["select"];
-        };
+          select?: parameters['select']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** Created */
-        201: unknown;
-      };
-    };
+        201: unknown
+      }
+    }
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.orders.id"];
-          created_at?: parameters["rowFilter.orders.created_at"];
+          id?: parameters['rowFilter.orders.id']
+          created_at?: parameters['rowFilter.orders.created_at']
           /** the order owner */
-          owner?: parameters["rowFilter.orders.owner"];
-          type?: parameters["rowFilter.orders.type"];
-          status?: parameters["rowFilter.orders.status"];
+          owner?: parameters['rowFilter.orders.owner']
+          type?: parameters['rowFilter.orders.type']
+          status?: parameters['rowFilter.orders.status']
           /** the customer's purchases */
-          purchases?: parameters["rowFilter.orders.purchases"];
-        };
+          purchases?: parameters['rowFilter.orders.purchases']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** No Content */
-        204: never;
-      };
-    };
+        204: never
+      }
+    }
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.orders.id"];
-          created_at?: parameters["rowFilter.orders.created_at"];
+          id?: parameters['rowFilter.orders.id']
+          created_at?: parameters['rowFilter.orders.created_at']
           /** the order owner */
-          owner?: parameters["rowFilter.orders.owner"];
-          type?: parameters["rowFilter.orders.type"];
-          status?: parameters["rowFilter.orders.status"];
+          owner?: parameters['rowFilter.orders.owner']
+          type?: parameters['rowFilter.orders.type']
+          status?: parameters['rowFilter.orders.status']
           /** the customer's purchases */
-          purchases?: parameters["rowFilter.orders.purchases"];
-        };
+          purchases?: parameters['rowFilter.orders.purchases']
+        }
         body: {
           /** orders */
-          orders?: definitions["orders"];
-        };
+          orders?: definitions['orders']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** No Content */
-        204: never;
-      };
-    };
-  };
-  "/customers": {
+        204: never
+      }
+    }
+  }
+  '/customers': {
     get: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.customers.id"];
-          created_at?: parameters["rowFilter.customers.created_at"];
-          name?: parameters["rowFilter.customers.name"];
-          email?: parameters["rowFilter.customers.email"];
-          phone?: parameters["rowFilter.customers.phone"];
-          status?: parameters["rowFilter.customers.status"];
+          id?: parameters['rowFilter.customers.id']
+          created_at?: parameters['rowFilter.customers.created_at']
+          name?: parameters['rowFilter.customers.name']
+          email?: parameters['rowFilter.customers.email']
+          phone?: parameters['rowFilter.customers.phone']
+          status?: parameters['rowFilter.customers.status']
           /** Filtering Columns */
-          select?: parameters["select"];
+          select?: parameters['select']
           /** Ordering */
-          order?: parameters["order"];
+          order?: parameters['order']
           /** Limiting and Pagination */
-          offset?: parameters["offset"];
+          offset?: parameters['offset']
           /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
+          limit?: parameters['limit']
+        }
         header: {
           /** Limiting and Pagination */
-          Range?: parameters["range"];
+          Range?: parameters['range']
           /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
+          'Range-Unit'?: parameters['rangeUnit']
           /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
+          Prefer?: parameters['preferCount']
+        }
+      }
       responses: {
         /** OK */
         200: {
-          schema: definitions["customers"][];
-        };
+          schema: definitions['customers'][]
+        }
         /** Partial Content */
-        206: unknown;
-      };
-    };
+        206: unknown
+      }
+    }
     post: {
       parameters: {
         body: {
           /** customers */
-          customers?: definitions["customers"];
-        };
+          customers?: definitions['customers']
+        }
         query: {
           /** Filtering Columns */
-          select?: parameters["select"];
-        };
+          select?: parameters['select']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** Created */
-        201: unknown;
-      };
-    };
+        201: unknown
+      }
+    }
     delete: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.customers.id"];
-          created_at?: parameters["rowFilter.customers.created_at"];
-          name?: parameters["rowFilter.customers.name"];
-          email?: parameters["rowFilter.customers.email"];
-          phone?: parameters["rowFilter.customers.phone"];
-          status?: parameters["rowFilter.customers.status"];
-        };
+          id?: parameters['rowFilter.customers.id']
+          created_at?: parameters['rowFilter.customers.created_at']
+          name?: parameters['rowFilter.customers.name']
+          email?: parameters['rowFilter.customers.email']
+          phone?: parameters['rowFilter.customers.phone']
+          status?: parameters['rowFilter.customers.status']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** No Content */
-        204: never;
-      };
-    };
+        204: never
+      }
+    }
     patch: {
       parameters: {
         query: {
-          id?: parameters["rowFilter.customers.id"];
-          created_at?: parameters["rowFilter.customers.created_at"];
-          name?: parameters["rowFilter.customers.name"];
-          email?: parameters["rowFilter.customers.email"];
-          phone?: parameters["rowFilter.customers.phone"];
-          status?: parameters["rowFilter.customers.status"];
-        };
+          id?: parameters['rowFilter.customers.id']
+          created_at?: parameters['rowFilter.customers.created_at']
+          name?: parameters['rowFilter.customers.name']
+          email?: parameters['rowFilter.customers.email']
+          phone?: parameters['rowFilter.customers.phone']
+          status?: parameters['rowFilter.customers.status']
+        }
         body: {
           /** customers */
-          customers?: definitions["customers"];
-        };
+          customers?: definitions['customers']
+        }
         header: {
           /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
+          Prefer?: parameters['preferReturn']
+        }
+      }
       responses: {
         /** No Content */
-        204: never;
-      };
-    };
-  };
+        204: never
+      }
+    }
+  }
 }
 
 export interface definitions {
@@ -339,31 +360,39 @@ export interface definitions {
      * @description Note:
      * This is a Primary Key.<pk/>
      */
-    id: number;
+    id?: number
     /**
      * Format: timestamp without time zone
      * @default (now() AT TIME ZONE 'utc'::text)
      */
-    created_at?: string;
+    created_at?: string
     /** Format: text */
-    name: string;
+    name?: string
+    /** Format: integer */
+    stock?: number
+    /** Format: boolean */
+    published?: boolean
+    /** Format: text */
+    category?: string
     /** Format: real */
-    price: number;
-    /**
-     * Format: integer
-     * @default 0
-     */
-    stock: number;
+    sell_price?: number
     /** Format: real */
-    discount: number;
-    /**
-     * Format: boolean
-     * @default false
-     */
-    published: boolean;
-    /** Format: character varying */
-    category: string;
-  };
+    cost_price?: number
+    /** Format: text */
+    discount_type?: string
+    /** Format: real */
+    discount_value?: number
+    /** Format: text */
+    description?: string
+    /** Format: timestamp without time zone */
+    expiration_date?: string
+    /** Format: text */
+    image?: any
+    /** Format: ARRAY */
+    additional_images?: any[]
+    /** Format: ARRAY */
+    delivery_type?: unknown[]
+  }
   /** @description dashboard database */
   orders: {
     /**
@@ -371,12 +400,12 @@ export interface definitions {
      * @description Note:
      * This is a Primary Key.<pk/>
      */
-    id: number;
+    id: number
     /**
      * Format: timestamp with time zone
      * @default now()
      */
-    created_at?: string;
+    created_at?: string
     /**
      * Format: bigint
      * @description the order owner
@@ -384,41 +413,41 @@ export interface definitions {
      * Note:
      * This is a Foreign Key to `customers.id`.<fk table='customers' column='id'/>
      */
-    owner: number;
+    owner: number
     /** Format: text */
-    type: string;
+    type: string
     /**
      * Format: boolean
      * @default false
      */
-    status?: boolean;
+    status?: boolean
     /**
      * Format: ARRAY
      * @description the customer's purchases
      */
-    purchases: unknown[];
-  };
+    purchases: unknown[]
+  }
   customers: {
     /**
      * Format: bigint
      * @description Note:
      * This is a Primary Key.<pk/>
      */
-    id: number;
+    id: number
     /**
      * Format: timestamp with time zone
      * @default now()
      */
-    created_at?: string;
+    created_at?: string
     /** Format: text */
-    name?: string;
+    name?: string
     /** Format: text */
-    email?: string;
+    email?: string
     /** Format: text */
-    phone?: string;
+    phone?: string
     /** Format: boolean */
-    status?: boolean;
-  };
+    status?: boolean
+  }
 }
 
 export interface parameters {
@@ -426,86 +455,100 @@ export interface parameters {
    * @description Preference
    * @enum {string}
    */
-  preferParams: "params=single-object";
+  preferParams: 'params=single-object'
   /**
    * @description Preference
    * @enum {string}
    */
-  preferReturn: "return=representation" | "return=minimal" | "return=none";
+  preferReturn: 'return=representation' | 'return=minimal' | 'return=none'
   /**
    * @description Preference
    * @enum {string}
    */
-  preferCount: "count=none";
+  preferCount: 'count=none'
   /** @description Filtering Columns */
-  select: string;
+  select: string
   /** @description On Conflict */
-  on_conflict: string;
+  on_conflict: string
   /** @description Ordering */
-  order: string;
+  order: string
   /** @description Limiting and Pagination */
-  range: string;
+  range: string
   /**
    * @description Limiting and Pagination
    * @default items
    */
-  rangeUnit: string;
+  rangeUnit: string
   /** @description Limiting and Pagination */
-  offset: string;
+  offset: string
   /** @description Limiting and Pagination */
-  limit: string;
+  limit: string
   /** @description products */
-  "body.products": definitions["products"];
+  'body.products': definitions['products']
   /** Format: bigint */
-  "rowFilter.products.id": string;
+  'rowFilter.products.id': string
   /** Format: timestamp without time zone */
-  "rowFilter.products.created_at": string;
+  'rowFilter.products.created_at': string
   /** Format: text */
-  "rowFilter.products.name": string;
-  /** Format: real */
-  "rowFilter.products.price": string;
+  'rowFilter.products.name': string
   /** Format: integer */
-  "rowFilter.products.stock": string;
-  /** Format: real */
-  "rowFilter.products.discount": string;
+  'rowFilter.products.stock': string
   /** Format: boolean */
-  "rowFilter.products.published": string;
-  /** Format: character varying */
-  "rowFilter.products.category": string;
+  'rowFilter.products.published': string
+  /** Format: text */
+  'rowFilter.products.category': string
+  /** Format: real */
+  'rowFilter.products.sell_price': string
+  /** Format: real */
+  'rowFilter.products.cost_price': string
+  /** Format: text */
+  'rowFilter.products.discount_type': string
+  /** Format: real */
+  'rowFilter.products.discount_value': string
+  /** Format: text */
+  'rowFilter.products.description': string
+  /** Format: timestamp without time zone */
+  'rowFilter.products.expiration_date': string
+  /** Format: text */
+  'rowFilter.products.image': string
+  /** Format: ARRAY */
+  'rowFilter.products.additional_images': string
+  /** Format: ARRAY */
+  'rowFilter.products.delivery_type': string
   /** @description orders */
-  "body.orders": definitions["orders"];
+  'body.orders': definitions['orders']
   /** Format: bigint */
-  "rowFilter.orders.id": string;
+  'rowFilter.orders.id': string
   /** Format: timestamp with time zone */
-  "rowFilter.orders.created_at": string;
+  'rowFilter.orders.created_at': string
   /**
    * Format: bigint
    * @description the order owner
    */
-  "rowFilter.orders.owner": string;
+  'rowFilter.orders.owner': string
   /** Format: text */
-  "rowFilter.orders.type": string;
+  'rowFilter.orders.type': string
   /** Format: boolean */
-  "rowFilter.orders.status": string;
+  'rowFilter.orders.status': string
   /**
    * Format: ARRAY
    * @description the customer's purchases
    */
-  "rowFilter.orders.purchases": string;
+  'rowFilter.orders.purchases': string
   /** @description customers */
-  "body.customers": definitions["customers"];
+  'body.customers': definitions['customers']
   /** Format: bigint */
-  "rowFilter.customers.id": string;
+  'rowFilter.customers.id': string
   /** Format: timestamp with time zone */
-  "rowFilter.customers.created_at": string;
+  'rowFilter.customers.created_at': string
   /** Format: text */
-  "rowFilter.customers.name": string;
+  'rowFilter.customers.name': string
   /** Format: text */
-  "rowFilter.customers.email": string;
+  'rowFilter.customers.email': string
   /** Format: text */
-  "rowFilter.customers.phone": string;
+  'rowFilter.customers.phone': string
   /** Format: boolean */
-  "rowFilter.customers.status": string;
+  'rowFilter.customers.status': string
 }
 
 export interface operations {}

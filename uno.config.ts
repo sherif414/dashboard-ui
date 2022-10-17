@@ -4,13 +4,14 @@ export default defineConfig({
   shortcuts: [
     // components
     { 'summary-icon': 'p2 rounded-3 dark:bg-dark-2 bg-accent-3 box-content' },
-    { 'form-input': 'p3 surface-2 rounded-md focus:outline-gray-3 dark:focus:outline-none' },
+    { 'form-input': 'p3 surface-1 border dark:border-dark-3 rounded-md focus:outline-gray-3 dark:focus:outline-none' },
 
     // typography - colors
     { 'typo-clr-base': 'dark:text-gray-1 text-gray-9' },
     { 'typo-clr-muted': 'text-gray-4' },
     { 'typo-clr-disabled': 'dark:text-gray-7 text-gray-3' },
     { 'typo-clr-on-primary': 'text-gray-1' },
+    { 'typo-clr-primary': 'text-indigo-5 dark:text-violet-5' },
     //typography - sizes
     { 'typo-sm': 'text-3' },
     { 'typo-base': 'text-0.875rem' },
