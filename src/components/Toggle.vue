@@ -1,20 +1,24 @@
 <template>
-  <Switch
-    v-model="enabled"
-    :class="enabled ? 'dark:bg-violet-600 bg-indigo-600' : 'dark:bg-gray-600 bg-gray-300'"
-    class="relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+  <div
+    @click="$emit('update:modelValue', !modelValue)"
+    :style="{ scale: scale }"
+    class="w-42px h-24px rounded-full relative select-none transition duration-300 cursor-pointer scale-80"
+    :class="{ 'fill-primary-3': modelValue, 'bg-gray-2 dark:bg-dark-1': !modelValue }"
   >
-    <span class="sr-only"></span>
+    <input v-show="false" type="checkbox" :value="modelValue" />
     <span
-      aria-hidden="true"
-      :class="enabled ? 'translate-x-3' : 'translate-x-0'"
-      class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
-    />
-  </Switch>
+      :class="{
+        'fill-primary-2 translate-x-21px  border-indigo-6 dark:border-violet-6 ': modelValue,
+        'surface-1 border-white dark:border-dark-9 translate-x-3px': !modelValue,
+      }"
+      class="h-18px absolute w-18px left-0 top-0 rounded-full transition-all select-none duration-300 border-2px translate-y-3px shadow"
+    ></span>
+  </div>
 </template>
 
-<script setup>
-import { Switch } from '@headlessui/vue'
-
-const enabled = ref(false)
+<script setup lang="ts">
+const { modelValue = false } = defineProps<{
+  modelValue: boolean
+  scale?: number
+}>()
 </script>

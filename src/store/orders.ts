@@ -8,10 +8,9 @@ export const useOrderStore = defineStore('order', () => {
   async function getOrderList() {
     if (orderList.value === undefined) {
       const { data } = await supabase.from('orders').select('*')
-      orderList.value = data
+      if (data) orderList.value = data
     }
   }
-  getOrderList()
 
   return {
     orderList,

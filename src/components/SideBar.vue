@@ -2,7 +2,7 @@
 
 <template>
   <aside
-    class="sidebar h-screen fixed top-0 left-0 w-4rem hover:w-12rem transition-width duration-300 flex flex-col py-6rem px-3 surface-1 z-100 typo-clr-base"
+    class="sidebar shadow h-screen fixed top-0 left-0 w-4rem hover:w-12rem transition-width duration-300 flex flex-col py-6rem px-3 surface-1 z-100 typo-clr-base"
   >
     <nav class="flex flex-col w-full grow gap-y-4 text-3 text-gray-500">
       <router-link class="sidebar__link" to="/">
@@ -44,7 +44,7 @@
 
 <style>
 .sidebar__link {
-  --at-apply: flex items-center box-content p-2 duration-300 hover:dark:(text-gray-1 fill-gray-1 stroke-none);
+  --at-apply: flex items-center justify-start box-content py-2 pl-8px duration-300 hover:dark:(text-gray-1 fill-gray-1 stroke-none);
 }
 .router-link-active {
   --at-apply: text-gray-1 fill-primary-2 rounded-12px;

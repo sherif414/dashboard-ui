@@ -19,9 +19,9 @@
         <td class="py2">{{ product.id }}</td>
         <td class="py2">{{ product.name }}</td>
         <td class="py2">{{ new Date(product.created_at!).toDateString() }}</td>
-        <td class="py2">${{ product.price }}</td>
+        <td class="py2">${{ product.sell_price }}</td>
         <td class="py2">{{ product.stock }}</td>
-        <td class="py2">{{ product.discount }}</td>
+        <td class="py2">{{ product.discount_value }}</td>
         <td class="py2">{{ product.category }}</td>
         <td>
           <Chip :status="product.published">{{ product.published ? 'published' : 'not published' }}</Chip>

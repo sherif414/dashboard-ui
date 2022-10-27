@@ -3,6 +3,7 @@ import { router } from './pages/router'
 import App from './App.vue'
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
+import 'tippy.js/dist/tippy.css'
 import { createPinia } from 'pinia'
 
 const pinia = createPinia()

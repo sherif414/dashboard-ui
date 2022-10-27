@@ -1,6 +1,6 @@
 <template>
-  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 p4 h-screen">
-    <section class="col-span-2 grid grid-cols-2 pr-2 gap-4 overflow-y-auto">
+  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 p4 h-full w-full p-4 pl-5rem pt-5rem">
+    <section class="col-span-2 grid 2xl:px-8 grid-cols-2 pr-2 gap-4 overflow-y-auto">
       <!-- sales summary -->
       <SummaryCard
         :data="[
@@ -16,7 +16,7 @@
       <!-- customers summary -->
       <SummaryCard
         :data="[
-          { name: 'cusomters', value: customers ? customers.length : '', growth: '+1' },
+          { name: 'customers', value: customersStore.customersList?.length ?? '', growth: '+1' },
           { name: 'active', value: '1,050', growth: '+80' },
         ]"
       >
@@ -41,7 +41,7 @@
       <!-- products summary -->
       <SummaryCard
         :data="[
-          { name: 'all products', value: products ? products.length : '' },
+          { name: 'all products', value: productsStore.productsCount ?? '' },
           { name: 'active', value: '50', growth: '+20%' },
         ]"
         fill="fill-primary-2 typo-clr-on-primary"
@@ -62,8 +62,12 @@
 <script setup lang="ts">
 import { useProductsStore } from '~/store/products'
 import { useCustomersStore } from '~/store/customers'
-import { storeToRefs } from 'pinia'
 
-const { productsList: products } = storeToRefs(useProductsStore())
-const { customersList: customers } = storeToRefs(useCustomersStore())
+const productsStore = useProductsStore()
+const customersStore = useCustomersStore()
+
+onMounted(() => {
+  productsStore.getProductsCount()
+  customersStore.getCustomersList()
+})
 </script>

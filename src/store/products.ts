@@ -5,13 +5,20 @@ import { supabase } from '~/api'
 export const useProductsStore = defineStore('products', () => {
   const productsList = ref<definitions['products'][] | null>(null)
   const productsCount = ref<number | null>(null)
+  const publishedProducts = ref<number | null>(null)
 
   async function getProductList() {
     if (!productsList.value) {
-      const { data, count } = await supabase.from('products').select('*', { count: 'exact' })
+      const { data, count } = await supabase.from('products').select('*', { count: 'exact' }).range(0, 7)
       productsList.value = data
       productsCount.value = count
     }
+  }
+
+  async function getProductsCount(): Promise<void> {
+    if (productsCount.value) return
+    const { data } = await supabase.rpc('products_published_count')
+    publishedProducts.value = data as any
   }
 
   async function addProduct(product: definitions['products'], image?: File): Promise<boolean> {
@@ -47,13 +54,12 @@ export const useProductsStore = defineStore('products', () => {
     // }
   }
 
-  // FIX: this should be on the the page
-  getProductList()
-
   return {
     productsList,
     productsCount,
+    publishedProducts,
     getProductList,
+    getProductsCount,
     addProduct,
   }
 })

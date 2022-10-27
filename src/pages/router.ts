@@ -7,10 +7,10 @@ import orders from './orders/index.vue'
 import OrderDetails from './orders/details.vue'
 
 import customers from './customers/index.vue'
-import CustomerDetails from './customers/details.vue'
+import AddCustomer from './customers/details.vue'
 
 import products from './products/index.vue'
-import ProductDetails from './products/details.vue'
+import AddProduct from './products/add.vue'
 
 import chat from './chat.vue'
 import settings from './settings.vue'
@@ -29,13 +29,13 @@ export const router = createRouter({
       component: { render: () => h(RouterView) },
       children: [
         {
-          name: 'orders',
+          name: 'orders list',
           path: '',
           component: orders,
         },
         {
-          name: 'orders details',
-          path: 'details',
+          name: 'details',
+          path: 'detail',
           component: OrderDetails,
         },
       ],
@@ -51,9 +51,9 @@ export const router = createRouter({
           component: customers,
         },
         {
-          name: 'customer details',
-          path: 'details',
-          component: CustomerDetails,
+          name: 'add customer',
+          path: 'add',
+          component: AddCustomer,
         },
       ],
     },
@@ -68,9 +68,10 @@ export const router = createRouter({
           component: products,
         },
         {
-          name: 'product details',
-          path: 'details',
-          component: ProductDetails,
+          name: 'add product',
+          path: 'add',
+          component: AddProduct,
+          meta: { transitionName: 'slide-left' },
         },
       ],
     },

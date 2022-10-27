@@ -8,11 +8,11 @@
         <div><img width="48" heigh="48" src="../assets/img/iphone14.png" /></div>
         <div class="flex flex-col gap-y-1">
           <h2>{{ product.name }}</h2>
-          <h3>${{ product.price }}</h3>
+          <h3>${{ product.sell_price }}</h3>
         </div>
         <div class="flex flex-col items-end items-start gap-y-1 ml-auto">
           <span class="typo-clr-muted">{{ new Date(product.created_at!).toLocaleTimeString() }} </span>
-          <Chip :variant="product.published ? 'completed' : 'pending'" />
+          <Chip :status="product.published">{{ product.published ? 'published' : 'not published' }}</Chip>
         </div>
       </div>
     </template>
