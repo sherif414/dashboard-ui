@@ -37,7 +37,7 @@
     </div>
 
     <!-- data-table  -->
-    <ProductsTable />
+    <BaseTable :data="store.productsList" />
   </main>
 </template>
 
@@ -51,6 +51,6 @@ const unpublishedProducts = $computed<number | null>(() => {
 const store = useProductsStore()
 onMounted(() => {
   store.getProductsCount()
-  store.getProductList()
+  store.getProductTable()
 })
 </script>

@@ -17,11 +17,32 @@
       <table class="typo-base">
         <thead class="border-y border-gray-2 dark:border-dark-3 surface-1 capitalize">
           <tr class="text-left">
-            <slot name="headings" />
+            <slot name="headings">
+              <template v-if="data">
+                <th class="py2 px1">
+                  <input type="checkbox" />
+                </th>
+                <th v-for="(_, key, idx) in data[0]" :key="idx">
+                  <div class="flex items-center">
+                    {{ key }}
+                    <ISort class="ml2" />
+                  </div>
+                </th>
+              </template>
+            </slot>
           </tr>
         </thead>
         <tbody class="typo-sm">
-          <slot name="body" />
+          <slot name="body">
+            <template v-if="data">
+              <tr v-for="(row, idx) in data" :key="idx">
+                <td class="py2 px1">
+                  <input type="checkbox" />
+                </td>
+                <td v-for="(v, k) in row" :key="k" class="py2">{{ v }}</td>
+              </tr>
+            </template>
+          </slot>
         </tbody>
       </table>
     </div>
@@ -36,3 +57,9 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+const { data = [] } = defineProps<{
+  data?: object[] | null
+}>()
+</script>

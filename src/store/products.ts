@@ -1,18 +1,17 @@
 import { defineStore } from 'pinia'
-import { definitions } from 'types/supabase'
 import { supabase } from '~/api'
 
 export const useProductsStore = defineStore('products', () => {
-  const productsList = ref<definitions['products'][] | null>(null)
+  const productsList = ref()
   const productsCount = ref<number | null>(null)
   const publishedProducts = ref<number | null>(null)
 
-  async function getProductList() {
-    if (!productsList.value) {
-      const { data, count } = await supabase.from('products').select('*', { count: 'exact' }).range(0, 7)
-      productsList.value = data
-      productsCount.value = count
-    }
+  async function getProductTable() {
+    const res = await supabase
+      .from('products')
+      .select('id, name, created_at, category, stock, sell_price, delivery_type, published', { count: 'exact' })
+      .range(0, 7)
+    return res
   }
 
   async function getProductsCount(): Promise<void> {
@@ -21,7 +20,7 @@ export const useProductsStore = defineStore('products', () => {
     publishedProducts.value = data as any
   }
 
-  async function addProduct(product: definitions['products'], image?: File): Promise<boolean> {
+  async function addProduct(product: any, image?: File): Promise<boolean> {
     // image is valid
     if (image && image.type.startsWith('image') && image.name) {
       const imgRes = await supabase.storage.from('products-images').upload('preview-images/' + image.name, image)
@@ -58,7 +57,7 @@ export const useProductsStore = defineStore('products', () => {
     productsList,
     productsCount,
     publishedProducts,
-    getProductList,
+    getProductTable,
     getProductsCount,
     addProduct,
   }

@@ -8,8 +8,7 @@
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest",
-    "up": "taze major -I",
-    "update-types": "npx openapi-typescript https://mcvcidxgqdmfkoctzgbl.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jdmNpZHhncWRtZmtvY3R6Z2JsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjMyNTI5ODksImV4cCI6MTk3ODgyODk4OX0.r811ro-xC9NdKuGCcBZ72MyXm8-mc9rUvfpjxlVDkVY --output types/supabase.ts"
+    "up": "taze major -I"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.3",
