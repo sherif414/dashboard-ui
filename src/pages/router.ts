@@ -11,9 +11,12 @@ import AddCustomer from './customers/details.vue'
 
 import products from './products/index.vue'
 import AddProduct from './products/add.vue'
+import productDetails from './products/details.vue'
 
 import chat from './chat.vue'
 import settings from './settings.vue'
+
+import login from './login.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -73,6 +76,12 @@ export const router = createRouter({
           component: AddProduct,
           meta: { transitionName: 'slide-left' },
         },
+        {
+          name: 'details',
+          path: ':id',
+          component: productDetails,
+          meta: { transitionName: 'slide-left' },
+        },
       ],
     },
     {
@@ -84,6 +93,11 @@ export const router = createRouter({
       name: 'settings',
       path: '/settings',
       component: settings,
+    },
+    {
+      name: 'login',
+      path: '/login',
+      component: login,
     },
   ],
 })

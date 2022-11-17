@@ -1,10 +1,4 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
 export interface Database {
   public: {
@@ -64,7 +58,7 @@ export interface Database {
       products: {
         Row: {
           id: number
-          created_at: string | null
+          created_at: string
           name: string
           stock: number | null
           published: boolean
@@ -125,14 +119,7 @@ export interface Database {
       }
     }
     Enums: {
-      continents:
-        | "Africa"
-        | "Antarctica"
-        | "Asia"
-        | "Europe"
-        | "Oceania"
-        | "North America"
-        | "South America"
+      continents: 'Africa' | 'Antarctica' | 'Asia' | 'Europe' | 'Oceania' | 'North America' | 'South America'
     }
   }
 }

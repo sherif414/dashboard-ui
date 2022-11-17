@@ -20,7 +20,7 @@
             <!-- product name  -->
             <TextField
               required
-              v-model="formData.name"
+              v-model.trim="formData.name"
               placeholder="must be at least 3 characters"
               label="product name"
             >
@@ -37,19 +37,19 @@
             />
             <!-- pricing -->
             <div class="grid grid-cols-2 gap-4 items-center">
-              <TextField v-model="formData.sell_price" type="number" placeholder="0.00" label="sell price">
+              <TextField required v-model="formData.sell_price" type="number" placeholder="0.00" label="sell price">
                 <template #prepend>
                   <IMoney />
                 </template>
               </TextField>
-              <TextField v-model="formData.cost_price" type="number" placeholder="0.00" label="cost price">
+              <TextField required v-model="formData.cost_price" type="number" placeholder="0.00" label="cost price">
                 <template #prepend>
                   <IMoney />
                 </template>
               </TextField>
             </div>
             <!-- quantity -->
-            <TextField v-model="formData.stock" type="number" placeholder="0" label="in stock" />
+            <TextField required v-model="formData.stock" type="number" placeholder="0" label="in stock" />
             <!-- delivery type -->
             <Select v-model="formData.delivery_type" :options="['home delivery', 'pick up']" multiple
               >delivery type</Select
@@ -60,6 +60,7 @@
             <label class="flex flex-col w-full gap-y-1">
               description
               <textarea
+                required
                 v-model="formData.description"
                 rows="10"
                 class="form-input resize-none w-full focus:(outline-indigo-4 outline-2 dark:outline-violet-4)"

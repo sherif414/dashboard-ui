@@ -1,5 +1,5 @@
 <template>
-  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 p4 h-full w-full p-4 pl-5rem pt-5rem">
+  <main class="grid grid-cols-3 grid-rows-1 gap-x-6 p4 h-screen p-4 pl-5rem pt-5rem">
     <section class="col-span-2 grid 2xl:px-8 grid-cols-2 pr-2 gap-4 overflow-y-auto">
       <!-- sales summary -->
       <SummaryCard
@@ -16,7 +16,7 @@
       <!-- customers summary -->
       <SummaryCard
         :data="[
-          { name: 'customers', value: customersStore.customersList?.length ?? '', growth: '+1' },
+          { name: 'customers', value: customerStore.countAll ?? '', growth: '+1' },
           { name: 'active', value: '1,050', growth: '+80' },
         ]"
       >
@@ -41,7 +41,7 @@
       <!-- products summary -->
       <SummaryCard
         :data="[
-          { name: 'all products', value: productsStore.productsCount ?? '' },
+          { name: 'all products', value: productStore.countAll ?? '' },
           { name: 'active', value: '50', growth: '+20%' },
         ]"
         fill="fill-primary-2 typo-clr-on-primary"
@@ -55,7 +55,7 @@
       <ChartLine class="col-span-full" />
       <ChartBar class="col-span-full" />
     </section>
-    <RecentOrders />
+    <RecentOrders :data="productStore.products" />
   </main>
 </template>
 
@@ -63,11 +63,12 @@
 import { useProductsStore } from '~/store/products'
 import { useCustomersStore } from '~/store/customers'
 
-const productsStore = useProductsStore()
-const customersStore = useCustomersStore()
+const productStore = useProductsStore()
+const customerStore = useCustomersStore()
 
 onMounted(() => {
-  productsStore.getProductsCount()
-  customersStore.getCustomersList()
+  productStore.getCount()
+  productStore.getProducts({ orderBy: 'created_at', ascending: false, itemsPerPage: 50, page: 1 })
+  customerStore.getCount()
 })
 </script>

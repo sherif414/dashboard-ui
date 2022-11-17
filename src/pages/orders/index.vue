@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 pt-5rem pl-5rem flex flex-col gap-y-4 h-full">
+  <main class="p4 pt-5rem pl-5rem flex flex-col gap-y-4 h-screen">
     <button
       class="fixed bottom-5rem right-5rem fill-primary-2 rounded-full p-3 shadow-lg typo-clr-on-primary"
       @click="orderDialogRef?.openModal"
@@ -49,7 +49,13 @@
     </div>
 
     <!-- data-table  -->
-    <BaseTable />
+    <BaseTable
+      :get-data="store.getOrders"
+      table-name="orders"
+      :items-count="store.countAll"
+      :headers="headers"
+      :data="store.orderList"
+    />
 
     <!-- create order dialog -->
     <OrderDialog ref="orderDialogRef" />
@@ -62,8 +68,9 @@ import OrderDialog from '~/components/OrderDialog.vue'
 
 const orderDialogRef = $ref<InstanceType<typeof OrderDialog> | null>(null)
 const store = useOrderStore()
+const headers = ['id', 'owner', 'created_at', 'type', 'status', 'purchases']
 
 onMounted(() => {
-  store.getOrderList()
+  store.getOrders({ orderBy: 'id', page: 1, itemsPerPage: 10, ascending: true })
 })
 </script>

@@ -9,6 +9,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  status?: boolean
+  status: boolean | null
 }>()
 </script>

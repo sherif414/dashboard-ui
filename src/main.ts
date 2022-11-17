@@ -1,9 +1,15 @@
+// framework
 import { createApp } from 'vue'
-import { router } from './pages/router'
 import App from './App.vue'
+
+// styles
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
+import './assets/styles/index.css'
 import 'tippy.js/dist/tippy.css'
+
+// 3rd party
+import { router } from './pages/router'
 import { createPinia } from 'pinia'
 
 const pinia = createPinia()

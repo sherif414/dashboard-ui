@@ -1,23 +1,32 @@
 import { defineStore } from 'pinia'
 import { supabase } from '~/api'
+import type { ProductTable, getTableDataParams } from 'types'
 
 export const useProductsStore = defineStore('products', () => {
-  const productsList = ref()
-  const productsCount = ref<number | null>(null)
-  const publishedProducts = ref<number | null>(null)
+  const products = ref<ProductTable[] | null>(null)
+  const countAll = ref<number | null>(null)
+  const countPublished = ref<number | null>(null)
 
-  async function getProductTable() {
-    const res = await supabase
+  async function getProducts({ orderBy, itemsPerPage, page, ascending }: getTableDataParams) {
+    const from = (page - 1) * itemsPerPage
+    const to = page * itemsPerPage
+
+    const { data, count } = await supabase
       .from('products')
-      .select('id, name, created_at, category, stock, sell_price, delivery_type, published', { count: 'exact' })
-      .range(0, 7)
-    return res
+      .select('id, name, created_at, category, stock, sell_price, delivery_type, published', { count: 'estimated' })
+      .range(from, to - 1)
+      .order(orderBy, { ascending })
+
+    products.value = data
+    countAll.value = count
   }
 
-  async function getProductsCount(): Promise<void> {
-    if (productsCount.value) return
-    const { data } = await supabase.rpc('products_published_count')
-    publishedProducts.value = data as any
+  async function getCount(): Promise<void> {
+    const { count } = await supabase
+      .from('products')
+      .select(undefined, { count: 'estimated', head: true })
+      .filter('published', 'eq', true)
+    countPublished.value = count
   }
 
   async function addProduct(product: any, image?: File): Promise<boolean> {
@@ -30,9 +39,9 @@ export const useProductsStore = defineStore('products', () => {
         return false
       }
 
-      // image uploaded successfully now upload the rest of the product
+      // image uploaded successfully now upload the rest of the product data
       product.image = imgRes.data.path
-      const { error, status } = await supabase.from('products').insert([product])
+      const { error, status } = await supabase.from('products').insert(product)
       if (error) return false
       if (status == 201 || status == 200) return true
       return false
@@ -43,22 +52,14 @@ export const useProductsStore = defineStore('products', () => {
     if (error) return false
     if (status == 201 || status == 200) return true
     return false
-    // if (additional_images) {
-    //   additional_images.forEach(async (img) => {
-    //     const res = await supabase.storage
-    //       .from('public/products-images')
-    //       .upload('additional-images' + img.name, img.file)
-    //     console.log(res)
-    //   })
-    // }
   }
 
   return {
-    productsList,
-    productsCount,
-    publishedProducts,
-    getProductTable,
-    getProductsCount,
+    products,
+    countAll,
+    countPublished,
+    getProducts,
+    getCount,
     addProduct,
   }
 })

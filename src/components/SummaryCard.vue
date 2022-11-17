@@ -11,9 +11,9 @@
     </div>
     <div class="flex justify-between text-left">
       <div v-for="{ name, value, growth } in data" :key="name">
-        <h2 class="capitalize opacity-80">{{ name }}</h2>
+        <h2 class="capitalize">{{ name }}</h2>
         <h3 class="typo-base">
-          {{ value ? value : '?' }}
+          {{ !!value ? value : '-' }}
           <span v-if="growth" class="text-success typo-sm">{{ growth }}</span>
         </h3>
       </div>

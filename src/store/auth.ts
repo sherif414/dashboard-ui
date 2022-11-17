@@ -2,5 +2,6 @@ import { defineStore } from 'pinia'
 // import { supabase } from '../api'
 
 export const useAuthStore = defineStore('main', () => {
-  return {}
+  const isLogged = ref(false)
+  return { isLogged }
 })

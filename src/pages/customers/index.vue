@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 pt-20 pl-20 2xl:(p8 pt-20 pl-24 gap-8) flex flex-col gap-4 h-full w-full">
+  <main class="p4 pt-20 pl-20 2xl:(p8 pt-20 pl-24 gap-8) flex flex-col gap-4 h-screen">
     <button
       class="fixed right-20 bottom-24 fill-primary-2 rounded-full p-3 typo-clr-on-primary"
       @click="ModalRef?.openModal"
@@ -39,7 +39,13 @@
     </div>
 
     <!-- data-table  -->
-    <BaseTable />
+    <BaseTable
+      :items-count="store.countAll"
+      :data="store.customers"
+      :headers="headers"
+      :get-data="store.getCustomers"
+      table-name="customers"
+    />
 
     <!-- create order dialog -->
     <CreateCustomerModal ref="ModalRef" />
@@ -47,11 +53,15 @@
 </template>
 
 <script setup lang="ts">
-//import { useCustomersStore } from '~/store/customers'
-
+import { useCustomersStore } from '~/store/customers'
 import CreateCustomerModal from '~/components/CreateCustomerModal.vue'
-const ModalRef = $ref<InstanceType<typeof CreateCustomerModal> | null>(null)
 
-//const store = useCustomersStore()
-//store.getCustomersList()
+const ModalRef = $ref<InstanceType<typeof CreateCustomerModal> | null>(null)
+const headers = ['id', 'name', 'email', 'created_at', 'phone', 'status']
+
+const store = useCustomersStore()
+
+onMounted(() => {
+  store.getCustomers({ orderBy: 'id', page: 1, itemsPerPage: 10, ascending: true })
+})
 </script>

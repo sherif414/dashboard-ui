@@ -24,30 +24,31 @@ onMounted(() => {
 <style>
 .spinner {
   position: absolute;
-  display: grid;
-  place-self: center;
-  place-items: center;
 }
 
 .spinner > div {
   position: absolute;
   border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
   border: 3px solid transparent;
   border-top-color: currentColor;
 }
 .spinner > div:nth-child(1) {
-  border-left-color: currentColor;
+  /* border-left-color: currentColor; */
   width: 100%;
   height: 100%;
 }
 .spinner > div:nth-child(2) {
+  border-left-color: currentColor;
   width: 70%;
   height: 70%;
   border-style: dotted;
 }
 .spinner > div:nth-child(3) {
   border-left-color: currentColor;
-  width: 50%;
-  height: 50%;
+  width: 40%;
+  height: 40%;
 }
 </style>
