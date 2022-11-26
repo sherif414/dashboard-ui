@@ -3,6 +3,7 @@ import type { Database } from './supabase'
 export type Order = Database['public']['Tables']['orders']['Row']
 export type Product = Database['public']['Tables']['products']['Row']
 export type Customer = Database['public']['Tables']['customers']['Row']
+export type Profile = Database['public']['Tables']['profiles']['Row']
 
 export interface ProductTable {
   id: number

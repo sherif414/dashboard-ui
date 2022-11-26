@@ -103,6 +103,7 @@ async function submit() {
   let imgPath
 
   if (productImage) {
+    let imageName = ''
     const res = await store.insertImage(productImage, `${formData.name}-preview`)
 
     if (res.error) {

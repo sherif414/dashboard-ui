@@ -31,38 +31,38 @@ export interface Database {
       }
       orders: {
         Row: {
-          id: number
-          created_at: string | null
-          owner: number
           type: string
           status: boolean | null
           purchases: number[]
+          created_at: string | null
+          owner: number
+          id: number
         }
         Insert: {
-          id?: number
-          created_at?: string | null
-          owner: number
           type: string
           status?: boolean | null
           purchases: number[]
+          created_at?: string | null
+          owner: number
+          id?: number
         }
         Update: {
-          id?: number
-          created_at?: string | null
-          owner?: number
           type?: string
           status?: boolean | null
           purchases?: number[]
+          created_at?: string | null
+          owner?: number
+          id?: number
         }
       }
       products: {
         Row: {
           id: number
-          created_at: string
-          name: string
+          created_at: string | null
           stock: number | null
           published: boolean
           category: string | null
+          name: string | null
           sell_price: number | null
           cost_price: number | null
           discount_type: string | null
@@ -76,10 +76,10 @@ export interface Database {
         Insert: {
           id?: number
           created_at?: string | null
-          name: string
           stock?: number | null
           published?: boolean
           category?: string | null
+          name?: string | null
           sell_price?: number | null
           cost_price?: number | null
           discount_type?: string | null
@@ -93,10 +93,10 @@ export interface Database {
         Update: {
           id?: number
           created_at?: string | null
-          name?: string
           stock?: number | null
           published?: boolean
           category?: string | null
+          name?: string | null
           sell_price?: number | null
           cost_price?: number | null
           discount_type?: string | null
@@ -106,6 +106,23 @@ export interface Database {
           image?: string | null
           additional_images?: string[] | null
           delivery_type?: string[] | null
+        }
+      }
+      profiles: {
+        Row: {
+          id: string
+          full_name: string
+          profile_image: string | null
+        }
+        Insert: {
+          id: string
+          full_name: string
+          profile_image?: string | null
+        }
+        Update: {
+          id?: string
+          full_name?: string
+          profile_image?: string | null
         }
       }
     }

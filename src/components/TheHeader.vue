@@ -11,11 +11,16 @@
       <IBell class="typo-clr-primary cursor-pointer" width="24" height="24" />
       <div>
         <div class="w-8 h-8 rounded-50% overflow-hidden cursor-pointer">
-          <img src="../assets/img/profile.jpg" alt="profile image" />
+          <img :src="auth.profile?.profile_image ?? '../assets/img/profile.jpg'" alt="avatar" />
         </div>
       </div>
     </div>
   </header>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAuthStore } from '~/store/auth'
+
+const auth = useAuthStore()
+auth.getProfile()
+</script>

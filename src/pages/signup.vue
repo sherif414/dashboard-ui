@@ -9,7 +9,7 @@
         <h2 class="text-center typo-clr-muted typo-sm">create your account</h2>
       </div>
       <div class="flex flex-col">
-        <TextField required v-model="name" placeholder="your full name" type="text">
+        <TextField required v-model="fullName" placeholder="your full name" type="text">
           <template #prepend><ICustomers /></template>
         </TextField>
         <TextField required class="my-5" v-model="email" placeholder="Email Address" type="email">
@@ -35,14 +35,14 @@ const auth = useAuthStore()
 const router = useRouter()
 
 let isSubmitting = $ref(false)
-let name = $ref('')
+let fullName = $ref('')
 let email = $ref('')
 let password = $ref('')
 
 async function handleSignup() {
-  if (email && password) {
+  if (email && password && fullName) {
     isSubmitting = true
-    const error = await auth.signUp(email, password)
+    const error = await auth.signUp(email, password, fullName)
     isSubmitting = false
     if (error) {
       useMessage('error', error.message)
