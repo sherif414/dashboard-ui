@@ -1,40 +1,24 @@
 <template>
-  <main class="h-full w-full p4 pt-5rem pl-5rem">
-    <FlashMessage :variant="messageType" :show="isShowingMessage" :msg="message" />
-    <form @submit.prevent="submit" ref="formEl" class="flex flex-col gap-4 h-full">
+  <main class="h-screen p4 pt-5rem pl-5rem">
+    <form @submit.prevent="submit" class="flex flex-col gap-4 h-full">
       <!-- title  -->
       <header class="flex items-center gap-4">
         <h1 class="typo-head">Create New Products</h1>
-        <button
-          type="submit"
-          class="relative typo-clr-on-primary grid px-4 py-2 rounded-md ml-auto transition-color"
-          :class="[isSubmitting ? 'fill-primary-3 pointer-events-none' : 'fill-primary-2']"
-        >
-          <span :class="{ 'opacity-0': isSubmitting }"> add product </span>
-          <ILoading class="w-6 h-6" v-if="isSubmitting" />
-        </button>
+        <Btn class="ml-auto" type="submit" :loading="isSubmitting"> add product </Btn>
       </header>
       <div class="grow grid grid-cols-3 gap-x-4">
         <div class="p8 grid grid-cols-2 gap-x-16 col-span-2 rounded-md surface-1 typo-sm">
           <div class="flex flex-col gap-6">
             <!-- product name  -->
-            <TextField
-              required
-              v-model.trim="formData.name"
-              placeholder="must be at least 3 characters"
-              label="product name"
-            >
+            <TextField required v-model="formData.name" placeholder="name" label="product name">
               <template #prepend>
                 <IShoppingBag />
               </template>
             </TextField>
+
             <!-- category -->
-            <ComboBox
-              place-holder="select category"
-              v-model="formData.category"
-              label="category"
-              :options="categories"
-            />
+            <Select v-model="formData.category" label="category" :options="categories">select category</Select>
+
             <!-- pricing -->
             <div class="grid grid-cols-2 gap-4 items-center">
               <TextField required v-model="formData.sell_price" type="number" placeholder="0.00" label="sell price">
@@ -48,12 +32,12 @@
                 </template>
               </TextField>
             </div>
+
             <!-- quantity -->
             <TextField required v-model="formData.stock" type="number" placeholder="0" label="in stock" />
+
             <!-- delivery type -->
-            <Select v-model="formData.delivery_type" :options="['home delivery', 'pick up']" multiple
-              >delivery type</Select
-            >
+            <Select v-model="formData.delivery_type" :options="['home delivery', 'pick up']">delivery type</Select>
           </div>
           <!-- description -->
           <div class="flex flex-col w-full gap-y-4">
@@ -61,7 +45,7 @@
               description
               <textarea
                 required
-                v-model="formData.description"
+                v-model.trim.lazy="formData.description"
                 rows="10"
                 class="form-input resize-none w-full focus:(outline-indigo-4 outline-2 dark:outline-violet-4)"
                 placeholder="short description"
@@ -98,50 +82,59 @@ import { useProductsStore } from '~/store/products'
 
 const categories = ['phone', 'computer', 'laptop', 'clothes', 'shoes', 'accessory', 'gadget']
 const store = useProductsStore()
-let formEl = $ref<HTMLFormElement | null>(null)
-
-let isSubmitting = $ref(false)
-let isShowingMessage = $ref(false)
-
-let message = $ref('')
-let messageType = $ref<'success' | 'error'>('success')
 
 let productImage = $ref<File | undefined>()
 let formData = $ref({
-  name: '',
-  description: '',
+  name: undefined,
+  description: undefined,
   category: '',
   sell_price: undefined,
   cost_price: undefined,
   stock: undefined,
   delivery_type: [],
-  discount_type: '',
+  discount_type: [],
   discount_value: undefined,
   expiration_date: undefined,
 })
 
+let isSubmitting = $ref(false)
 async function submit() {
   isSubmitting = true
-  formEl?.reportValidity()
-  const res = await store.addProduct(formData, productImage)
-  if (!res) {
-    message = 'something wrong happened'
-    messageType = 'error'
-    isShowingMessage = true
-    setTimeout(() => {
-      isShowingMessage = false
-    }, 5000)
+  let imgPath
+
+  if (productImage) {
+    const res = await store.insertImage(productImage, `${formData.name}-preview`)
+
+    if (res.error) {
+      useMessage('error', res.error.message ?? 'an error has ocurred')
+      isSubmitting = false
+      return
+    }
+    imgPath = res.data.path
   }
-  //
-  else if (res) {
-    message = 'the product was added successfully'
-    messageType = 'success'
-    isShowingMessage = true
-    formEl?.reset()
-    setTimeout(() => {
-      isShowingMessage = false
-    }, 5000)
+
+  const err = await store.insertProduct({ ...formData, image: imgPath })
+  useMessage(err ? 'error' : 'success', err ? err.message : 'product was added successfully')
+  console.log(err)
+
+  if (!err) {
+    resetForm()
   }
-  isSubmitting = false
+  setTimeout(() => {
+    isSubmitting = false
+  }, 200)
+}
+
+function resetForm() {
+  formData.name = undefined
+  formData.description = undefined
+  formData.category = ''
+  formData.sell_price = undefined
+  formData.cost_price = undefined
+  formData.stock = undefined
+  formData.delivery_type = []
+  formData.discount_type = []
+  formData.discount_value = undefined
+  formData.expiration_date = undefined
 }
 </script>

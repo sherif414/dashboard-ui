@@ -17,6 +17,9 @@ import chat from './chat.vue'
 import settings from './settings.vue'
 
 import login from './login.vue'
+import signup from './signup.vue'
+import EmailConfirmation from './EmailConfirmation.vue'
+import { useAuthStore } from '~/store/auth'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -99,5 +102,26 @@ export const router = createRouter({
       path: '/login',
       component: login,
     },
+    {
+      name: 'signup',
+      path: '/signup',
+      component: signup,
+    },
+    {
+      name: 'email confirmation',
+      path: '/email-confirmation',
+      component: EmailConfirmation,
+    },
   ],
+})
+
+router.beforeEach(async (to) => {
+  const auth = useAuthStore()
+  const authRequired = !auth.publicPages.includes(to.path)
+
+  if (authRequired && !auth.user) {
+    auth.redirectPath = to.fullPath
+    return '/login'
+  }
+  return true
 })

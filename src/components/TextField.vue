@@ -4,7 +4,7 @@
       {{ label }}
     </div>
     <div
-      class="px-3 py-1 rounded flex items-center gap-x-3 outline surface-1 transition duration-300"
+      class="px-3 py-1 rounded flex items-center gap-x-3 outline surface-1"
       :class="[
         {
           'outline-indigo-4 dark:outline-violet-4 outline-2': isFocused,
@@ -14,15 +14,16 @@
         classes,
       ]"
     >
-      <div class="[&>*]:(w-18px h-18px)" v-if="$slots.prepend">
+      <div class="w-4 h-4 flex justify-center items-center" v-if="$slots.prepend">
         <slot name="prepend" />
       </div>
       <input
         ref="el"
         class="h-2rem focus:outline-none active:outline-none grow bg-inherit w-full resize-none border-none"
-        :placeholder="placeholder"
         @focus="handleFocus"
         @blur="handleBlur"
+        @[eventType]="handleEmit"
+        :placeholder="placeholder"
         :value="modelValue"
         :required="required"
         :disabled="disabled"
@@ -35,7 +36,7 @@
     <span
       class="duration-300 transition-opacity text-error absolute bottom--5 left-0 text-10px"
       :class="[isInvalid && !isFocused ? 'opacity-100' : 'opacity-0 pointer-events-none']"
-      >{{ errorMessage }}</span
+      >{{ errorMsg ?? 'this field is required' }}</span
     >
   </label>
 </template>
@@ -46,21 +47,26 @@ interface Props {
   type?: 'text' | 'email' | 'password' | 'date' | 'number' | 'tel' | 'time' | 'url' | 'search'
   disabled?: boolean
   modelValue?: string | number
-  modelModifiers?: { noSpace?: boolean; isLazy?: boolean; isNumber?: boolean }
+  modelModifiers?: { noTrim?: boolean; noLazy?: boolean; isNumber?: boolean }
   placeholder?: string
   required?: boolean
   classes?: string
+  invalid?: boolean
+  errorMsg?: string
 }
 
-const { type = 'text', modelValue, required, modelModifiers } = defineProps<Props>()
+const { type = 'text', modelValue, required, invalid, modelModifiers } = defineProps<Props>()
 
+let eventType = $computed(() => {
+  return modelModifiers?.noLazy ? 'input' : 'change'
+})
 const el = $ref<HTMLInputElement | null>(null)
 const emits = defineEmits(['update:modelValue'])
 
 function handleEmit(e: Event) {
   let value: string | number | undefined = (e.target as HTMLInputElement)?.value
 
-  if (modelModifiers?.noSpace) {
+  if (!modelModifiers?.noTrim) {
     value = value.trim()
   }
 
@@ -72,36 +78,18 @@ function handleEmit(e: Event) {
 }
 
 let isFocused = $ref(false)
-let isInvalid = $ref(false)
-let errorMessage = $ref('invalid input')
+let _invalid = $ref(false)
+let isInvalid = $computed(() => invalid || _invalid)
 
-function handleBlur(e: Event) {
+function handleBlur() {
   isFocused = false
-  if (!required) return
-  if (!modelValue) {
-    isInvalid = true
-    errorMessage = 'this Field is required'
+  if (required && !modelValue) {
+    _invalid = true
   }
 }
 
 function handleFocus() {
   isFocused = true
-  isInvalid = false
+  _invalid = false
 }
-
-onMounted(() => {
-  if (modelModifiers?.isLazy) {
-    el?.addEventListener('change', handleEmit)
-  } else {
-    el?.addEventListener('input', handleEmit)
-  }
-})
-
-onUnmounted(() => {
-  if (modelModifiers?.isLazy) {
-    el?.removeEventListener('change', handleEmit)
-  } else {
-    el?.removeEventListener('input', handleEmit)
-  }
-})
 </script>

@@ -21,12 +21,12 @@ export default defineConfig({
     // background colors - surfaces
     { 'surface-1': 'dark:bg-dark-9 bg-white' },
     { 'surface-2': 'dark:bg-dark-6 bg-gray-1' },
-    { 'surface-3': 'dark:bg-dark-3 bg-gray-1' },
+    { 'surface-3': 'dark:bg-dark-3 bg-white' },
 
     // background colors - primary
-    { 'fill-primary-1': 'dark:bg-violet-9 bg-indigo-9' },
+    { 'fill-primary-1': 'dark:bg-violet-7 bg-indigo-7' },
     { 'fill-primary-2': 'dark:bg-violet-6 bg-indigo-6' },
-    { 'fill-primary-3': 'dark:bg-violet-3 bg-indigo-3' },
+    { 'fill-primary-3': 'dark:bg-violet-5 bg-indigo-5' },
   ],
   theme: {
     colors: {

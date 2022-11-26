@@ -21,7 +21,7 @@ export const useProductsStore = defineStore('products', () => {
     countAll.value = count
   }
 
-  async function getCount(): Promise<void> {
+  async function getCount() {
     const { count } = await supabase
       .from('products')
       .select(undefined, { count: 'estimated', head: true })
@@ -29,29 +29,13 @@ export const useProductsStore = defineStore('products', () => {
     countPublished.value = count
   }
 
-  async function addProduct(product: any, image?: File): Promise<boolean> {
-    // image is valid
-    if (image && image.type.startsWith('image') && image.name) {
-      const imgRes = await supabase.storage.from('products-images').upload('preview-images/' + image.name, image)
+  async function insertImage(image: File, fileName: string) {
+    return await supabase.storage.from('products-images').upload('preview-images/' + fileName, image)
+  }
 
-      // error on uploading image
-      if (imgRes.error) {
-        return false
-      }
-
-      // image uploaded successfully now upload the rest of the product data
-      product.image = imgRes.data.path
-      const { error, status } = await supabase.from('products').insert(product)
-      if (error) return false
-      if (status == 201 || status == 200) return true
-      return false
-    }
-
-    // image is invalid or upload without an image
-    const { error, status } = await supabase.from('products').insert([product])
-    if (error) return false
-    if (status == 201 || status == 200) return true
-    return false
+  async function insertProduct(product: any) {
+    const { error } = await supabase.from('products').insert([product])
+    return error
   }
 
   return {
@@ -60,6 +44,7 @@ export const useProductsStore = defineStore('products', () => {
     countPublished,
     getProducts,
     getCount,
-    addProduct,
+    insertProduct,
+    insertImage,
   }
 })

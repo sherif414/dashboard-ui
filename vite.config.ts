@@ -1,10 +1,7 @@
-/// <reference types="vitest" />
-
 import path from 'path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 
@@ -29,9 +26,6 @@ export default defineConfig({
         {
           motion: ['animate', 'spring', 'timeline', 'stagger'],
         },
-        {
-          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
-        },
       ],
       dts: true,
       dirs: ['./src/composables'],
@@ -41,7 +35,6 @@ export default defineConfig({
     // https://github.com/antfu/vite-plugin-components
     Components({
       dts: true,
-      resolvers: [NaiveUiResolver()],
     }),
 
     // https://github.com/antfu/unocss

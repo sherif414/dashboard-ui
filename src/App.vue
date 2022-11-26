@@ -1,6 +1,6 @@
 <template>
-  <TheHeader />
-  <SideBar v-if="authStore.isLogged" />
+  <TheHeader v-if="publicPage" />
+  <SideBar v-if="publicPage" />
 
   <router-view v-slot="{ Component }">
     <transition name="fade" mode="out-in">
@@ -10,7 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/store/auth'
+import { useAuthStore } from './store/auth'
 
-const authStore = useAuthStore()
+const auth = useAuthStore()
+const route = useRoute()
+
+let publicPage = $computed(() => !auth.publicPages.includes(route.fullPath))
 </script>

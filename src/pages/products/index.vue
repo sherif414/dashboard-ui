@@ -20,7 +20,7 @@
         ]"
       >
         <template #icon>
-          <IInventory width="18" height="18" class="summary-icon fill-primary-3" />
+          <IInventory width="18" height="18" class="summary-icon fill-primary-3 typo-clr-on-primary!" />
         </template>
       </SummaryCard>
 

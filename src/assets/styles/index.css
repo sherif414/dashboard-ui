@@ -1,4 +1,4 @@
-body{
+body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -16,46 +16,53 @@ body{
 }
 
 .fade-enter-active,
-.fade-leave-active{
+.fade-leave-active {
   --at-apply: transition-opacity duration-300;
 }
+
 .fade-enter-from,
-.fade-leave-to{
- --at-apply: opacity-0;
+.fade-leave-to {
+  --at-apply: opacity-0;
 }
 
 .slide-left-enter-active,
-.slide-left-leave-active{
+.slide-left-leave-active {
   --at-apply: transition-all duration-300 absolute w-full h-full;
 }
-.slide-left-enter-from{
+
+.slide-left-enter-from {
   --at-apply: translate-x-100vw;
 }
-.slide-left-leave-to{
- --at-apply: translate-x-100vw;
+
+.slide-left-leave-to {
+  --at-apply: translate-x-100vw;
 }
 
 .slide-right-enter-active,
-.slide-right-leave-active{
+.slide-right-leave-active {
   --at-apply: transition-all duration-300 absolute w-full h-full;
 }
-.slide-right-enter-from{
+
+.slide-right-enter-from {
   --at-apply: translate-x--100vw;
 }
-.slide-right-leave-to{
- --at-apply: translate-x--100vw;
+
+.slide-right-leave-to {
+  --at-apply: translate-x--100vw;
 }
 
 dialog[open] {
-    animation: showModal 150ms ease normal;
+  animation: showModal 150ms ease normal;
 }
-@keyframes showModal{
-    from {
-      scale: 80%;
-    }
-    to {
-      scale: 100%;
-    }
+
+@keyframes showModal {
+  from {
+    scale: 80%;
+  }
+
+  to {
+    scale: 100%;
+  }
 }
 
 .hide-arrows[type='number']::-webkit-outer-spin-button,
@@ -64,7 +71,69 @@ dialog[open] {
   appearance: none;
   margin: 0;
 }
+
 .hide-arrows[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+#notification {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 999999;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 70px;
+}
+
+.notification__msg {
+  --at-apply: w-auto h-35px flex shrink-0 items-center justify-center p-4 transition-all duration-300 opacity-0 mt-0 mb-10px translate-y--100% shadow-md text-14px rounded-md surface-3;
+}
+
+.msg__content {
+
+  --at-apply: max-w-500px text-ellipsis whitespace-nowrap overflow-hidden;
+}
+
+.notification__msg svg {
+
+  --at-apply: w-4 h-4 mr-3 !important;
+}
+
+.msg--normal {
+  --at-apply: typo-clr-base;
+}
+
+.msg--error {
+  --at-apply: text-error;
+}
+
+.msg--success {
+  --at-apply: text-success;
+}
+
+.msg--info {
+  --at-apply: typo-clr-primary;
+}
+
+.msg--warn {
+  --at-apply: text-warn;
+}
+
+.msg--icon {
+  --at-apply: flex;
+}
+
+.msg--show {
+
+  --at-apply: opacity-100 translate-y-0;
+}
+
+.msg--hide {
+
+  --at-apply: opacity-0 mt--45px;
+
 }
