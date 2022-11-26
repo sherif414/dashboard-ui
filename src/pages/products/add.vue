@@ -79,7 +79,7 @@
 
 <script setup lang="ts">
 import { useProductsStore } from '~/store/products'
-
+import { v4 as uuid } from 'uuid'
 const categories = ['phone', 'computer', 'laptop', 'clothes', 'shoes', 'accessory', 'gadget']
 const store = useProductsStore()
 
@@ -100,21 +100,20 @@ let formData = $ref({
 let isSubmitting = $ref(false)
 async function submit() {
   isSubmitting = true
-  let imgPath
+  let imageName
 
   if (productImage) {
-    let imageName = ''
-    const res = await store.insertImage(productImage, `${formData.name}-preview`)
+    const res = await store.insertImage(productImage, `${uuid()}.${productImage.name.split('.').pop()}`)
 
     if (res.error) {
       useMessage('error', res.error.message ?? 'an error has ocurred')
       isSubmitting = false
       return
     }
-    imgPath = res.data.path
+    imageName = res.data.path
   }
 
-  const err = await store.insertProduct({ ...formData, image: imgPath })
+  const err = await store.insertProduct({ ...formData, image: imageName })
   useMessage(err ? 'error' : 'success', err ? err.message : 'product was added successfully')
   console.log(err)
 

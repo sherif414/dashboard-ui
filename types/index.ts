@@ -7,7 +7,7 @@ export type Profile = Database['public']['Tables']['profiles']['Row']
 
 export interface ProductTable {
   id: number
-  name: string
+  name: string | null
   created_at: string | null
   category: string | null
   stock: number | null

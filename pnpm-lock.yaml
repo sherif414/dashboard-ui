@@ -4,6 +4,7 @@ specifiers:
   '@supabase/supabase-js': 2.1.1
   '@types/chart.js': ^2.9.37
   '@types/node': 18.11.2
+  '@types/uuid': ^8.3.4
   '@unocss/reset': ^0.46.5
   '@vitejs/plugin-vue': ^3.2.0
   '@vueuse/core': ^9.6.0
@@ -16,6 +17,7 @@ specifiers:
   unocss: 0.46.5
   unplugin-auto-import: ^0.11.5
   unplugin-vue-components: ^0.22.11
+  uuid: ^9.0.0
   vite: ^3.2.4
   vue: ^3.2.45
   vue-router: ^4.1.6
@@ -28,12 +30,14 @@ dependencies:
   motion: 10.14.3
   pinia: 2.0.26_mgnvym7yiazkylwwogi5r767ue
   tippy.js: 6.3.7
+  uuid: 9.0.0
   vue: 3.2.45
   vue-router: 4.1.6_vue@3.2.45
 
 devDependencies:
   '@types/chart.js': 2.9.37
   '@types/node': 18.11.2
+  '@types/uuid': 8.3.4
   '@unocss/reset': 0.46.5
   '@vitejs/plugin-vue': 3.2.0_vite@3.2.4+vue@3.2.45
   taze: 0.8.4
@@ -442,6 +446,10 @@ packages:
   /@types/phoenix/1.5.4:
     resolution: {integrity: sha512-L5eZmzw89eXBKkiqVBcJfU1QGx9y+wurRIEgt0cuLH0hwNtVUxtx+6cu0R2STwWj468sjXyBYPYDtGclUd1kjQ==}
     dev: false
+
+  /@types/uuid/8.3.4:
+    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
+    dev: true
 
   /@types/web-bluetooth/0.0.16:
     resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
@@ -2736,6 +2744,11 @@ packages:
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
+
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /validate-npm-package-license/3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}

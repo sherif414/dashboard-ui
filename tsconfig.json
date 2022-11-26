@@ -17,7 +17,8 @@
     "types": [
       "vite/client",
       "chart.js/types",
-      "naive-ui/volar"
+      "naive-ui/volar",
+      "types"
     ],
     "paths": {
       "~/*": ["src/*"]
