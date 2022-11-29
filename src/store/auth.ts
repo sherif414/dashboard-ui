@@ -30,6 +30,24 @@ export const useAuthStore = defineStore('main', () => {
     profile.value = (await supabase.from('profiles').select('*')).data?.[0] ?? null
   }
 
+  async function updateProfile({
+    id = 'leave empty',
+    full_name,
+    profile_image,
+    city,
+    country,
+    state,
+    email,
+    address,
+    phone_number,
+  }: Profile) {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ full_name, city, state, address, phone_number, country, profile_image, email })
+      .eq('id', user.value?.id)
+    return error
+  }
+
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
       user.value = session?.user ?? null
@@ -40,5 +58,5 @@ export const useAuthStore = defineStore('main', () => {
     }
   })
 
-  return { redirectPath, publicPages, getUser, getProfile, signOut, signUp, login, profile, user }
+  return { redirectPath, publicPages, getUser, getProfile, updateProfile, signOut, signUp, login, profile, user }
 })
