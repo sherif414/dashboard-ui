@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="h-full w-full grid grid-cols-3 2xl:grid-cols-2 gap-x-8">
+  <form @submit.prevent="handleSubmit" class="h-full w-full grid grid-cols-3 2xl:grid-cols-2 gap-x-8 p2">
     <header class="col-span-full flex items-center gap-x-4">
       <h1 class="typo-lg">Account Settings</h1>
       <Btn :loading="isLoading" class="ml-auto px-6 w-20ch!" type="submit">update</Btn>
