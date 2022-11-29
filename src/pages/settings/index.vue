@@ -24,7 +24,7 @@
           >edit info</RouterLink
         >
       </nav>
-      <div class="grow relative overflow-hidden p2">
+      <div class="grow relative overflow-hidden">
         <RouterView v-slot="{ Component, route }">
           <Transition :name="route.meta.transition ?? transitionName">
             <Component :is="Component" />
