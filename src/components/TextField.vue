@@ -46,7 +46,7 @@ interface Props {
   label?: string
   type?: 'text' | 'email' | 'password' | 'date' | 'number' | 'tel' | 'time' | 'url' | 'search'
   disabled?: boolean
-  modelValue?: string | number
+  modelValue?: string | number | null
   modelModifiers?: { noTrim?: boolean; noLazy?: boolean; isNumber?: boolean }
   placeholder?: string
   required?: boolean
