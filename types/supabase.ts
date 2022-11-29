@@ -1,4 +1,10 @@
-export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json }
+  | Json[]
 
 export interface Database {
   public: {
@@ -113,16 +119,34 @@ export interface Database {
           id: string
           full_name: string
           profile_image: string | null
+          email: string | null
+          phone_number: number | null
+          address: string | null
+          city: string | null
+          country: string | null
+          state: string | null
         }
         Insert: {
           id: string
           full_name: string
           profile_image?: string | null
+          email?: string | null
+          phone_number?: number | null
+          address?: string | null
+          city?: string | null
+          country?: string | null
+          state?: string | null
         }
         Update: {
           id?: string
           full_name?: string
           profile_image?: string | null
+          email?: string | null
+          phone_number?: number | null
+          address?: string | null
+          city?: string | null
+          country?: string | null
+          state?: string | null
         }
       }
     }
@@ -136,7 +160,14 @@ export interface Database {
       }
     }
     Enums: {
-      continents: 'Africa' | 'Antarctica' | 'Asia' | 'Europe' | 'Oceania' | 'North America' | 'South America'
+      continents:
+        | "Africa"
+        | "Antarctica"
+        | "Asia"
+        | "Europe"
+        | "Oceania"
+        | "North America"
+        | "South America"
     }
   }
 }
