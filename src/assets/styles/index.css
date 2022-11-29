@@ -31,7 +31,7 @@ body {
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  --at-apply: transition-transform duration-300 absolute h-full w-full;
+  --at-apply: transition-transform duration-500 absolute h-full w-full;
 }
 
 .slide-left-enter-from,
