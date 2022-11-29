@@ -25,31 +25,25 @@ body {
   --at-apply: opacity-0;
 }
 
+
+
 .slide-left-enter-active,
-.slide-left-leave-active {
-  --at-apply: transition-all duration-300 absolute w-full h-full;
-}
-
-.slide-left-enter-from {
-  --at-apply: translate-x-100vw;
-}
-
-.slide-left-leave-to {
-  --at-apply: translate-x-100vw;
-}
-
+.slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  --at-apply: transition-all duration-300 absolute w-full h-full;
+  --at-apply: transition-transform duration-300 absolute h-full w-full;
 }
 
-.slide-right-enter-from {
-  --at-apply: translate-x--100vw;
-}
-
+.slide-left-enter-from,
 .slide-right-leave-to {
-  --at-apply: translate-x--100vw;
+  --at-apply: translate-x--100%;
 }
+
+.slide-left-leave-to,
+.slide-right-enter-from {
+  --at-apply: translate-x-100%;
+}
+
 
 dialog[open] {
   animation: showModal 150ms ease normal;

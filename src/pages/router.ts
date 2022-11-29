@@ -14,7 +14,11 @@ import AddProduct from './products/add.vue'
 import productDetails from './products/details.vue'
 
 import chat from './chat.vue'
-import settings from './settings.vue'
+
+import settings from './settings/index.vue'
+import SettingsSecurity from './settings/security.vue'
+import SettingsEditInfo from './settings/EditInfo.vue'
+import SettingsPersonalize from './settings/personalize.vue'
 
 import login from './login.vue'
 import signup from './signup.vue'
@@ -68,23 +72,9 @@ export const router = createRouter({
       path: '/products',
       component: { render: () => h(RouterView) },
       children: [
-        {
-          name: 'products list',
-          path: '',
-          component: products,
-        },
-        {
-          name: 'add product',
-          path: 'add',
-          component: AddProduct,
-          meta: { transitionName: 'slide-left' },
-        },
-        {
-          name: 'details',
-          path: ':id',
-          component: productDetails,
-          meta: { transitionName: 'slide-left' },
-        },
+        { name: 'products list', path: '', component: products },
+        { name: 'add product', path: 'add', component: AddProduct },
+        { name: 'details', path: ':id', component: productDetails },
       ],
     },
     {
@@ -96,6 +86,17 @@ export const router = createRouter({
       name: 'settings',
       path: '/settings',
       component: settings,
+      redirect: '/settings/personalize',
+      children: [
+        { name: 'edit info', path: 'edit-info', component: SettingsEditInfo, meta: { transition: 'slide-right' } },
+        {
+          name: 'personalize',
+          path: 'personalize',
+          component: SettingsPersonalize,
+          meta: { transition: 'slide-left' },
+        },
+        { name: 'security', path: 'security', component: SettingsSecurity },
+      ],
     },
     {
       name: 'login',
