@@ -10,17 +10,23 @@
         <div class="p8 grid grid-cols-2 gap-x-16 col-span-2 rounded-md surface-1 typo-sm">
           <div class="flex flex-col gap-6">
             <!-- product name  -->
-            <TextField required v-model="formData.name" placeholder="name" label="product name">
+            <TextField
+              required
+              v-model="formData.name"
+              placeholder="must be at least 3 characters"
+              label="product name"
+            >
               <template #prepend>
                 <IShoppingBag />
               </template>
             </TextField>
 
             <!-- category -->
-            <Select v-model="formData.category" label="category" :options="categories">select category</Select>
+            <Select v-model="formData.category" :options="categories">category</Select>
 
             <!-- pricing -->
-            <div class="grid grid-cols-2 gap-4 items-center">
+            <fieldset class="grid grid-cols-2 gap-4 items-center">
+              <legend class="sr-only">price</legend>
               <TextField required v-model="formData.sell_price" type="number" placeholder="0.00" label="sell price">
                 <template #prepend>
                   <IMoney />
@@ -31,7 +37,7 @@
                   <IMoney />
                 </template>
               </TextField>
-            </div>
+            </fieldset>
 
             <!-- quantity -->
             <TextField required v-model="formData.stock" type="number" placeholder="0" label="in stock" />
@@ -54,17 +60,19 @@
             <!-- expiration date -->
             <TextField v-model="formData.expiration_date" type="date" label="expiration date" />
             <!-- discount -->
-            <div>
-              <div class="mb-1">discount</div>
-              <div class="grid grid-cols-2 gap-4 items-end">
-                <Select v-model="formData.discount_type" :options="['coupon', 'time limited', 'offer']">type</Select>
-                <TextField v-model="formData.discount_value" type="number" placeholder="0.00">
-                  <template #prepend>
-                    <IMoney />
-                  </template>
-                </TextField>
-              </div>
-            </div>
+            <fieldset class="grid grid-cols-2 gap-4 items-end">
+              <legend class="mb-1 col-span-2">discount</legend>
+              <Select
+                v-model="formData.discount_type"
+                placeholder="type"
+                :options="['coupon', 'time limited', 'offer']"
+              />
+              <TextField v-model="formData.discount_value" type="number" placeholder="0.00">
+                <template #prepend>
+                  <IMoney />
+                </template>
+              </TextField>
+            </fieldset>
           </div>
         </div>
         <!-- picture upload form  -->
