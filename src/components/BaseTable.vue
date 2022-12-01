@@ -10,22 +10,26 @@
         <input
           v-model="searchValue"
           type="search"
+          @blur="handleBlur"
+          @focus="handleFocus"
           placeholder="search.."
           class="focus:outline-none active:outline-none bg-inherit"
         />
         <div
           class="absolute z-10 top-10 shadow w-full flex flex-col left-0 py-2 items-center justify-center surface-2 max-h-10rem overflow-y-auto"
-          v-if="searchValue && searchValue.length > 0"
+          v-if="showSearchResult && searchValue"
         >
-          <div v-if="(!searchResult || searchResult?.length === 0) && searchValue?.length > 0">
+          <div v-if="isSearching">
             <ILoading class="w-8 p1 h-8 relative! typo-clr-primary" />
           </div>
           <div
+            v-else-if="searchResult?.length"
             class="p2 hover:(fill-primary-2 typo-clr-on-primary) cursor-pointer w-full text-start"
             v-for="item in searchResult"
           >
             {{ item.name }}
           </div>
+          <div v-else>found nothing</div>
         </div>
       </label>
 
@@ -146,16 +150,25 @@ function sort(column: string) {
 // searching
 let searchValue = $ref<string>('')
 let searchResult = $ref<any[] | null>(null)
+let isSearching = $ref(false)
+let showSearchResult = $ref(false)
 
 async function search() {
-  if (searchValue.length < 3) return
-  searchValue = searchValue.toLocaleLowerCase().trim()
-  const { data } = await supabase
-    .from(tableName)
-    .select('id, name')
-    .textSearch('name', searchValue, { type: 'websearch' })
-    .range(0, 5)
+  if (!searchValue) return
+  isSearching = true
+  let _searchValue = searchValue.toLocaleLowerCase().trim()
+  const { data } = await supabase.from(tableName).select('id, name').ilike('name', `%${_searchValue}%`).range(0, 10)
   searchResult = data
+  isSearching = false
+}
+
+function handleBlur() {
+  showSearchResult = false
+  if (!searchValue) searchResult = null
+}
+
+function handleFocus() {
+  showSearchResult = true
 }
 
 watchDebounced(
@@ -166,5 +179,5 @@ watchDebounced(
   { debounce: 300 }
 )
 
-watchDebounced($$(searchValue), search, { debounce: 1000 })
+watchDebounced($$(searchValue), search, { debounce: 500 })
 </script>
