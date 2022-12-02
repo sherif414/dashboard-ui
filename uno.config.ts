@@ -3,6 +3,7 @@ import { defineConfig, presetUno, presetWebFonts, transformerDirectives, transfo
 export default defineConfig({
   shortcuts: [
     // components
+    { loading: 'relative w-22px h-22px' },
     { 'summary-icon': 'p2 rounded-3 dark:text-dark-9 bg-accent-3 box-content' },
     { 'form-input': 'p3 surface-1 border dark:border-dark-3 rounded-md focus:outline-gray-3 dark:focus:outline-none' },
 

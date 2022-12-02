@@ -15,6 +15,20 @@ body {
   color-scheme: dark;
 }
 
+.loading::before,
+.loading::after {
+  --at-apply: content-none w-full h-full absolute left-0 right-0 border-2 border-transparent border-t-current dark:border-t-current rounded-full;
+}
+
+.loading::after {
+  animation: spin 800ms ease infinite;
+}
+
+.loading::before {
+  --at-apply: border-dashed opacity-50;
+  animation: spin 800ms linear infinite;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   --at-apply: transition-opacity duration-300;
@@ -24,8 +38,6 @@ body {
 .fade-leave-to {
   --at-apply: opacity-0;
 }
-
-
 
 .slide-left-enter-active,
 .slide-left-leave-active,

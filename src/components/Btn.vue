@@ -7,7 +7,7 @@
   >
     <slot v-if="!loading" />
 
-    <div v-else class="h-6 w-6 rounded-50% border-white border-2 border-l-transparent animate-spin" />
+    <div v-else class="loading" />
   </button>
 </template>
 <script setup lang="ts">
