@@ -20,7 +20,7 @@
           v-if="showSearchResult && searchValue"
         >
           <div v-if="isSearching">
-            <ILoading class="w-8 p1 h-8 relative! typo-clr-primary" />
+            <div class="loading" />
           </div>
           <div
             v-else-if="searchResult?.length"
