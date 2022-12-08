@@ -88,13 +88,8 @@ export const router = createRouter({
       component: settings,
       redirect: '/settings/personalize',
       children: [
-        { name: 'edit info', path: 'edit-info', component: SettingsEditInfo, meta: { transition: 'slide-right' } },
-        {
-          name: 'personalize',
-          path: 'personalize',
-          component: SettingsPersonalize,
-          meta: { transition: 'slide-left' },
-        },
+        { name: 'edit info', path: 'edit-info', component: SettingsEditInfo },
+        { name: 'personalize', path: 'personalize', component: SettingsPersonalize },
         { name: 'security', path: 'security', component: SettingsSecurity },
       ],
     },

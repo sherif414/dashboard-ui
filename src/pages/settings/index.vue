@@ -26,8 +26,8 @@
         />
       </nav>
       <div class="grow relative overflow-hidden">
-        <RouterView v-slot="{ Component, route }">
-          <Transition :name="route.meta.transition ?? transitionName">
+        <RouterView v-slot="{ Component }">
+          <Transition :name="transitionName">
             <Component :is="Component" />
           </Transition>
         </RouterView>
@@ -42,12 +42,17 @@ const route = useRoute()
 const tabPointer = $ref<HTMLElement | null>(null)
 
 let transitionName = $ref<'slide-left' | 'slide-right'>('slide-right')
-router.beforeEach((to, from) => {
+const removeGuard = router.beforeEach((to, from) => {
   if (from.path === '/settings/security') {
-    if (to.path === '/settings/edit-info') transitionName = 'slide-left'
-    else if (to.path === '/settings/personalize') transitionName = 'slide-right'
+    if (to.path === '/settings/edit-info') transitionName = 'slide-right'
+    else transitionName = 'slide-left'
   }
+  //
+  else if (from.path === '/settings/edit-info') transitionName = 'slide-left'
+  else transitionName = 'slide-right'
 })
+
+onUnmounted(removeGuard)
 
 onMounted(() => {
   watchEffect(() => {
