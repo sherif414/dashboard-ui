@@ -1,28 +1,29 @@
 <template>
   <main class="h-screen grid p-1.5rem pt-5.5rem pl-5.5rem">
     <section class="surface-1 p-8 flex flex-col rounded-md">
-      <nav class="grid grid-cols-12 text-center gap-4">
+      <nav class="relative inline-flex w-max rounded-md surface-2 text-center gap-2 p1">
         <RouterLink
-          exact-active-class="border-b-3 border-b-indigo-4 dark:border-b-violet-4"
-          active-class=""
+          active-class="typo-clr-base!"
           to="/settings/personalize"
-          class="p1"
+          class="p2 personalize-link relative z-2 typo-clr-muted"
           >personalize</RouterLink
         >
         <RouterLink
-          exact-active-class="border-b-3  border-b-indigo-4 dark:border-b-violet-4"
-          active-class=""
+          active-class="typo-clr-base!"
           to="/settings/security"
-          class="p1"
+          class="p2 security-link relative z-2 typo-clr-muted"
           >security</RouterLink
         >
         <RouterLink
-          exact-active-class="border-b-3  border-b-indigo-4 dark:border-b-violet-4"
-          active-class=""
+          active-class="typo-clr-base!"
           to="/settings/edit-info"
-          class="p1"
+          class="p2 edit-info-link relative z-2 typo-clr-muted"
           >edit info</RouterLink
         >
+        <div
+          ref="tabPointer"
+          class="surface-1 h-[calc(100%_-_8px)] absolute transition-all duration-300 z-1 w-3rem top-4px rounded-md"
+        />
       </nav>
       <div class="grow relative overflow-hidden">
         <RouterView v-slot="{ Component, route }">
@@ -37,6 +38,8 @@
 
 <script setup lang="ts">
 const router = useRouter()
+const route = useRoute()
+const tabPointer = $ref<HTMLElement | null>(null)
 
 let transitionName = $ref<'slide-left' | 'slide-right'>('slide-right')
 router.beforeEach((to, from) => {
@@ -44,5 +47,29 @@ router.beforeEach((to, from) => {
     if (to.path === '/settings/edit-info') transitionName = 'slide-left'
     else if (to.path === '/settings/personalize') transitionName = 'slide-right'
   }
+})
+
+onMounted(() => {
+  watchEffect(() => {
+    if (!tabPointer) return
+    //
+    else if (route.name === 'personalize') {
+      const personalize = document.querySelector('.personalize-link') as HTMLElement
+      tabPointer.style.left = personalize.offsetLeft + 'px'
+      tabPointer.style.width = personalize.getBoundingClientRect().width + 'px'
+    }
+    //
+    else if (route.name === 'security') {
+      const security = document.querySelector('.security-link') as HTMLElement
+      tabPointer.style.left = security.offsetLeft + 'px'
+      tabPointer.style.width = security.getBoundingClientRect().width + 'px'
+    }
+    //
+    else if (route.name === 'edit info') {
+      const editInfo = document.querySelector('.edit-info-link') as HTMLElement
+      tabPointer.style.width = editInfo.getBoundingClientRect().width + 'px'
+      tabPointer.style.left = editInfo.offsetLeft + 'px'
+    }
+  })
 })
 </script>

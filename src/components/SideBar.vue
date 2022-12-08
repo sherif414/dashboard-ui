@@ -23,32 +23,32 @@ async function signOut() {
       <span class="sidebar__link__name typo-lg font-normal">Metrix</span>
     </router-link>
     <nav class="flex flex-col w-full grow gap-y-4 text-3 text-gray-500 pt-2rem">
-      <router-link class="sidebar__link" to="/">
+      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/">
         <IDashboard />
         <span class="sidebar__link__name">Dashboard</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="/orders">
+      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/orders">
         <IShoppingBag />
         <span class="sidebar__link__name">Orders</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="/customers">
+      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/customers">
         <ICustomers />
         <span class="sidebar__link__name">Customers</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="/products">
+      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/products">
         <IInventory />
         <span class="sidebar__link__name">products</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="/chat">
+      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/chat">
         <IMessage />
         <span class="sidebar__link__name">Chat</span>
       </router-link>
 
-      <router-link class="sidebar__link" to="/settings">
+      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/settings">
         <ISetting />
         <span class="sidebar__link__name">Settings</span>
       </router-link>
@@ -66,10 +66,10 @@ async function signOut() {
 .sidebar__link {
   --at-apply: flex items-center justify-start box-content py-2 pl-8px duration-300 hover:dark:(text-gray-1 fill-gray-1 stroke-none);
 }
-.router-link-active {
+.sidebar__link--active {
   --at-apply: text-gray-1 fill-primary-2 rounded-12px;
 }
-.router-link-active svg{
+.sidebar__link--active svg{
   --at-apply: stroke-none fill-gray-1;
 }
 
