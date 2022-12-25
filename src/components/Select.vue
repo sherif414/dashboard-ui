@@ -8,38 +8,41 @@
         <!-- placeholder -->
         <span v-if="!modelValue.length" class="typo-clr-muted"> {{ placeholder }} </span>
         <template v-else>
+          <!-- multiple values -->
           <template v-if="typeof modelValue !== 'string' && true">
-            <span class="p4 py-1 rounded-full surface-2" v-for="value in modelValue" :key="value">
-              {{ value }}
+            <span class="px4 h-60% my-auto flex items-center rounded-md surface-1 mr-1">
+              {{ modelValue[0] }}
+            </span>
+            <span class="px2 h-60% my-auto flex items-center rounded-md surface-1" v-if="modelValue.length > 1">
+              {{ modelValue.length - 1 }} +
             </span>
           </template>
+          <!-- single value -->
           <span v-else>{{ modelValue }}</span>
         </template>
-        <ICaretDown :class="[isOpen ? 'rotate-x-180' : '']" width="12" height="12" class="ml-auto" />
+        <ICaretDown :class="[isOpen ? 'rotate-180' : '']" width="12" height="12" class="ml-auto transition-transform" />
       </div>
       <!-- menu body -->
-      <Transition name="select">
+      <div
+        v-show="isOpen"
+        :style="{ top: `${sizes + 0.4}rem` }"
+        class="absolute left-0 w-full max-h-56 overflow-y-auto! truncate rounded-md surface-2 shadow-md py-2 flex flex-col z-99"
+      >
         <div
-          v-if="isOpen"
-          :style="{ top: `${sizes + 0.3}rem` }"
-          class="absolute left-0 w-full max-h-56 overflow-y-auto! truncate rounded surface-2 py-2 flex flex-col shadow z-99"
+          v-for="option in options"
+          :key="option"
+          @click="handleEmit(option)"
+          class="p2 flex items-center justify-start cursor-pointer hover:(fill-primary-2 typo-clr-on-primary!)"
+          :class="{
+            'typo-clr-primary [&_svg]:inline':
+              (typeof modelValue === 'string' && modelValue === option) ||
+              (Array.isArray(modelValue) && modelValue.includes(option)),
+          }"
         >
-          <div
-            v-for="option in options"
-            :key="option"
-            @click="handleEmit(option)"
-            class="p2 flex items-center justify-start cursor-pointer hover:(fill-primary-2 typo-clr-on-primary!)"
-            :class="{
-              'typo-clr-primary [&_svg]:inline':
-                (typeof modelValue === 'string' && modelValue === option) ||
-                (Array.isArray(modelValue) && modelValue.includes(option)),
-            }"
-          >
-            {{ option }}
-            <ICheckCircle width="12" height="12" class="ml-auto hidden" />
-          </div>
+          {{ option }}
+          <ICheckCircle width="12" height="12" class="ml-auto hidden" />
         </div>
-      </Transition>
+      </div>
     </div>
   </label>
 </template>
@@ -73,37 +76,18 @@ function handleEmit(newValue: string) {
 
 let isOpen = $ref(false)
 let menuRef = ref<HTMLElement>()
-onMounted(() => {
-  onClickOutside(menuRef, () => {
-    isOpen = false
-  })
-})
+onClickOutside(menuRef, () => (isOpen = false))
 
 const sizes = $computed(() => {
+  if (size === 'md') return 3
   if (size === 'lg') return 3.5
-  if (size === 'md') return 2.6
   return 2
 })
 
-let classes = $computed(() => [
-  'rounded-md surface-1 focus:(outline-indigo-4 dark:outline-violet-4 outline-2) flex items-center justify-start truncate px-4 outline min-w-10rem w-full cursor-pointer',
+let classes = [
+  'rounded-md surface-2 focus:(outline-indigo-4 dark:outline-violet-4) flex items-center justify-start truncate px-4 outline-none outline-offset-0! min-w-10rem w-full cursor-pointer',
   {
-    'outline-indigo-4 dark:outline-violet-4 outline-2': isOpen,
-    'outline-gray-3 dark:outline-dark-3 outline-1': !isOpen,
+    'outline-indigo-4 dark:outline-violet': isOpen,
   },
-])
+]
 </script>
-
-<style>
-.select-enter-active,
-.select-leave-active {
-  transition: transform 100ms linear;
-  pointer-events: none;
-}
-
-.select-leave-to,
-.select-enter-from {
-  transform: translateY(-20px);
-  opacity: 0;
-}
-</style>
