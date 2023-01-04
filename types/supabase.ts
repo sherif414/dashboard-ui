@@ -1,10 +1,4 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
 export interface Database {
   public: {
@@ -63,25 +57,25 @@ export interface Database {
           id: number
           created_at: string | null
           name: string | null
-          email: string | null
           phone: string | null
           status: boolean | null
+          email: string | null
         }
         Insert: {
           id?: number
           created_at?: string | null
           name?: string | null
-          email?: string | null
           phone?: string | null
           status?: boolean | null
+          email?: string | null
         }
         Update: {
           id?: number
           created_at?: string | null
           name?: string | null
-          email?: string | null
           phone?: string | null
           status?: boolean | null
+          email?: string | null
         }
       }
       message: {
@@ -114,6 +108,7 @@ export interface Database {
           quantity: number | null
           discount: number | null
           status: string | null
+          created_at: string | null
         }
         Insert: {
           order_id?: number
@@ -121,6 +116,7 @@ export interface Database {
           quantity?: number | null
           discount?: number | null
           status?: string | null
+          created_at?: string | null
         }
         Update: {
           order_id?: number
@@ -128,12 +124,12 @@ export interface Database {
           quantity?: number | null
           discount?: number | null
           status?: string | null
+          created_at?: string | null
         }
       }
       orders: {
         Row: {
           id: number
-          created_at: string | null
           owner: number
           type: string | null
           status: string | null
@@ -142,7 +138,6 @@ export interface Database {
         }
         Insert: {
           id?: number
-          created_at?: string | null
           owner: number
           type?: string | null
           status?: string | null
@@ -151,7 +146,6 @@ export interface Database {
         }
         Update: {
           id?: number
-          created_at?: string | null
           owner?: number
           type?: string | null
           status?: string | null
@@ -262,14 +256,7 @@ export interface Database {
       }
     }
     Enums: {
-      continents:
-        | "Africa"
-        | "Antarctica"
-        | "Asia"
-        | "Europe"
-        | "Oceania"
-        | "North America"
-        | "South America"
+      continents: 'Africa' | 'Antarctica' | 'Asia' | 'Europe' | 'Oceania' | 'North America' | 'South America'
     }
   }
 }
