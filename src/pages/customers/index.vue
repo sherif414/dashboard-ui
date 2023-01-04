@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 pt-20 pl-20 2xl:(p8 pt-20 pl-24 gap-8) flex flex-col gap-4 h-screen">
+  <main class="p4 flex flex-col gap-4">
     <button
       class="fixed right-20 bottom-24 fill-primary-2 rounded-full p-3 typo-clr-on-primary"
       @click="ModalRef?.openModal"
@@ -48,7 +48,7 @@
     />
 
     <!-- create order dialog -->
-    <CreateCustomerModal ref="ModalRef" />
+    <CreateCustomerModal @success="getCustomers" ref="ModalRef" />
   </main>
 </template>
 
@@ -61,7 +61,10 @@ const headers = ['id', 'name', 'email', 'created_at', 'phone', 'status']
 
 const store = useCustomersStore()
 
+function getCustomers() {
+  store.getCustomers({ orderOptions: { column: 'id', ascending: true, foreignTable: '' }, page: 1, itemsPerPage: 10 })
+}
 onMounted(() => {
-  store.getCustomers({ orderBy: 'id', page: 1, itemsPerPage: 10, ascending: true })
+  getCustomers()
 })
 </script>

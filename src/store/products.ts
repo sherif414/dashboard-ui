@@ -7,15 +7,16 @@ export const useProductsStore = defineStore('products', () => {
   const countAll = ref<number | null>(null)
   const countPublished = ref<number | null>(null)
 
-  async function getProducts({ orderBy, itemsPerPage, page, ascending }: getTableDataParams) {
+  async function getProducts({ orderOptions, itemsPerPage, page }: getTableDataParams) {
     const from = (page - 1) * itemsPerPage
     const to = page * itemsPerPage
+    const { ascending, column, foreignTable } = orderOptions
 
     const { data, count } = await supabase
       .from('products')
       .select('id, name, created_at, category, stock, sell_price, delivery_type, published', { count: 'estimated' })
+      .order(column, { ascending, foreignTable, nullsFirst: false })
       .range(from, to - 1)
-      .order(orderBy, { ascending })
 
     products.value = data
     countAll.value = count

@@ -1,7 +1,7 @@
 <template>
   <main class="p4 h-screen grid place-items-center">
     <form class="flex flex-col gap-8 surface-1 p8 py-11 rounded-md w-27rem" @submit.prevent="handleSignup">
-      <ILogo class="self-center" />
+      <ILogo width="100" height="100" class="mx-auto" />
       <div class="flex flex-col gap-2">
         <h1 class="text-center typo-lg last:typo-clr-primary">
           Get started with <em class="typo-clr-primary font-not-oblique">Metrix</em>
@@ -12,10 +12,10 @@
         <TextField required v-model="fullName" placeholder="your full name" type="text">
           <template #prepend><ICustomers /></template>
         </TextField>
-        <TextField required class="my-5" v-model="email" placeholder="Email Address" type="email">
+        <TextField required wrapper-class="my-5" v-model="email" placeholder="Email Address" type="email">
           <template #prepend><IEmail /></template>
         </TextField>
-        <TextField required v-model="password" placeholder="pick a strong password" type="password">
+        <TextField minlength="6" required v-model="password" placeholder="pick a strong password" type="password">
           <template #prepend><ILock /></template>
         </TextField>
       </div>

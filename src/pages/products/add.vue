@@ -1,5 +1,5 @@
 <template>
-  <main class="h-screen p4 pt-5rem pl-5rem">
+  <main class="p4">
     <form @submit.prevent="submit" class="flex flex-col gap-4 h-full">
       <!-- title  -->
       <header class="flex items-center gap-4">
@@ -12,6 +12,7 @@
             <!-- product name  -->
             <TextField
               required
+              minlength="3"
               v-model="formData.name"
               placeholder="must be at least 3 characters"
               label="product name"
@@ -53,7 +54,7 @@
                 required
                 v-model.trim.lazy="formData.description"
                 rows="10"
-                class="form-input resize-none w-full focus:(outline-indigo-4 outline-2 dark:outline-violet-4)"
+                class="surface-2 p4 rounded-md outline-none outline-offset-0! resize-none w-full focus:(outline-indigo-4 outline-2 dark:outline-violet)"
                 placeholder="short description"
               />
             </label>
@@ -86,8 +87,6 @@
 </template>
 
 <script setup lang="ts">
-import { useProductsStore } from '~/store/products'
-import { v4 as uuid } from 'uuid'
 const categories = ['phone', 'computer', 'laptop', 'clothes', 'shoes', 'accessory', 'gadget']
 const store = useProductsStore()
 
@@ -100,7 +99,7 @@ let formData = $ref({
   cost_price: undefined,
   stock: undefined,
   delivery_type: [],
-  discount_type: [],
+  discount_type: '',
   discount_value: undefined,
   expiration_date: undefined,
 })
@@ -111,7 +110,7 @@ async function submit() {
   let imageName
 
   if (productImage) {
-    const res = await store.insertImage(productImage, `${uuid()}.${productImage.name.split('.').pop()}`)
+    const res = await store.insertImage(productImage, `${useUUID()}.${productImage.name.split('.').pop()}`)
 
     if (res.error) {
       useMessage('error', res.error.message ?? 'an error has ocurred')
@@ -141,7 +140,7 @@ function resetForm() {
   formData.cost_price = undefined
   formData.stock = undefined
   formData.delivery_type = []
-  formData.discount_type = []
+  formData.discount_type = ''
   formData.discount_value = undefined
   formData.expiration_date = undefined
 }

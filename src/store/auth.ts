@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('main', () => {
   const publicPages = ['/login', '/signup', '/email-confirmation']
   const redirectPath = ref('')
   const user = useLocalStorage<User | null>('user', null, { serializer: StorageSerializers.object })
-  const profile = ref<Profile | null>(null)
+  const profile = useLocalStorage<Profile | null>('profile', null, { serializer: StorageSerializers.object })
 
   async function login(email: string, password: string) {
     return (await supabase.auth.signInWithPassword({ email, password })).error
@@ -27,24 +27,27 @@ export const useAuthStore = defineStore('main', () => {
   }
 
   async function getProfile() {
-    profile.value = (await supabase.from('profiles').select('*')).data?.[0] ?? null
+    profile.value = (await supabase.from('profiles').select('*').eq('id', user.value?.id).single()).data ?? null
   }
 
-  async function updateProfile({
-    id = 'leave empty',
-    full_name,
-    profile_image,
-    city,
-    country,
-    state,
-    email,
-    address,
-    phone_number,
-  }: Profile) {
-    const { error } = await supabase
+  async function updateProfile(userProfile: Partial<Profile>, imageFile?: File) {
+    let imagePath: string | null = null
+    if (imageFile) {
+      const { data, error } = await supabase.storage
+        .from('profile-image')
+        .upload(`${useUUID()}.${imageFile.name.split('.').pop()}`, imageFile)
+
+      if (error) return error
+      if (data?.path) imagePath = data.path
+    }
+
+    const { error, data } = await supabase
       .from('profiles')
-      .update({ full_name, city, state, address, phone_number, country, profile_image, email })
+      .update({ ...userProfile, profile_image: imagePath })
       .eq('id', user.value?.id)
+      .select()
+      .single()
+    if (data) profile.value = data
     return error
   }
 
@@ -52,9 +55,9 @@ export const useAuthStore = defineStore('main', () => {
     if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
       user.value = session?.user ?? null
       getProfile()
-    }
-    if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+    } else if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
       user.value = null
+      profile.value = null
     }
   })
 

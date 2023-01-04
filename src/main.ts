@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 // styles
+import 'chartist/dist/index.css'
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
 import './assets/styles/index.css'

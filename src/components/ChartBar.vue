@@ -1,59 +1,70 @@
 <script setup lang="ts">
-import { Chart, ChartConfiguration, registerables } from 'chart.js'
+import { BarChart } from 'chartist'
+import type { BarChartData, BarChartOptions } from 'chartist'
 
-//register the used functions
-Chart.register(...registerables)
-//data and configs
-const config = $computed<ChartConfiguration>(() => ({
-  type: 'bar',
-  data: {
-    labels: ['sat', 'sun', 'mon', 'tus', 'wed', 'thu'],
-    datasets: [
-      {
-        label: 'number of orders',
-        data: [10, 30, 90, 30, 120, 130],
-        barThickness: 16,
-        cubicInterpolationMode: 'monotone',
-        borderRadius: 999,
-        backgroundColor: 'rgba(124, 58, 237)',
-      },
-    ],
+const data: BarChartData = {
+  series: [
+    [100, 100, 100, 100, 100, 100, 100],
+    [20, 80, 20, 60, 40, 40, 80],
+  ],
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'sun'],
+}
+const options: BarChartOptions = {
+  low: 0,
+  high: 100,
+  width: '100%',
+  height: '100%',
+  seriesBarDistance: 0,
+
+  axisX: {
+    offset: 30,
   },
-  options: {
-    responsive: true,
-    scales: {
-      x: {
-        stacked: true,
-        grid: {
-          display: false,
-        },
-      },
-
-      y: {
-        stacked: true,
-        grid: {
-          display: false,
-        },
-      },
-    },
+  axisY: {
+    offset: 30,
   },
-}))
-
-let chart: Chart
-let ctx: HTMLCanvasElement
-// view the chart
+}
 
 onMounted(() => {
-  ctx = document.getElementById('bar-chart')! as HTMLCanvasElement
-  chart = new Chart(ctx, config)
-})
-onUnmounted(() => {
-  chart.destroy()
+  const chart = new BarChart('#chart-bar', data, options)
 })
 </script>
 
 <template>
-  <div class="surface-1 rounded-3 p2 grid place-content-center">
-    <canvas id="bar-chart"></canvas>
-  </div>
+  <article class="surface-1 rounded-3 flex flex-col gap-4 p4">
+    <header class="flex gap-4 items-center hidden!">
+      <h2 class="typo-head">summary</h2>
+      <span>sales</span><span class="ml-auto">last 7 days</span>
+    </header>
+    <div id="chart-bar" class="grow typo-clr-base!"></div>
+  </article>
 </template>
+
+<style>
+.ct-vertical,
+.ct-horizontal {
+  stroke: none;
+}
+
+#chart-bar .ct-bar {
+  stroke: rgb(79, 70, 229) !important;
+  stroke-linecap: round;
+  stroke-width: 13px;
+}
+
+#chart-bar .dark .ct-bar {
+  stroke: rgb(124, 58, 237) !important;
+}
+
+#chart-bar .ct-label {
+  margin-top: 1rem;
+}
+
+.dark .ct-label {
+  color: white;
+}
+
+#chart-bar .ct-series-a .ct-bar {
+  stroke: gray !important;
+  stroke-opacity: 0.1;
+}
+</style>

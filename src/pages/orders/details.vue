@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 pt-20 pl-20 grid h-full w-full flex flex-col gap-4 2xl:(gap-8 p8 pl-24 pt-24)">
+  <main class="p4 flex flex-col gap-4">
     <header class="flex gap-4 2xl:gap-8 items-center justify-start">
       <h2 class="typo-head">Order Id: <span class="typo-clr-muted typo-base">#218083</span></h2>
       <h2 class="typo-head">Date: <span class="typo-clr-muted typo-base">20 sep 2022 - 12:55 pm</span></h2>

@@ -15,5 +15,9 @@
   "volar.vueserver.useSecondServer": false,
   "html.format.wrapAttributes": "force",
   "volar.codeLens.references": false,
-  "cSpell.words": ["websearch"]
+  "cSpell.words": [
+    "composables",
+    "maybeSingle",
+    "websearch"
+  ]
 }

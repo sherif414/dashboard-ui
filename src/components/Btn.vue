@@ -1,9 +1,14 @@
 <template>
   <button
+    class="transition h-10 capitalize w-25ch text-center rounded-md focus:outline-none grid place-items-center"
     :disabled="isDisabled"
-    :class="{ 'fill-primary-3 pointer-events-none': isDisabled }"
     :type="type"
-    class="transition h-10 capitalize w-25ch text-center rounded-md typo-clr-on-primary hover:fill-primary-3 fill-primary-2 active:fill-primary-1 focus:outline-none grid place-items-center"
+    :class="{
+      'typo-clr-on-primary fill-primary-2 hover:fill-primary-3 active:fill-primary-1': variant === 'primary',
+      'hover:surface-2': variant === 'text' && !isDisabled,
+      'fill-primary-3': isDisabled && variant === 'primary',
+      'typo-clr-disabled cursor-not-allowed': isDisabled,
+    }"
   >
     <slot v-if="!loading" />
 
@@ -11,15 +16,13 @@
   </button>
 </template>
 <script setup lang="ts">
-const {
-  type = 'button',
-  loading = false,
-  disabled = false,
-} = defineProps<{
+interface Props {
   type?: 'submit' | 'button' | 'reset'
   loading?: boolean
   disabled?: boolean
-}>()
+  variant?: 'text' | 'primary'
+}
+const { type = 'button', loading = false, disabled = false, variant = 'primary' } = defineProps<Props>()
 
 let isDisabled = $computed(() => disabled || loading)
 </script>

@@ -1,23 +1,54 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar {
-  --at-apply: w-6px h-6px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  --at-apply: dark:bg-dark-50 bg-gray-4 rounded-full;
+  --at-apply: dark:bg-dark-50 bg-gray-3 rounded-full;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 .dark input {
   color-scheme: dark;
 }
 
+.loading {
+  --loading-spinner-thickness: 2px;
+  position: relative;
+  width: 22px;
+  height: 22px;
+}
+
 .loading::before,
 .loading::after {
-  --at-apply: content-none w-full h-full absolute left-0 right-0 border-2 border-transparent border-t-current dark:border-t-current rounded-full;
+  --at-apply: content-none w-full h-full absolute left-0 right-0 border-transparent border-t-current dark:border-t-current rounded-full;
+  border-width: var(--loading-spinner-thickness);
 }
 
 .loading::after {
@@ -27,6 +58,36 @@ body {
 .loading::before {
   --at-apply: border-dashed opacity-50;
   animation: spin 800ms linear infinite;
+}
+
+.msg-enter-active,
+.msg-leave-active {
+  --at-apply: transition-all duration-300;
+}
+
+.msg-enter-from,
+.msg-leave-to {
+  --at-apply: h-0;
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 300ms ease;
+}
+
+/* 2. declare enter from and leave to state */
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translateX(30px);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+  z-index: 0;
 }
 
 .fade-enter-active,
@@ -43,7 +104,7 @@ body {
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  --at-apply: transition-transform duration-500 absolute h-full w-full;
+  --at-apply: transition-transform ease-out duration-500 absolute h-full w-full;
 }
 
 .slide-left-enter-from,

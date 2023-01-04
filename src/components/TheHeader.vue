@@ -1,6 +1,6 @@
 <template>
-  <header class="surface-1 fixed w-screen z-99 top-0 left-0 pl-4rem h-58px flex pr-8 items-center">
-    <div class="p1 pl-4 grow flex items-center">
+  <header class="surface-1 h-58px flex px-8 items-center">
+    <div class="p1 grow flex items-center">
       <h1 class="text-5 capitalize font-bold">{{ $route.matched[0]?.name }}</h1>
     </div>
     <div class="flex items-center gap-4">
@@ -10,9 +10,12 @@
       </div>
       <IBell class="typo-clr-primary cursor-pointer" width="24" height="24" />
       <div>
-        <div class="w-8 h-8 rounded-50% overflow-hidden cursor-pointer">
-          <img src="../assets/img/profile.jpg" alt="avatar" />
-        </div>
+        <img
+          :title="auth.profile?.full_name ?? ''"
+          class="w-8 h-8 rounded-50% cursor-pointer"
+          :src="profileImg || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'"
+          alt="avatar"
+        />
       </div>
     </div>
   </header>
@@ -23,4 +26,10 @@ import { useAuthStore } from '~/store/auth'
 
 const auth = useAuthStore()
 auth.getProfile()
+let profileImg = $ref('')
+
+if (auth.profile?.profile_image) {
+  profileImg =
+    'https://mcvcidxgqdmfkoctzgbl.supabase.co/storage/v1/object/public/profile-image/' + auth.profile.profile_image
+}
 </script>

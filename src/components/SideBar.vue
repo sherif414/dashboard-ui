@@ -4,6 +4,9 @@ import { useAuthStore } from '~/store/auth'
 const auth = useAuthStore()
 const router = useRouter()
 
+let isExpanded = $ref(false)
+let linkNameOpacity = $computed(() => (isExpanded ? '1' : '0'))
+
 async function signOut() {
   const signOutError = await auth.signOut()
   if (!signOutError) {
@@ -16,13 +19,25 @@ async function signOut() {
 
 <template>
   <aside
-    class="sidebar h-screen fixed top-0 left-0 w-4rem hover:w-12rem transition-width duration-300 flex flex-col py-2 px-3 surface-1 z-100 typo-clr-base"
+    :class="isExpanded ? 'w-12rem' : 'w-4rem'"
+    class="sidebar h-screen transition-width duration-300 ease flex flex-col py-2 px-3 surface-1 typo-clr-base"
   >
     <router-link activeClass="" to="/" class="sidebar__link p-0">
       <ILogo width="45" height="45" />
       <span class="sidebar__link__name typo-lg font-normal">Metrix</span>
     </router-link>
-    <nav class="flex flex-col w-full grow gap-y-4 text-3 text-gray-500 pt-2rem">
+    <nav class="flex flex-col w-full grow gap-y-4 typo-sm pt-2rem">
+      <svg
+        class="ml-2 self-start cursor-pointer"
+        @click="isExpanded = !isExpanded"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path d="M3 7h18M3 12h18M3 17h18" stroke="gray" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
       <router-link class="sidebar__link" active-class="sidebar__link--active" to="/">
         <IDashboard />
         <span class="sidebar__link__name">Dashboard</span>
@@ -56,7 +71,8 @@ async function signOut() {
     <!-- user control -->
     <div class="flex flex-col justify-end w-full">
       <button @click="signOut" type="button" class="sidebar__link text-error">
-        <ILogout class="rotate-180" /> <span class="sidebar__link__name left-3.5rem translate-y--2px">logout</span>
+        <ILogout class="rotate-180 text-error!" />
+        <span class="sidebar__link__name left-3.5rem translate-y--2px">logout</span>
       </button>
     </div>
   </aside>
@@ -64,12 +80,18 @@ async function signOut() {
 
 <style>
 .sidebar__link {
-  --at-apply: flex items-center justify-start box-content py-2 pl-8px duration-300 hover:dark:(text-gray-1 fill-gray-1 stroke-none);
+  --at-apply: flex items-center justify-start box-content py-2 pl-8px duration-300;
+}
+.sidebar__link svg {
+  --at-apply: typo-clr-muted;
+}
+.dark .sidebar__link:hover svg {
+  --at-apply: fill-gray-1 typo-clr-base;
 }
 .sidebar__link--active {
-  --at-apply: text-gray-1 fill-primary-2 rounded-12px;
+  --at-apply: fill-primary-2 rounded-12px typo-clr-on-primary;
 }
-.sidebar__link--active svg{
+.sidebar__link--active svg {
   --at-apply: stroke-none fill-gray-1;
 }
 
@@ -77,8 +99,8 @@ async function signOut() {
   --at-apply: absolute left-4rem opacity-0 pointer-events-none;
 }
 
-.sidebar:hover .sidebar__link__name {
-  transition: opacity 300ms 150ms ease;
-  opacity: 1;
+.sidebar__link__name {
+  transition: opacity 0ms 150ms;
+  opacity: v-bind('linkNameOpacity');
 }
 </style>

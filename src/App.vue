@@ -1,12 +1,14 @@
 <template>
-  <TheHeader v-if="publicPage" />
   <SideBar v-if="publicPage" />
 
-  <router-view v-slot="{ Component }">
-    <transition name="fade" mode="out-in">
-      <component :is="Component" />
-    </transition>
-  </router-view>
+  <div class="grow grid grid-rows-[max-content_1fr]">
+    <TheHeader v-if="publicPage" />
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+  </div>
 </template>
 
 <script setup lang="ts">

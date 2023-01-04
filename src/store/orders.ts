@@ -1,22 +1,24 @@
 import { defineStore } from 'pinia'
-import { getTableDataParams, OrderTable } from 'types'
+import { getTableDataParams } from 'types'
 import { supabase } from '~/api'
 
 export const useOrderStore = defineStore('order', () => {
-  const orderList = ref<OrderTable[] | null>(null)
+  const orderList = ref<any[] | null>(null)
   const countAll = ref<number | null>(null)
 
-  async function getOrders({ ascending, itemsPerPage, orderBy, page }: getTableDataParams) {
+  async function getOrders({ orderOptions, itemsPerPage, page }: getTableDataParams) {
     const from = (page - 1) * itemsPerPage
     const to = page * itemsPerPage
+    const { ascending, column, foreignTable } = orderOptions
 
-    const { data, count } = await supabase
+    const { data, count, error } = await supabase
       .from('orders')
-      .select('id, owner, created_at, type, status, purchases', { count: 'estimated' })
-      .order(orderBy, { ascending })
+      .select('id, customers(name), created_at, type, status, total_purchases', { count: 'estimated' })
+      .order(column, { ascending, foreignTable, nullsFirst: false })
       .range(from, to - 1)
     orderList.value = data
     countAll.value = count
+    if (error) useMessage('error', error.message ?? 'an error has occurred')
   }
 
   return {

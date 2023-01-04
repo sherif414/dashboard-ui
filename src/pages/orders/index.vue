@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 pt-5rem pl-5rem flex flex-col gap-y-4 h-screen">
+  <main class="p4 flex flex-col gap-y-4">
     <button
       class="fixed bottom-5rem right-5rem fill-primary-2 rounded-full p-3 shadow-lg typo-clr-on-primary"
       @click="orderDialogRef?.openModal"
@@ -51,14 +51,41 @@
     <!-- data-table  -->
     <BaseTable
       :get-data="store.getOrders"
+      :show-search="false"
       table-name="orders"
+      table-title="orders"
       :items-count="store.countAll"
-      :headers="headers"
       :data="store.orderList"
-    />
+    >
+      <template #header="{ sort, orderBy }">
+        <TableHeaderCell
+          v-for="head in headers"
+          :key="head.column"
+          :sort-ascending="orderBy.ascending"
+          :order-by="orderBy.column"
+          :column="head.column"
+          @sort="sort(head.column, head.foreignTable)"
+        >
+          {{ head.label }}
+        </TableHeaderCell>
+      </template>
+
+      <template #body>
+        <tbody v-if="store.orderList">
+          <tr v-for="order in store.orderList" :key="order.id">
+            <td class="p2 px-4">{{ order.id ?? '-' }}</td>
+            <td class="p2 px-4">{{ order.customers.name ?? '-' }}</td>
+            <td class="p2 px-4">{{ useDateFormat(order.created_at, 'DD MMM YYYY').value || '-' }}</td>
+            <td class="p2 px-4">{{ order.type ?? '-' }}</td>
+            <td class="p2 px-4">${{ order.total_purchases ?? '-' }}</td>
+            <td class="p2 px-4">{{ order.status ?? '-' }}</td>
+          </tr>
+        </tbody>
+      </template>
+    </BaseTable>
 
     <!-- create order dialog -->
-    <OrderDialog ref="orderDialogRef" />
+    <OrderDialog @success="getOrders" ref="orderDialogRef" />
   </main>
 </template>
 
@@ -68,9 +95,39 @@ import OrderDialog from '~/components/OrderDialog.vue'
 
 const orderDialogRef = $ref<InstanceType<typeof OrderDialog> | null>(null)
 const store = useOrderStore()
-const headers = ['id', 'owner', 'created_at', 'type', 'status', 'purchases']
+const headers = [
+  {
+    label: 'tracking id',
+    column: 'id',
+  },
+  {
+    label: 'customer name',
+    column: 'name',
+    foreignTable: 'customers',
+  },
+  {
+    label: 'created at',
+    column: 'created_at',
+  },
+  {
+    label: 'order type',
+    column: 'type',
+  },
+  {
+    label: 'total purchases',
+    column: 'total_purchases',
+  },
+  {
+    label: 'status',
+    column: 'status',
+  },
+]
+
+function getOrders() {
+  store.getOrders({ orderOptions: { column: 'id', foreignTable: '', ascending: true }, page: 1, itemsPerPage: 10 })
+}
 
 onMounted(() => {
-  store.getOrders({ orderBy: 'id', page: 1, itemsPerPage: 10, ascending: true })
+  getOrders()
 })
 </script>

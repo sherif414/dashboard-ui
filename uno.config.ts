@@ -3,9 +3,10 @@ import { defineConfig, presetUno, presetWebFonts, transformerDirectives, transfo
 export default defineConfig({
   shortcuts: [
     // components
-    { loading: 'relative w-22px h-22px' },
+    {
+      overlay: 'w-full h-full absolute place-items-center grid bg-opacity-60 dark:bg-opacity-80 surface-1 z-99',
+    },
     { 'summary-icon': 'p2 rounded-3 dark:text-dark-9 bg-accent-3 box-content' },
-    { 'form-input': 'p3 surface-1 border dark:border-dark-3 rounded-md focus:outline-gray-3 dark:focus:outline-none' },
 
     // typography - colors
     { 'typo-clr-base': 'dark:text-gray-1 text-gray-9' },
@@ -20,15 +21,17 @@ export default defineConfig({
     { 'typo-lg': 'text-5 font-bold' },
 
     // background colors - surfaces
-    { 'surface-1': 'dark:bg-dark-9 bg-white' },
-    { 'surface-2': 'dark:bg-dark-6 bg-gray-1' },
-    { 'surface-3': 'dark:bg-dark-3 bg-white' },
+    { 'surface-1': 'dark:bg-dark-4 bg-white' },
+    { 'surface-2': 'dark:bg-dark-1 bg-#f0f0f0' },
+    { 'surface-3': 'dark:bg-dark-1 bg-white' },
 
     // background colors - primary
     { 'fill-primary-1': 'dark:bg-violet-7 bg-indigo-7' },
     { 'fill-primary-2': 'dark:bg-violet-6 bg-indigo-6' },
     { 'fill-primary-3': 'dark:bg-violet-5 bg-indigo-5' },
   ],
+
+  safelist: ['hidden!', 'overlay'],
   theme: {
     colors: {
       success: '#2DD881',
@@ -41,7 +44,7 @@ export default defineConfig({
       },
       background: {
         light: '#F0F0F0',
-        dark: 'black',
+        dark: '#121212',
       },
     },
   },
@@ -50,7 +53,7 @@ export default defineConfig({
     presetUno(),
     presetWebFonts({
       fonts: {
-        sans: 'Roboto Slab:400,700',
+        sans: 'Roboto:400,700',
       },
     }),
   ],

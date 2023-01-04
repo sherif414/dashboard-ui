@@ -6,18 +6,11 @@
       <Btn class="bg-error! dark:bg-error! w-20ch!">cancel</Btn>
     </header>
     <div class="flex flex-col gap-4">
-      <div class="grid grid-cols-2 gap-4 items-center">
-        <TextField label="first name" placeholder="John" v-model="firstName">
-          <template #prepend>
-            <ICustomers />
-          </template>
-        </TextField>
-        <TextField label="last name" placeholder="Doe" v-model="lastName">
-          <template #prepend>
-            <ICustomers />
-          </template>
-        </TextField>
-      </div>
+      <TextField label="full name" placeholder="John Doe" v-model="fullName">
+        <template #prepend>
+          <ICustomers />
+        </template>
+      </TextField>
       <TextField label="additional email" placeholder="example@email.com" v-model="email" type="email">
         <template #prepend>
           <IEmail />
@@ -48,37 +41,35 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/store/auth'
-
 const auth = useAuthStore()
 
-let firstName = $ref('')
-let lastName = $ref('')
-let full_name = $computed(() => firstName + ' ' + lastName)
-let email = $ref('')
-let phone_number = $ref<number | null>(null)
-let address = $ref('')
-let state = $ref('')
-let country = $ref('')
-let city = $ref('')
+let fullName = $ref(auth.profile?.full_name)
+let email = $ref(auth.profile?.email ?? null)
+let phone_number = $ref(auth.profile?.phone_number ?? null)
+let address = $ref(auth.profile?.address ?? null)
+let state = $ref(auth.profile?.address ?? null)
+let country = $ref(auth.profile?.country)
+let city = $ref(auth.profile?.city)
 let image = $ref<File>()
 
 let isLoading = $ref(false)
 async function handleSubmit() {
   isLoading = true
-  const res = await auth.updateProfile({
-    full_name,
-    email,
-    state,
-    country,
-    city,
-    address,
-    phone_number,
-    profile_image: image?.name ?? null,
-    id: '',
-  })
 
-  useMessage(res ? 'error' : 'success', res?.message ?? 'profile updated')
+  const error = await auth.updateProfile(
+    {
+      full_name: fullName,
+      email,
+      state,
+      country,
+      city,
+      address,
+      phone_number,
+    },
+    image
+  )
+
+  useMessage(error ? 'error' : 'success', error?.message ?? 'profile updated')
   isLoading = false
 }
 </script>

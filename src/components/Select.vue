@@ -1,10 +1,10 @@
 <template>
-  <label ref="menuRef" class="relative flex flex-col gap-2">
-    <span v-if="$slots.default" class="typo-sm">
+  <label ref="menuRef" class="relative flex flex-col gap-1 typo-sm">
+    <span v-if="$slots.default">
       <slot />
     </span>
     <div class="relative">
-      <div tabindex="0" :style="{ height: `${sizes}rem` }" :class="classes" @click="isOpen = !isOpen">
+      <div tabindex="0" :style="{ height: `${height}rem` }" :class="classes" @click="isOpen = !isOpen">
         <!-- placeholder -->
         <span v-if="!modelValue.length" class="typo-clr-muted"> {{ placeholder }} </span>
         <template v-else>
@@ -25,7 +25,7 @@
       <!-- menu body -->
       <div
         v-show="isOpen"
-        :style="{ top: `${sizes + 0.4}rem` }"
+        :style="{ top: `${height + 0.4}rem` }"
         class="absolute left-0 w-full max-h-56 overflow-y-auto! truncate rounded-md surface-2 shadow-md py-2 flex flex-col z-99"
       >
         <div
@@ -78,7 +78,7 @@ let isOpen = $ref(false)
 let menuRef = ref<HTMLElement>()
 onClickOutside(menuRef, () => (isOpen = false))
 
-const sizes = $computed(() => {
+const height = $computed(() => {
   if (size === 'md') return 3
   if (size === 'lg') return 3.5
   return 2

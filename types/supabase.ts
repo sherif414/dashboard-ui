@@ -9,6 +9,55 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      conversation: {
+        Row: {
+          id: string
+          created_at: string | null
+          name: string | null
+          created_by: string | null
+          other_member_id: string | null
+          last_message_content: string | null
+          last_message_at: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string | null
+          name?: string | null
+          created_by?: string | null
+          other_member_id?: string | null
+          last_message_content?: string | null
+          last_message_at?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string | null
+          name?: string | null
+          created_by?: string | null
+          other_member_id?: string | null
+          last_message_content?: string | null
+          last_message_at?: string | null
+        }
+      }
+      conversation_member: {
+        Row: {
+          user_id: string
+          joined_at: string | null
+          conversation_id: string
+          left_at: string | null
+        }
+        Insert: {
+          user_id: string
+          joined_at?: string | null
+          conversation_id: string
+          left_at?: string | null
+        }
+        Update: {
+          user_id?: string
+          joined_at?: string | null
+          conversation_id?: string
+          left_at?: string | null
+        }
+      }
       customers: {
         Row: {
           id: number
@@ -35,40 +84,89 @@ export interface Database {
           status?: boolean | null
         }
       }
-      orders: {
+      message: {
         Row: {
-          type: string
-          status: boolean | null
-          purchases: number[]
           created_at: string | null
-          owner: number
-          id: number
+          sent_by: string | null
+          content: string
+          conversation_id: string
+          id: string
         }
         Insert: {
-          type: string
-          status?: boolean | null
-          purchases: number[]
           created_at?: string | null
-          owner: number
-          id?: number
+          sent_by?: string | null
+          content: string
+          conversation_id: string
+          id?: string
         }
         Update: {
-          type?: string
-          status?: boolean | null
-          purchases?: number[]
+          created_at?: string | null
+          sent_by?: string | null
+          content?: string
+          conversation_id?: string
+          id?: string
+        }
+      }
+      order_item: {
+        Row: {
+          order_id: number
+          product_id: number
+          quantity: number | null
+          discount: number | null
+          status: string | null
+        }
+        Insert: {
+          order_id?: number
+          product_id: number
+          quantity?: number | null
+          discount?: number | null
+          status?: string | null
+        }
+        Update: {
+          order_id?: number
+          product_id?: number
+          quantity?: number | null
+          discount?: number | null
+          status?: string | null
+        }
+      }
+      orders: {
+        Row: {
+          id: number
+          created_at: string | null
+          owner: number
+          type: string | null
+          status: string | null
+          note: string | null
+          total_purchases: number | null
+        }
+        Insert: {
+          id?: number
+          created_at?: string | null
+          owner: number
+          type?: string | null
+          status?: string | null
+          note?: string | null
+          total_purchases?: number | null
+        }
+        Update: {
+          id?: number
           created_at?: string | null
           owner?: number
-          id?: number
+          type?: string | null
+          status?: string | null
+          note?: string | null
+          total_purchases?: number | null
         }
       }
       products: {
         Row: {
           id: number
           created_at: string | null
+          name: string | null
           stock: number | null
           published: boolean
           category: string | null
-          name: string | null
           sell_price: number | null
           cost_price: number | null
           discount_type: string | null
@@ -82,10 +180,10 @@ export interface Database {
         Insert: {
           id?: number
           created_at?: string | null
+          name?: string | null
           stock?: number | null
           published?: boolean
           category?: string | null
-          name?: string | null
           sell_price?: number | null
           cost_price?: number | null
           discount_type?: string | null
@@ -99,10 +197,10 @@ export interface Database {
         Update: {
           id?: number
           created_at?: string | null
+          name?: string | null
           stock?: number | null
           published?: boolean
           category?: string | null
-          name?: string | null
           sell_price?: number | null
           cost_price?: number | null
           discount_type?: string | null
@@ -154,6 +252,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      is_conversation_member: {
+        Args: { user_id: string; conversation_id: string }
+        Returns: boolean
+      }
       products_published_count: {
         Args: Record<PropertyKey, never>
         Returns: number

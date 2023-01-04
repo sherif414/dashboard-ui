@@ -1,9 +1,19 @@
 import type { Database } from './supabase'
 
+export type MaybeArray<T> = T | T[]
+export type ConversationWithProfile = Conversation & {
+  created_by_profile: Profile | null
+  other_member_profile: Profile | null
+}
+
 export type Order = Database['public']['Tables']['orders']['Row']
 export type Product = Database['public']['Tables']['products']['Row']
 export type Customer = Database['public']['Tables']['customers']['Row']
 export type Profile = Database['public']['Tables']['profiles']['Row']
+export type Conversation = Database['public']['Tables']['conversation']['Row']
+export type Message = Database['public']['Tables']['message']['Row']
+export type ConversationMember = Database['public']['Tables']['conversation_member']['Row']
+export type OrderItem = Database['public']['Tables']['order_item']['Row']
 
 export interface ProductTable {
   id: number
@@ -35,8 +45,7 @@ export interface CustomerTable {
 }
 
 export interface getTableDataParams {
-  orderBy: any
   itemsPerPage: number
   page: number
-  ascending: boolean
+  orderOptions: { column: string; foreignTable: string; ascending: boolean }
 }

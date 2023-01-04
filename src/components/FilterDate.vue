@@ -10,7 +10,7 @@
     <menu
       ref="menuRef"
       v-show="isOpen"
-      class="w-15rem grid grid-cols-2 absolute bg-white dark:bg-dark-300 gap-4 right-[-4rem] rounded-md mt-2 p4 border dark:border-none border-gray-2"
+      class="w-15rem grid grid-cols-2 absolute z-2 bg-white dark:bg-dark-300 gap-4 right-[-4rem] rounded-md mt-2 p4 border dark:border-none border-gray-2"
     >
       <h2 class="col-span-2 text-left">By Date</h2>
       <div class="flex items-center gap-x-2">

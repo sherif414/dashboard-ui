@@ -10,7 +10,7 @@
 
       <!-- form -->
       <div class="flex flex-col">
-        <TextField class="mb-5" required v-model="email" placeholder="Email Address" type="email">
+        <TextField wrapper-class="mb-5" required v-model="email" placeholder="Email Address" type="email">
           <template #prepend><IEmail /></template>
         </TextField>
         <TextField required v-model="password" placeholder="password" type="password">

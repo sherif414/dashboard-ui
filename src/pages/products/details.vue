@@ -1,9 +1,12 @@
 <template>
-  <main v-if="product" class="w-full h-full flex flex-col gap-4 p4 pt-5rem pl-5rem">
+  <main class="grid place-items-center w-full h-full" v-if="hasError">
+    <h1>product was not found</h1>
+  </main>
+  <main v-else class="flex flex-col gap-4 p4">
     <header class="flex gap-8 items-center typo-head">
-      <h1>{{ product.name }}</h1>
+      <h1>{{ product?.name ?? '-' }}</h1>
       <h2>
-        Date added: <span class="typo-clr-muted typo-sm">{{ new Date(product.created_at).toDateString() }}</span>
+        Date added: <span class="typo-clr-muted typo-sm">{{ new Date(product?.created_at ?? '').toDateString() }}</span>
       </h2>
       <h2>
         product id: <span class="typo-clr-muted typo-sm">{{ $route.params.id }}</span>
@@ -20,19 +23,19 @@
         <div class="col-span-1 fill-primary-2 rounded-md"></div>
         <SummaryCard
           :data="[
-            { name: 'price', value: product.sell_price },
-            { name: 'in-stock', value: product.stock },
+            { name: 'price', value: product?.sell_price },
+            { name: 'in-stock', value: product?.stock },
           ]"
           class="col-span-3"
         >
           <template #icon>
-            <IInventory width="18" height="18" class="summary-icon fill-primary-3" />
+            <IInventory width="18" height="18" class="summary-icon" />
           </template>
         </SummaryCard>
 
         <SummaryCard :data="[{ name: 'total orders', value: '1000' }]" class="col-span-2">
           <template #icon>
-            <IInventory width="18" height="18" class="summary-icon fill-primary-3" />
+            <IInventory width="18" height="18" class="summary-icon" />
           </template>
         </SummaryCard>
 
@@ -44,7 +47,7 @@
           class="col-span-2"
         >
           <template #icon>
-            <IInventory width="18" height="18" class="summary-icon fill-primary-3" />
+            <IInventory width="18" height="18" class="summary-icon" />
           </template>
         </SummaryCard>
       </div>
@@ -81,9 +84,6 @@
       <BaseTable class="grow" table-name="product detail" :data="null" />
     </section>
   </main>
-  <main class="grid place-items-center w-full h-full" v-if="hasError">
-    <h1>product was not found</h1>
-  </main>
 </template>
 
 <script setup lang="ts">
@@ -99,19 +99,9 @@ let productId = $computed<number>(() => {
   return -1
 })
 
-onMounted(() => {
-  supabase
-    .from('products')
-    .select('*')
-    .eq('id', productId)
-    .then(({ data, error }) => {
-      if (data) {
-        hasError = false
-        product = data[0]
-      } else if (error) {
-        hasError = true
-        product = null
-      }
-    })
+onMounted(async () => {
+  const { data, error } = await supabase.from('products').select('*').eq('id', productId).single()
+  product = data
+  if (error) hasError = true
 })
 </script>

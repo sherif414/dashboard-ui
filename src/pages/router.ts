@@ -13,7 +13,8 @@ import products from './products/index.vue'
 import AddProduct from './products/add.vue'
 import productDetails from './products/details.vue'
 
-import chat from './chat.vue'
+import chat from './chat/index.vue'
+import ConversationView from './chat/ConversationView.vue'
 
 import settings from './settings/index.vue'
 import SettingsSecurity from './settings/security.vue'
@@ -81,6 +82,7 @@ export const router = createRouter({
       name: 'chat',
       path: '/chat',
       component: chat,
+      children: [{ name: 'conversation view', path: ':id', component: ConversationView }],
     },
     {
       name: 'settings',
@@ -111,7 +113,7 @@ export const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to) => {
+router.beforeEach((to) => {
   const auth = useAuthStore()
   const authRequired = !auth.publicPages.includes(to.path)
 

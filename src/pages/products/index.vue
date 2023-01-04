@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 pt-5rem pl-5rem flex flex-col gap-y-4 h-screen overflow-y-auto">
+  <main class="p4 flex flex-col gap-y-4 overflow-y-auto">
     <!-- header -->
     <router-link
       to="/products/add"
@@ -12,7 +12,7 @@
     <div class="grid grid-cols-2 gap-x-6 row-span-1">
       <SummaryCard
         :filter="false"
-        fill="fill-primary-2 typo-clr-on-primary"
+        fill="primary"
         :data="[
           { name: 'all products', value: store.countAll },
           { name: 'published', value: store.countPublished },
@@ -51,11 +51,12 @@
           <tr class="[&_td]:(p2 px-4)" v-for="row in store.products">
             <td>{{ row.id || '-' }}</td>
             <td>
-              <RouterLink v-if="row.id" class="hover:underline" :to="`/products/${row.id}`"
-                >{{ row.name || '-' }}
+              <RouterLink v-if="row.id" class="hover:underline flex gap-2 items-center" :to="`/products/${row.id}`">
+                <IExternalLink width="12" height="12" />
+                {{ row.name || '-' }}
               </RouterLink>
             </td>
-            <td>{{ row.created_at ? new Date(row.created_at).toDateString() : '-' }}</td>
+            <td>{{ row.created_at ? useDateFormat(row.created_at, 'DD MMM YYYY').value : '-' }}</td>
             <td>{{ row.category || '-' }}</td>
             <td>{{ row.stock || '-' }}</td>
             <td>{{ row.sell_price || '-' }}</td>
@@ -76,6 +77,6 @@ const store = useProductsStore()
 
 onMounted(() => {
   store.getCount()
-  store.getProducts({ orderBy: 'id', page: 1, itemsPerPage: 10, ascending: true })
+  store.getProducts({ orderOptions: { column: 'id', ascending: true, foreignTable: '' }, page: 1, itemsPerPage: 10 })
 })
 </script>

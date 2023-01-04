@@ -28,7 +28,7 @@ export default defineConfig({
         },
       ],
       dts: true,
-      dirs: ['./src/composables'],
+      dirs: ['./src/composables', './src/api', './src/store'],
       vueTemplate: true,
     }),
 
@@ -41,9 +41,4 @@ export default defineConfig({
     // see unocss.config.ts for config
     Unocss(),
   ],
-
-  // https://github.com/vitest-dev/vitest
-  test: {
-    environment: 'jsdom',
-  },
 })

@@ -1,5 +1,5 @@
 <template>
-  <label :class="classes" class="flex flex-col gap-y-1 relative">
+  <label :class="wrapperClass" class="flex flex-col gap-1 relative">
     <div class="capitalize typo-sm">
       {{ label }}
     </div>
@@ -11,7 +11,8 @@
           $slots.append ? 'pr-11' : 'pr-4',
           isInvalid ? 'bg-opacity-10! bg-error!' : 'surface-2',
         ]"
-        class="h-12 rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none"
+        class="rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none"
+        :style="{ height: `${height}rem` }"
         @[eventType]="handleEmit"
         @invalid="isInvalid = true"
         @focus="isInvalid = false"
@@ -35,6 +36,7 @@
       <div v-show="isInvalid" class="text-error absolute top-110% left-0 text-10px">
         {{ _errorMsg ?? 'invalid input' }}
       </div>
+      <slot name="dropdown"></slot>
     </div>
   </label>
 </template>
@@ -45,13 +47,19 @@ interface Props {
   type?: 'text' | 'email' | 'password' | 'date' | 'number' | 'tel' | 'time' | 'url' | 'search'
   modelValue?: string | number | null
   modelModifiers?: { noTrim?: boolean; noLazy?: boolean; isNumber?: boolean }
-  classes?: string
+  wrapperClass?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-const { type = 'text', modelValue, modelModifiers = {} } = defineProps<Props>()
+const { type = 'text', modelValue, modelModifiers = {}, size = 'md' } = defineProps<Props>()
 const emits = defineEmits(['update:modelValue'])
 const inputEl = $ref<HTMLInputElement | null>(null)
 
+let height = $computed(() => {
+  if (size === 'md') return 3
+  if (size === 'lg') return 3.5
+  return 2
+})
 let eventType = $computed(() => (modelModifiers?.noLazy ? 'input' : 'change'))
 let isInvalid = $ref(false)
 
