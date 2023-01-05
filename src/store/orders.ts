@@ -16,9 +16,10 @@ export const useOrderStore = defineStore('order', () => {
       .select('id, customers(name), created_at, type, status, total_purchases', { count: 'estimated' })
       .order(column, { ascending, foreignTable, nullsFirst: false })
       .range(from, to - 1)
+
+    if (error) useMessage('error', error.message ?? 'an error has occurred')
     orderList.value = data
     countAll.value = count
-    if (error) useMessage('error', error.message ?? 'an error has occurred')
   }
 
   return {

@@ -11,12 +11,13 @@ export const useCustomersStore = defineStore('customers', () => {
     const to = page * itemsPerPage
     const { ascending, column, foreignTable } = orderOptions
 
-    const { data, count } = await supabase
+    const { data, count, error } = await supabase
       .from('customers')
       .select('id, name, email, created_at, phone, status', { count: 'estimated' })
       .order(column, { ascending, foreignTable, nullsFirst: false })
       .range(from, to - 1)
 
+    if (error) useMessage('error', error.message || 'an error has occurred')
     customers.value = data
     countAll.value = count
   }

@@ -12,12 +12,13 @@ export const useProductsStore = defineStore('products', () => {
     const to = page * itemsPerPage
     const { ascending, column, foreignTable } = orderOptions
 
-    const { data, count } = await supabase
+    const { data, count, error } = await supabase
       .from('products')
       .select('id, name, created_at, category, stock, sell_price, delivery_type, published', { count: 'estimated' })
       .order(column, { ascending, foreignTable, nullsFirst: false })
       .range(from, to - 1)
 
+    if (error) useMessage('error', error.message || 'an error has occurred')
     products.value = data
     countAll.value = count
   }
