@@ -1,5 +1,5 @@
 <template>
-  <div ref="self" class="flex flex-col grow p4 px-8 gap-y-4 surface-1 rounded-md overflow-auto">
+  <div class="flex flex-col grow p4 px-8 gap-y-4 surface-1 rounded-md overflow-auto">
     <!-- header  -->
     <caption class="flex items-center gap-x-4 typo-sm">
       <!-- search box -->
@@ -88,7 +88,7 @@
             width="16"
             height="16"
             class="rotate-90 p2 rounded box-content"
-            :class="[page === 1 ? 'opacity-30 cursor-default pointer-events-none' : 'hover:bg-gray-2 cursor-pointer']"
+            :class="[page === 1 ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 cursor-pointer']"
           />
           <ICaretDown
             @click="changePage('next')"
@@ -96,7 +96,7 @@
             height="16"
             class="rotate-270 p2 rounded box-content"
             :class="[
-              page === lastPage ? 'opacity-30 cursor-default pointer-events-none' : 'hover:bg-gray-2 cursor-pointer',
+              page === lastPage ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 cursor-pointer',
             ]"
           />
         </div>
@@ -121,9 +121,6 @@ interface Props {
 const { showSearch = true, tableName, itemsCount, getData, data } = defineProps<Props>()
 
 const headers = $computed(() => (data ? Object.keys(data[0]) : null))
-const self = ref<HTMLElement | null>(null)
-// const { isLoading } = useLoadingOverlay(self, { spinnerThickness: '4px', spinnerSize: '40px' })
-// isLoading.value = true
 
 // pagination
 let page = $ref(1)
@@ -146,15 +143,9 @@ function sort(column: string, foreignTable?: string) {
   getData({ page, itemsPerPage, orderOptions: { ...orderBy } })
 }
 
-watchDebounced(
-  [$$(itemsPerPage), $$(page)],
-  async () => {
-    // isLoading.value = true
-    await getData({ page, itemsPerPage, orderOptions: { ...orderBy } })
-    // isLoading.value = false
-  },
-  { debounce: 300 }
-)
+watchDebounced([$$(itemsPerPage), $$(page)], () => getData({ page, itemsPerPage, orderOptions: { ...orderBy } }), {
+  debounce: 300,
+})
 
 // searching
 let searchValue = $ref<string>('')

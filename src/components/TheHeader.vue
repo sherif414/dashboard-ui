@@ -8,10 +8,9 @@
         <ISun class="cursor-pointer" width="20" height="20" v-if="!isDark" @click="toggleDark()" />
         <IDark class="cursor-pointer" width="20" height="20" v-else @click="toggleDark()" />
       </div>
-      <IBell class="typo-clr-primary cursor-pointer" width="24" height="24" />
       <div>
         <img
-          :title="auth.profile?.full_name ?? ''"
+          :title="auth.profile?.full_name || ''"
           class="w-8 h-8 rounded-50% cursor-pointer"
           :src="profileImg || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'"
           alt="avatar"

@@ -25,7 +25,7 @@ const options: BarChartOptions = {
 }
 
 onMounted(() => {
-  const chart = new BarChart('#chart-bar', data, options)
+  new BarChart('#chart-bar', data, options)
 })
 </script>
 
@@ -46,13 +46,9 @@ onMounted(() => {
 }
 
 #chart-bar .ct-bar {
-  stroke: rgb(79, 70, 229) !important;
+  stroke: var(--clr-primary) !important;
   stroke-linecap: round;
   stroke-width: 13px;
-}
-
-#chart-bar .dark .ct-bar {
-  stroke: rgb(124, 58, 237) !important;
 }
 
 #chart-bar .ct-label {

@@ -135,6 +135,7 @@ export interface Database {
           status: string | null
           note: string | null
           total_purchases: number | null
+          created_at: string | null
         }
         Insert: {
           id?: number
@@ -143,6 +144,7 @@ export interface Database {
           status?: string | null
           note?: string | null
           total_purchases?: number | null
+          created_at?: string | null
         }
         Update: {
           id?: number
@@ -151,6 +153,7 @@ export interface Database {
           status?: string | null
           note?: string | null
           total_purchases?: number | null
+          created_at?: string | null
         }
       }
       products: {

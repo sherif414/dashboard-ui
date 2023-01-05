@@ -8,6 +8,14 @@
   }
 }
 
+:root {
+  --clr-primary: rgb(79, 70, 229);
+}
+
+.dark {
+  --clr-primary: rgb(124, 58, 237);
+}
+
 html {
   scroll-behavior: smooth;
 }
