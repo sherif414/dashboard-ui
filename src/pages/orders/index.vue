@@ -1,5 +1,5 @@
 <template>
-  <main class="p4 flex flex-col gap-y-4">
+  <main class="p4 flex flex-col gap-y-4 overflow-y-auto">
     <button
       class="fixed bottom-5rem right-5rem fill-primary-2 rounded-full p-3 shadow-lg typo-clr-on-primary"
       @click="orderDialogRef?.openModal"
