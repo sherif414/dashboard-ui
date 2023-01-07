@@ -45,7 +45,24 @@
       :headers="headers"
       :get-data="store.getCustomers"
       table-name="customers"
-    />
+    >
+      <template #body>
+        <tbody v-if="store.customers">
+          <tr v-for="customer in store.customers" :key="customer.id">
+            <TableBodyCell :value="customer.id" />
+            <TableBodyCell :value="customer.name" variant="link" :to="`/customers/${customer.id}`" />
+            <TableBodyCell :value="customer.email" />
+            <TableBodyCell :value="customer.created_at" variant="date" />
+            <TableBodyCell :value="customer.phone" />
+            <TableBodyCell
+              :value="customer.status ? 'active' : 'suspended'"
+              variant="chip"
+              :chip-status="customer.status"
+            />
+          </tr>
+        </tbody>
+      </template>
+    </BaseTable>
 
     <!-- create order dialog -->
     <CreateCustomerModal @success="getCustomers" ref="ModalRef" />
@@ -62,7 +79,7 @@ const headers = ['id', 'name', 'email', 'created_at', 'phone', 'status']
 const store = useCustomersStore()
 
 function getCustomers() {
-  store.getCustomers({ orderOptions: { column: 'id', ascending: true, foreignTable: '' }, page: 1, itemsPerPage: 10 })
+  store.getCustomers({ orderOptions: { column: 'id', ascending: false, foreignTable: '' }, page: 1, itemsPerPage: 10 })
 }
 onMounted(() => {
   getCustomers()

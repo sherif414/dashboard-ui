@@ -49,19 +49,18 @@
       <template #body>
         <template v-if="store.products">
           <tr class="[&_td]:(p2 px-4)" v-for="row in store.products">
-            <td>{{ row.id || '-' }}</td>
-            <td>
-              <RouterLink v-if="row.id" class="hover:underline flex gap-2 items-center" :to="`/products/${row.id}`">
-                <IExternalLink width="12" height="12" />
-                {{ row.name || '-' }}
-              </RouterLink>
-            </td>
-            <td>{{ row.created_at ? useDateFormat(row.created_at, 'DD MMM YYYY').value : '-' }}</td>
-            <td>{{ row.category || '-' }}</td>
-            <td>{{ row.stock || '-' }}</td>
-            <td>{{ row.sell_price || '-' }}</td>
-            <td>{{ row.delivery_type?.toString() || '-' }}</td>
-            <td>{{ row.published === true ? 'published' : 'unpublished' }}</td>
+            <TableBodyCell :value="row.id" />
+            <TableBodyCell :value="row.name" variant="link" :to="`/products/${row.id}`" />
+            <TableBodyCell :value="row.created_at" variant="date" />
+            <TableBodyCell :value="row.category" />
+            <TableBodyCell :value="row.stock" />
+            <TableBodyCell :value="row.sell_price" />
+            <TableBodyCell :value="row.delivery_type?.toString() || ''" />
+            <TableBodyCell
+              :value="row.published ? 'published' : 'unpublished'"
+              variant="chip"
+              :chip-status="row.published"
+            />
           </tr>
         </template>
       </template>
@@ -77,6 +76,6 @@ const store = useProductsStore()
 
 onMounted(() => {
   store.getCount()
-  store.getProducts({ orderOptions: { column: 'id', ascending: true, foreignTable: '' }, page: 1, itemsPerPage: 10 })
+  store.getProducts({ orderOptions: { column: 'id', ascending: false, foreignTable: '' }, page: 1, itemsPerPage: 10 })
 })
 </script>

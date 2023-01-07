@@ -9,14 +9,14 @@ export const useProductsStore = defineStore('products', () => {
 
   async function getProducts({ orderOptions, itemsPerPage, page }: getTableDataParams) {
     const from = (page - 1) * itemsPerPage
-    const to = page * itemsPerPage
+    const to = page * itemsPerPage - 1
     const { ascending, column, foreignTable } = orderOptions
 
     const { data, count, error } = await supabase
       .from('products')
       .select('id, name, created_at, category, stock, sell_price, delivery_type, published', { count: 'estimated' })
       .order(column, { ascending, foreignTable, nullsFirst: false })
-      .range(from, to - 1)
+      .range(from, to)
 
     if (error) useMessage('error', error.message || 'an error has occurred')
     products.value = data

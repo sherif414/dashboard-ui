@@ -20,7 +20,7 @@
               class="p2 flex items-center gap-x-2 typo-sm typo-clr-muted hover:surface-1 cursor-pointer"
               v-for="item in searchResults"
               :key="item.id"
-              @click="handleSearchResultClick"
+              @click="handleSearchResultClick(item.id)"
             >
               <span class="typo-clr-base">
                 {{ item.name }}
@@ -34,7 +34,9 @@
     <!-- table -->
     <div class="overflow-auto grow">
       <table class="typo-base w-full">
-        <thead class="sticky shadow-sm top-1px left-0 w-full z-1 left-0 capitalize surface-3">
+        <thead
+          class="sticky top-1px left-0 w-full z-1 left-0 capitalize surface-1 outline-1 outline dark:outline-dark-3 outline-gray-2"
+        >
           <tr class="text-left">
             <slot name="header" :orderBy="orderBy" :sort="sort">
               <template v-if="headers">
@@ -68,9 +70,11 @@
         <span>
           <input
             min="1"
+            :max="itemsCount || undefined"
             class="p1 surface-2 w-8 hide-arrows active:outline-none focus:outline-none"
             type="number"
-            v-model="itemsPerPage"
+            :value="itemsPerPage"
+            @change="onChangeItemsPerPage"
           />
           items / page</span
         >
@@ -115,16 +119,17 @@ interface Props {
   tableTitle?: string
   itemsCount: number | null
   showSearch?: boolean
+  orderColumn?: string
   getData: (params: getTableDataParams) => Promise<void>
 }
 
-const { showSearch = true, tableName, itemsCount, getData, data } = defineProps<Props>()
+const { showSearch = true, tableName, itemsCount, getData, data, orderColumn = 'id' } = defineProps<Props>()
 
 const headers = $computed(() => (data ? Object.keys(data[0]) : null))
 
 // pagination
 let page = $ref(1)
-let orderBy = $ref({ column: '', foreignTable: '', ascending: true })
+let orderBy = $ref({ column: orderColumn, foreignTable: '', ascending: false })
 let itemsPerPage = $ref(10)
 let lastPage = $computed(() => Math.ceil((itemsCount ?? 0) / itemsPerPage))
 
@@ -133,18 +138,27 @@ function changePage(to: 'next' | 'prev') {
   else if (to === 'prev' && page > 1) page--
 }
 
+function onChangeItemsPerPage(e: Event) {
+  let _value = +(e.target as HTMLInputElement).value
+  if (itemsCount && _value <= itemsCount) {
+    itemsPerPage = _value
+    page = 1
+  }
+}
+
 // sorting
 function sort(column: string, foreignTable?: string) {
   if (!foreignTable === !orderBy.foreignTable && orderBy.column === column) orderBy.ascending = !orderBy.ascending
-  else orderBy.ascending = true
+  else orderBy.ascending = false
 
   orderBy.column = column
   orderBy.foreignTable = foreignTable || ''
   getData({ page, itemsPerPage, orderOptions: { ...orderBy } })
 }
 
-watchDebounced([$$(itemsPerPage), $$(page)], () => getData({ page, itemsPerPage, orderOptions: { ...orderBy } }), {
+watchDebounced($$(page), () => getData({ page, itemsPerPage, orderOptions: orderBy }), {
   debounce: 300,
+  flush: 'post',
 })
 
 // searching
@@ -165,5 +179,8 @@ if (showSearch) {
   watchDebounced($$(searchValue), search, { debounce: 500 })
 }
 
-function handleSearchResultClick() {}
+const router = useRouter()
+function handleSearchResultClick(id: string) {
+  router.push(`/${tableName}/${id}`)
+}
 </script>

@@ -71,6 +71,7 @@ declare module '@vue/runtime-core' {
     Select: typeof import('./src/components/Select.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     SummaryCard: typeof import('./src/components/SummaryCard.vue')['default']
+    TableBodyCell: typeof import('./src/components/TableBodyCell.vue')['default']
     TableHeaderCell: typeof import('./src/components/TableHeaderCell.vue')['default']
     TextField: typeof import('./src/components/TextField.vue')['default']
     TheHeader: typeof import('./src/components/TheHeader.vue')['default']

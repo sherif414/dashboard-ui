@@ -73,12 +73,12 @@
       <template #body>
         <tbody v-if="store.orderList">
           <tr v-for="order in store.orderList" :key="order.id">
-            <td class="p2 px-4">{{ order.id ?? '-' }}</td>
-            <td class="p2 px-4">{{ order.customers.name ?? '-' }}</td>
-            <td class="p2 px-4">{{ useDateFormat(order.created_at, 'DD MMM YYYY').value || '-' }}</td>
-            <td class="p2 px-4">{{ order.type ?? '-' }}</td>
-            <td class="p2 px-4">${{ order.total_purchases ?? '-' }}</td>
-            <td class="p2 px-4">{{ order.status ?? '-' }}</td>
+            <TableBodyCell :value="order.id" />
+            <TableBodyCell :value="order.customers.name" variant="link" :to="`/orders/${order.id}`" />
+            <TableBodyCell :value="order.created_at" variant="date" />
+            <TableBodyCell :value="order.type" />
+            <TableBodyCell :value="order.total_purchases" />
+            <TableBodyCell :value="order.status" variant="chip" :chip-status="order.status === 'completed'" />
           </tr>
         </tbody>
       </template>
@@ -124,7 +124,7 @@ const headers = [
 ]
 
 function getOrders() {
-  store.getOrders({ orderOptions: { column: 'id', foreignTable: '', ascending: true }, page: 1, itemsPerPage: 10 })
+  store.getOrders({ orderOptions: { column: 'id', foreignTable: '', ascending: false }, page: 1, itemsPerPage: 10 })
 }
 
 onMounted(() => {
