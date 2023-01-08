@@ -9,6 +9,7 @@
     "up": "taze major -I"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.7",
     "@supabase/supabase-js": "2.2.2",
     "@vueuse/core": "^9.9.0",
     "chart.js": "^4.1.1",

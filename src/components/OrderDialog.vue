@@ -10,9 +10,7 @@
     <form @submit.prevent="handleSubmit" class="grid grid-cols-2 gap-8">
       <!-- dialog order form-->
       <div class="grid grid-cols-2 gap-x-2 gap-y-4 min-w-20rem">
-        <Select :options="['Jane Doe', 'John Doe']" v-model="formData.customer" class="col-span-2">
-          Select customer
-        </Select>
+        <ComboBox table-name="customers" class="col-span-2" v-model="customer" placeholder="customer" />
         <Select :options="['cash', 'credit card']" v-model="formData.paymentType" placeholder="Payment Type"></Select>
         <Select :options="['delivery', 'pickup']" v-model="formData.orderType" placeholder="Order Type"></Select>
         <TextField label="order date" wrapper-class="col-span-2" v-model="formData.orderDate" type="date" />
@@ -120,8 +118,8 @@
 import type { Product, OrderItem } from 'types'
 
 const emits = defineEmits(['success'])
+let customer = $ref<{ id?: number; name?: string }>({})
 let formData = $ref({
-  customer: '',
   paymentType: '',
   orderType: '',
   orderStatus: '',
@@ -138,7 +136,7 @@ const openModal = () => {
 // insert order
 let isSubmitting = $ref(false)
 async function handleSubmit() {
-  if (!orderItems.size) return
+  if (!orderItems.size || !customer.id) return
   isSubmitting = true
 
   const orderRes = await supabase
@@ -148,7 +146,7 @@ async function handleSubmit() {
       note: formData.orderNote,
       type: formData.orderType,
       created_at: formData.orderDate ?? undefined,
-      owner: 1,
+      owner: +customer.id,
       total_purchases: getTotalPrice(),
     })
     .select()
@@ -183,7 +181,7 @@ function getTotalPrice() {
 }
 
 function getOrderItems(orderId: number, orderStatus: string | null) {
-  let _orderItems: OrderItem[] = []
+  let _orderItems: Omit<OrderItem, 'created_at'>[] = []
 
   orderItems.forEach((item) => {
     _orderItems.push({
@@ -230,7 +228,10 @@ function handleSearchResultClick(product: Product) {
   let alreadyExists = false
 
   orderItems.forEach((item) => {
-    if (item.product.id === product.id) alreadyExists = true
+    if (item.product.id === product.id) {
+      alreadyExists = true
+      return
+    }
   })
 
   if (alreadyExists) return

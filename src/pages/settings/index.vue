@@ -22,7 +22,7 @@
         >
         <div
           ref="tabPointer"
-          class="surface-1 h-[calc(100%_-_8px)] absolute tab-pointer duration-300 z-1 w-3rem top-4px rounded-md"
+          class="surface-1 h-[calc(100%_-_8px)] absolute tab-pointer duration-300 z-1 top-4px rounded-md"
         />
       </nav>
       <div class="grow relative overflow-hidden">
