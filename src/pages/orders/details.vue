@@ -54,6 +54,7 @@
         </template>
       </SummaryCard>
     </div>
-    <BaseTable />
+    <!-- <BaseTable /> -->
+    <div class="surface-1 grow rounded-md"></div>
   </main>
 </template>

@@ -40,6 +40,7 @@ async function getData() {
     .from('order_item')
     .select('products(id, name, sell_price, image), status, created_at')
     .order('created_at', { ascending: false })
+    .limit(20)
 
   if (res.error) useMessage('error', res.error.message || 'failed loading recent orders')
 
