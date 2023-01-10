@@ -82,7 +82,7 @@
           <input
             min="1"
             :max="Math.ceil((itemsCount ?? 0) / itemsPerPage)"
-            class="p1 surface-2 w-8 mr-2 hide-arrows active:outline-none focus:outline-none"
+            class="p1 surface-2 w-8 mr-2 hide-arrowss active:outline-none focus:outline-none"
             type="number"
             v-model="page"
           />
@@ -120,7 +120,7 @@ interface Props {
   itemsCount: number | null
   showSearch?: boolean
   orderColumn?: string
-  getData: (params: getTableDataParams) => Promise<void>
+  getData?: (params: getTableDataParams) => Promise<void>
 }
 
 const { showSearch = true, tableName, itemsCount, getData, data, orderColumn = 'id' } = defineProps<Props>()
@@ -148,6 +148,7 @@ function onChangeItemsPerPage(e: Event) {
 
 // sorting
 function sort(column: string, foreignTable?: string) {
+  if (!getData) return
   if (!foreignTable === !orderBy.foreignTable && orderBy.column === column) orderBy.ascending = !orderBy.ascending
   else orderBy.ascending = false
 
@@ -156,10 +157,12 @@ function sort(column: string, foreignTable?: string) {
   getData({ page, itemsPerPage, orderOptions: { ...orderBy } })
 }
 
-watchDebounced($$(page), () => getData({ page, itemsPerPage, orderOptions: orderBy }), {
-  debounce: 300,
-  flush: 'post',
-})
+if (getData) {
+  watchDebounced($$(page), () => getData({ page, itemsPerPage, orderOptions: orderBy }), {
+    debounce: 300,
+    flush: 'post',
+  })
+}
 
 // searching
 let searchValue = $ref<string>('')

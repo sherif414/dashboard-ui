@@ -73,8 +73,8 @@
       <template #body>
         <tbody v-if="store.orderList">
           <tr v-for="order in store.orderList" :key="order.id">
-            <TableBodyCell :value="order.id" />
-            <TableBodyCell :value="order.customers.name" variant="link" :to="`/orders/${order.id}`" />
+            <TableBodyCell :value="order.id" variant="link" :to="`/orders/${order.id}`" />
+            <TableBodyCell :value="order.customers.name" />
             <TableBodyCell :value="order.created_at" variant="date" />
             <TableBodyCell :value="order.type" />
             <TableBodyCell :value="order.total_purchases" />
