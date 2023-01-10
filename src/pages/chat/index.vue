@@ -44,34 +44,36 @@
       </TextField>
 
       <!-- conversations list-->
-      <TransitionGroup
-        enter-active-class="delay-200 ease"
-        move-class="transition-all duration-300 ease-out"
-        enter-from-class="opacity-0"
-        tag="div"
-        class="relative flex flex-col overflow-y-auto border-t dark:border-dark-3 no-scrollbar"
-      >
-        <ConversationLink
-          v-if="conversations"
-          v-for="conversation in conversations"
-          @click="activeConversation = conversation"
-          :key="conversation.id"
-          :last-message-date="conversation.last_message_at"
-          :title="
-            conversation.created_by !== myId
-              ? conversation.created_by_profile?.full_name
-              : conversation.other_member_profile?.full_name
-          "
-          :avatar="
-            conversation.created_by !== myId
-              ? conversation.created_by_profile?.profile_image
-              : conversation.other_member_profile?.profile_image
-          "
-          :conversationId="conversation.id"
+      <div class="relative grow">
+        <TransitionGroup
+          enter-active-class="delay-200 ease"
+          move-class="transition-all duration-300 ease-out"
+          enter-from-class="opacity-0"
+          tag="div"
+          class="absolute w-full h-full flex flex-col overflow-y-auto border-t dark:border-dark-3 no-scrollbar"
         >
-          {{ conversation.last_message_content }}
-        </ConversationLink>
-      </TransitionGroup>
+          <ConversationLink
+            v-if="conversations"
+            v-for="conversation in conversations"
+            @click="activeConversation = conversation"
+            :key="conversation.id"
+            :last-message-date="conversation.last_message_at"
+            :title="
+              conversation.created_by !== myId
+                ? conversation.created_by_profile?.full_name
+                : conversation.other_member_profile?.full_name
+            "
+            :avatar="
+              conversation.created_by !== myId
+                ? conversation.created_by_profile?.profile_image
+                : conversation.other_member_profile?.profile_image
+            "
+            :conversationId="conversation.id"
+          >
+            {{ conversation.last_message_content }}
+          </ConversationLink>
+        </TransitionGroup>
+      </div>
     </section>
 
     <!-- conversation view -->
