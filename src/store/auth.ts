@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('main', () => {
     profile.value = (await supabase.from('profiles').select('*').eq('id', user.value?.id).single()).data ?? null
   }
 
-  async function updateProfile(userProfile: Partial<Profile>, imageFile?: File) {
+  async function updateProfile(userProfile: Partial<Profile>, imageFile?: File | null) {
     let imagePath: string | null = null
     if (imageFile) {
       const { data, error } = await supabase.storage

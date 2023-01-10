@@ -134,7 +134,6 @@ async function createConversation(userId: string): Promise<ConversationWithProfi
     .insert({ other_member_id: userId })
     .select(`*, created_by_profile:created_by(*), other_member_profile:other_member_id(*)`)
     .maybeSingle()
-  console.log(newConversation)
 
   if (error || !newConversation) {
     useMessage('error', error?.message ?? 'an error has happened')

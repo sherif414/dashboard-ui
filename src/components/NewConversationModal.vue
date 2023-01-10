@@ -98,7 +98,6 @@ async function getUsers(searchTerm: string): Promise<void> {
     .textSearch('full_name', _searchTerm)
     .neq('id', auth.user?.id)
     .limit(10)
-  console.log(data)
 
   searchResult = data
   if (error) useMessage('error', error.message ?? 'an error has happened')

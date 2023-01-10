@@ -1,42 +1,57 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="h-full w-full grid grid-cols-3 2xl:grid-cols-2 gap-x-8 p2">
-    <header class="col-span-full flex items-center gap-x-4">
+  <form @submit.prevent="handleSubmit" class="flex flex-col gap-4 overflow-y-auto px-4">
+    <header class="flex justify-between items-center gap-4">
       <h1 class="typo-lg">Account Settings</h1>
-      <Btn :loading="isLoading" class="ml-auto px-6 w-20ch!" type="submit">update</Btn>
-      <Btn class="bg-error! dark:bg-error! w-20ch!">cancel</Btn>
+      <Btn :loading="isLoading" type="submit">update</Btn>
     </header>
-    <div class="flex flex-col gap-4">
-      <TextField label="full name" placeholder="John Doe" v-model="fullName">
-        <template #prepend>
-          <ICustomers />
-        </template>
-      </TextField>
-      <TextField label="additional email" placeholder="example@email.com" v-model="email" type="email">
-        <template #prepend>
-          <IEmail />
-        </template>
-      </TextField>
-      <TextField label="phone" placeholder="09x,xxx,xx" v-model="phone_number" type="tel">
-        <template #prepend>
-          <ICustomers />
-        </template>
-      </TextField>
-    </div>
-    <div class="flex flex-col gap-4">
-      <TextField label="address" placeholder="address" v-model="address">
-        <template #prepend>
-          <ILocation />
-        </template>
-      </TextField>
-      <TextField label="city" placeholder="city" v-model="city" />
+
+    <section class="grid grid-cols-3 gap-4">
       <div class="grid grid-cols-2 gap-4">
+        <TextField wrapper-class="col-span-2" label="full name" placeholder="John Doe" v-model="fullName">
+          <template #prepend>
+            <ICustomers />
+          </template>
+        </TextField>
+        <TextField
+          wrapper-class="col-span-2"
+          label="additional email"
+          placeholder="example@email.com"
+          v-model="email"
+          type="email"
+        >
+          <template #prepend>
+            <IEmail />
+          </template>
+        </TextField>
+        <TextField label="address" placeholder="address" v-model="address">
+          <template #prepend>
+            <ILocation />
+          </template>
+        </TextField>
+        <TextField label="city" placeholder="city" v-model="city" />
+        <TextField wrapper-class="col-span-2" label="phone" placeholder="09x,xxx,xx" v-model="phone_number" type="tel">
+          <template #prepend>
+            <ICustomers />
+          </template>
+        </TextField>
         <TextField label="country" placeholder="country" v-model="country" />
         <TextField label="state" placeholder="state" v-model="state" />
       </div>
-    </div>
-    <div class="pt-4 flex mx-auto 2xl:col-span-2">
-      <FileUpload v-model="image" />
-    </div>
+      <div class="flex flex-col gap-4 items-center pt-5">
+        <FileUpload class="w-240px h-240px" v-model="image">
+          <div class="bg-indigo-1 dark:bg-inherit rounded-md w-max p-4px">
+            <IImg height="48" width="48" class="typo-clr-primary" />
+          </div>
+          <div>
+            <p class="typo-base typo-clr-primary">Upload Image</p>
+            <p class="typo-clr-muted">
+              File Format <span class="typo-clr-base">jpeg, png, jpg</span> Recommended Size
+              <span class="typo-clr-base">240x240</span>
+            </p>
+          </div>
+        </FileUpload>
+      </div>
+    </section>
   </form>
 </template>
 

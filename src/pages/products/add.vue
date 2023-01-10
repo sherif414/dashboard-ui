@@ -122,7 +122,6 @@ async function submit() {
 
   const err = await store.insertProduct({ ...formData, image: imageName })
   useMessage(err ? 'error' : 'success', err ? err.message : 'product was added successfully')
-  console.log(err)
 
   if (!err) {
     resetForm()

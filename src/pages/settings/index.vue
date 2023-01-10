@@ -1,6 +1,6 @@
 <template>
-  <main class="grid p-4">
-    <section class="surface-1 p-8 flex flex-col rounded-md">
+  <main class="flex flex-col p-4">
+    <section class="grow surface-1 p-4 flex flex-col gap-4 rounded-md overflow-auto">
       <nav class="relative inline-flex w-max rounded-md surface-2 text-center gap-2 p1">
         <RouterLink
           active-class="typo-clr-base!"

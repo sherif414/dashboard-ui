@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col surface-1 rounded-md col-span-2 overflow-y-auto">
+  <section class="flex flex-col surface-1 rounded-md col-span-2">
     <header class="flex justify-between items-center border-b border-b-gray-2 dark:border-b-dark-3 p-2 typo-sm">
       <div class="flex">
         <div class="w-14 h-14"><img src="../../assets/img/iphone14.png" alt="profile image" /></div>
@@ -16,25 +16,25 @@
         >
       </div>
     </header>
-
-    <TransitionGroup
-      enter-active-class="transition-all duration-300"
-      enter-from-class="translate-y-2rem opacity-0"
-      move-class="transition-all duration-300"
-      tag="ul"
-      class="grow p-8 relative py-2 flex flex-col-reverse gap-6 overflow-y-auto overflow-x-hidden"
-    >
-      <ConversationMessage
-        v-if="messages"
-        v-for="msg in messages"
-        :is-from-me="me?.id === msg.sent_by"
-        :time="msg.created_at ?? ''"
-        :key="msg.id"
+    <div class="grow relative">
+      <TransitionGroup
+        enter-active-class="transition-all duration-300"
+        enter-from-class="translate-y-2rem opacity-0"
+        move-class="transition-all duration-300"
+        tag="ul"
+        class="w-full h-full overflow-y-auto flex flex-col-reverse gap-6 p-8 absolute py-2"
       >
-        {{ msg.content }}
-      </ConversationMessage>
-    </TransitionGroup>
-
+        <ConversationMessage
+          v-if="messages"
+          v-for="msg in messages"
+          :is-from-me="me?.id === msg.sent_by"
+          :time="msg.created_at ?? ''"
+          :key="msg.id"
+        >
+          {{ msg.content }}
+        </ConversationMessage>
+      </TransitionGroup>
+    </div>
     <footer class="p-2">
       <form
         @submit.prevent="handleSend(formData)"

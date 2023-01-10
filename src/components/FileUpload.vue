@@ -4,9 +4,10 @@
       ref="dropzoneEl"
       v-if="!imgSrc && !modelValue"
       :class="{ 'border-accent-9!': isOverDropZone }"
-      class="border-dashed border border-gray-3 cursor-pointer surface-2 h-250px hover:dark:border-gray-3 hover:border-gray-9 dark:border-gray-6 p8 rounded-md grid gap-2 place-items-center"
+      class="border-dashed border grow border-gray-3 cursor-pointer surface-2 hover:dark:border-gray-3 hover:border-gray-9 dark:border-gray-6 p8 rounded-md grid gap-2 place-items-center"
     >
-      <slot>
+      <div v-if="isOverDropZone" class="m-auto typo-head">drop image here</div>
+      <slot v-else>
         <div class="bg-indigo-1 dark:bg-inherit rounded-md w-max p-4px">
           <IImg height="48" width="48" class="typo-clr-primary" />
         </div>
@@ -21,11 +22,11 @@
       </slot>
       <input class="hidden w-1px h-1px" @change="handleChange" type="file" :value="modelValue" :accept="accept" />
     </label>
-    <div v-if="imgSrc && modelValue" class="relative border">
+    <div v-else class="relative">
       <div @click="removePreviewImg" class="p2 bg-accent-6 rounded-md absolute top-3 right-3 shadow-md text-dark">
         <ITrash width="14" height="14" />
       </div>
-      <img class="w-full h-250px overflow-hidden mx-auto rounded-md object-cover" :src="imgSrc" />
+      <img class="overflow-hidden rounded-md" :src="imgSrc || ''" />
     </div>
   </div>
 </template>
@@ -33,11 +34,11 @@
 <script setup lang="ts">
 const { accept = 'image/*', modelValue } = defineProps<{
   accept?: string
-  modelValue: File | undefined
+  modelValue?: File
 }>()
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: File | undefined): void
+  (event: 'update:modelValue', value?: File): void
 }>()
 
 let imgSrc = $ref<string | null>(null)
