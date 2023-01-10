@@ -78,11 +78,11 @@
 
     <!-- conversation view -->
     <template v-if="activeConversation">
-      <RouterView v-slot="{ Component, route }">
-        <KeepAlive :max="5">
+      <KeepAlive :max="5">
+        <RouterView v-slot="{ Component, route }">
           <Component :data="activeConversation" :is="Component" :key="route.path" />
-        </KeepAlive>
-      </RouterView>
+        </RouterView>
+      </KeepAlive>
     </template>
     <div v-else class="surface-1 rounded-md col-span-2"></div>
   </main>
@@ -107,7 +107,7 @@ async function handleSearchResultClick(userId: string) {
   // already in conversation with
   if (existingConversation) {
     const idx = conversations?.findIndex(({ id }) => id === existingConversation.conversation_id)
-    if (idx && idx !== -1) activeConversation = conversations?.splice(idx, 1)[0] ?? activeConversation
+    if (idx !== undefined && idx !== -1) activeConversation = conversations?.splice(idx, 1)[0] ?? activeConversation
     else {
       const res = await getConversationWithProfile({ conversationId: existingConversation.conversation_id })
       if (!Array.isArray(res)) activeConversation = res
