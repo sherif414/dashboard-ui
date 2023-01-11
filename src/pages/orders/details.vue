@@ -44,7 +44,7 @@
     </header>
 
     <!-- summary cards grid -->
-    <div class="grid grid-cols-3 gap-4 2xl:gap-8 row-span-1">
+    <section class="grid grid-cols-3 gap-4 row-span-1">
       <!-- all orders summary -->
       <SummaryCard
         :filter="false"
@@ -71,8 +71,8 @@
       <SummaryCard
         :filter="false"
         :data="[
-          { name: 'address', value: 'No. 15 Bahri Street' },
-          { name: 'pilling address', value: 'No. 15 Bahri Street' },
+          { name: 'home address', value: 'No. 15 Bahri Street' },
+          { name: 'billing address', value: 'No. 15 Bahri Street' },
         ]"
       >
         <template #icon>
@@ -92,7 +92,7 @@
           <ICreditCard width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
-    </div>
+    </section>
     <BaseTable
       :show-search="false"
       table-name="order_item"

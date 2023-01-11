@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col grow p4 px-8 gap-y-4 surface-1 rounded-md overflow-auto">
     <!-- header  -->
-    <caption class="flex items-center gap-x-4 typo-sm">
+    <caption v-if="!hideHeader" class="flex items-center gap-x-4 typo-sm">
       <!-- search box -->
       <h2 class="typo-head capitalize">{{ tableTitle ?? tableName }}</h2>
       <TextField v-if="showSearch" wrapper-class="ml-4" size="sm" placeholder="search" v-model.noLazy="searchValue">
@@ -120,12 +120,21 @@ interface Props {
   itemsCount: number | null
   showSearch?: boolean
   orderColumn?: string
+  hideHeader?: boolean
   getData?: (params: getTableDataParams) => Promise<void>
 }
 
-const { showSearch = true, tableName, itemsCount, getData, data, orderColumn = 'id' } = defineProps<Props>()
+const {
+  showSearch = true,
+  tableName,
+  itemsCount,
+  getData,
+  data,
+  orderColumn = 'id',
+  hideHeader = false,
+} = defineProps<Props>()
 
-const headers = $computed(() => (data ? Object.keys(data[0]) : null))
+const headers = $computed(() => (data && data.length ? Object.keys(data[0]) : null))
 
 // pagination
 let page = $ref(1)

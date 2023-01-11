@@ -78,11 +78,11 @@
 
     <!-- conversation view -->
     <template v-if="activeConversation">
-      <KeepAlive :max="5">
-        <RouterView v-slot="{ Component, route }">
+      <RouterView v-slot="{ Component, route }">
+        <KeepAlive :max="5">
           <Component :data="activeConversation" :is="Component" :key="route.path" />
-        </RouterView>
-      </KeepAlive>
+        </KeepAlive>
+      </RouterView>
     </template>
     <div v-else class="surface-1 rounded-md col-span-2"></div>
   </main>

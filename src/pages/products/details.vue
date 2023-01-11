@@ -12,18 +12,28 @@
         product id: <span class="typo-clr-muted typo-sm">{{ $route.params.id }}</span>
       </h2>
       <div class="ml-auto">
-        <button class="p3 py-1 rounded-md typo-base" type="button">Edit product</button>
-        <button class="p3 py-1 typo-clr-on-primary bg-black rounded-md typo-base" type="button">
-          unpublish product
-        </button>
+        <Btn
+          :loading="isLoading"
+          class="ml-auto typo-sm"
+          :class="
+            !product?.published
+              ? 'bg-black! text-gray-1! dark:bg-gray-1! dark:text-dark!'
+              : 'bg-error! bg-opacity-10! text-error! hover:bg-error! hover:bg-opacity-30!'
+          "
+          @click="handleChangeState"
+          >{{ product?.published ? 'unpublish' : 'publish' }} product</Btn
+        >
       </div>
     </header>
     <section class="flex flex-col gap-4 w-full h-full">
       <div class="grid grid-cols-8 gap-4">
-        <div class="col-span-1 fill-primary-2 rounded-md"></div>
+        <div class="rounded-md surface-1">
+          <img class="bg-cover" src="../../assets/img/iphone14.png" />
+        </div>
         <SummaryCard
           :data="[
             { name: 'price', value: product?.sell_price },
+            { name: 'status', value: product?.published ? 'published' : 'unpublished' },
             { name: 'in-stock', value: product?.stock },
           ]"
           class="col-span-3"
@@ -81,27 +91,77 @@
         </SummaryCard>
       </div>
 
-      <BaseTable class="grow" table-name="product detail" :data="null" />
+      <BaseTable
+        :show-search="false"
+        table-name="orderItems"
+        table-title="orders"
+        :data="orderItems"
+        :items-count="orderItems?.length || 0"
+      >
+        <template #header="{ orderBy }">
+          <TableHeaderCell
+            v-for="head in headers"
+            :key="head"
+            :sort-ascending="orderBy.ascending"
+            :order-by="orderBy.column"
+            :column="head"
+          >
+            {{ head }}
+          </TableHeaderCell>
+        </template>
+        <template #body>
+          <tbody v-if="orderItems">
+            <tr v-for="item in orderItems" :key="item.product_id">
+              <TableBodyCell :value="item.order_id" variant="link" :to="`/orders/${item.order_id}`" />
+              <TableBodyCell :value="item.created_at" variant="date" />
+              <TableBodyCell :value="item.quantity" />
+              <TableBodyCell :value="item.discount" />
+              <TableBodyCell :value="item.status" variant="chip" :chip-status="item.status === 'completed'" />
+            </tr>
+          </tbody>
+        </template>
+        <template #pagination></template>
+      </BaseTable>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import type { Product } from 'types'
+import type { OrderItem, Product } from 'types'
 import { supabase } from '~/api'
 
 const route = useRoute()
 
 let hasError = $ref(false)
 let product = $ref<Product | null>(null)
+let orderItems = $ref<OrderItem[] | null>(null)
 let productId = $computed<number>(() => {
-  if (typeof route.params.id === 'string') return parseInt(route.params.id)
+  if (typeof route.params.id === 'string') return +route.params.id
   return -1
 })
 
+const headers = ['order id', 'order date', 'quantity', 'discount', 'status']
+
+// load initial data
 onMounted(async () => {
   const { data, error } = await supabase.from('products').select('*').eq('id', productId).single()
+  if (error && !data) return useMessage('error', error.message || 'an error has occurred')
   product = data
-  if (error) hasError = true
+
+  const res = await supabase.from('order_item').select('*').eq('product_id', data.id)
+  if (res.error) return useMessage('error', res.error.message || 'an error has occurred')
+  orderItems = res.data
 })
+
+// change publish status
+let isLoading = $ref(false)
+async function handleChangeState() {
+  if (!product) return
+  isLoading = true
+  const { error } = await supabase.from('products').update({ published: !product.published }).eq('id', product.id)
+  isLoading = false
+  if (error) return useMessage('error', error.message || 'an error has occurred')
+  product.published = !product.published
+  useMessage('success', 'action successful')
+}
 </script>
