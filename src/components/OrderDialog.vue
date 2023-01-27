@@ -47,7 +47,7 @@
               >
                 <img
                   class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden"
-                  src="src/assets/img/iphone14.png"
+                  src="../assets/img/iphone14.png"
                   :alt="`${product.name}'s profile image'`"
                 />
                 <span class="row-span-1 col-span-1 typo-clr-base">

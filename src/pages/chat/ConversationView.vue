@@ -1,8 +1,8 @@
 <template>
   <section class="flex flex-col surface-1 rounded-md col-span-2">
     <header class="flex justify-between items-center border-b border-b-gray-2 dark:border-b-dark-3 p-2 typo-sm">
-      <div class="flex">
-        <div class="w-14 h-14"><img src="../../assets/img/iphone14.png" alt="profile image" /></div>
+      <div class="flex gap-2">
+        <img class="w-14 h-14 rounded-full" src="../../assets/img/profile.jpg" alt="profile image" />
         <div class="flex flex-col gap-2 items-start justify-center">
           <h2>{{ otherMember?.full_name }}</h2>
           <h3>online <span class="typo-clr-muted">10:30 pm</span></h3>
