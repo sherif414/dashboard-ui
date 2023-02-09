@@ -50,7 +50,7 @@ declare module '@vue/runtime-core' {
     IMessage: typeof import('./src/components/icons/IMessage.vue')['default']
     IMinus: typeof import('./src/components/icons/IMinus.vue')['default']
     IMoney: typeof import('./src/components/icons/IMoney.vue')['default']
-    ISearch: typeof import('./src/components/icons/ISearch.vue')['default']
+    Isearch: typeof import('./src/components/icons/Isearch.vue')['default']
     ISend: typeof import('./src/components/icons/ISend.vue')['default']
     ISetting: typeof import('./src/components/icons/ISetting.vue')['default']
     IShoppingBag: typeof import('./src/components/icons/IShoppingBag.vue')['default']

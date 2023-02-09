@@ -37,8 +37,8 @@ import { useAuthStore } from '~/store/auth'
 const auth = useAuthStore()
 const router = useRouter()
 
-let email = $ref('')
-let password = $ref('')
+let email = $ref('admin@admin.com')
+let password = $ref('password')
 
 let isSubmitting = $ref(false)
 async function handleLogin() {

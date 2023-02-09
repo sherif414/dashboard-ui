@@ -3,11 +3,6 @@ import 'process'
 import type { Database } from 'types/supabase'
 
 export const supabase = createClient<Database>(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  'https://mcvcidxgqdmfkoctzgbl.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jdmNpZHhncWRtZmtvY3R6Z2JsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjMyNTI5ODksImV4cCI6MTk3ODgyODk4OX0.r811ro-xC9NdKuGCcBZ72MyXm8-mc9rUvfpjxlVDkVY'
 )
-// const channel = supabase.channel('test-channel', {
-//   config: {
-//     broadcast: { ack: true },
-//   },
-// })
