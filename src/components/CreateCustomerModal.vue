@@ -19,35 +19,42 @@
 </template>
 
 <script setup lang="ts">
-const self = $ref<HTMLDialogElement | null>(null)
+import { ref } from 'vue'
+import TextField from '~/components/TextField.vue'
+import Btn from '~/components/Btn.vue'
+import { customerService } from '~/services/customerService'
+import { useMessage } from '~/composables/message'
+
+const self = ref<HTMLDialogElement | null>(null)
 const emits = defineEmits(['success'])
 const openModal = () => {
-  self?.showModal()
+  self.value?.showModal()
 }
 
-let name = $ref('')
-let email = $ref('')
-let phone = $ref('')
+const name = ref('')
+const email = ref('')
+const phone = ref('')
 
-let errorMsg = $ref('')
-let isSubmitting = $ref(false)
+const errorMsg = ref('')
+const isSubmitting = ref(false)
+
 async function handleSubmit() {
-  isSubmitting = true
-  errorMsg = ''
-  const res = await supabase.from('customers').insert({ email, name, phone })
-  isSubmitting = false
+  isSubmitting.value = true
+  errorMsg.value = ''
+  const res = await customerService.createCustomer({ email: email.value, name: name.value, phone: phone.value })
+  isSubmitting.value = false
 
   if (res.error) {
     useMessage('error', res.error.message ?? 'an error has occurred')
-    errorMsg = res?.error?.message ?? 'unknown error'
+    errorMsg.value = res?.error?.message ?? 'unknown error'
     return
   } else {
-    useMessage('success', 'customer "' + name + '" added')
+    useMessage('success', 'customer "' + name.value + '" added')
     emits('success')
-    self?.close()
-    name = ''
-    email = ''
-    phone = ''
+    self.value?.close()
+    name.value = ''
+    email.value = ''
+    phone.value = ''
   }
 }
 

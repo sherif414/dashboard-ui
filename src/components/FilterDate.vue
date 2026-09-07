@@ -37,16 +37,20 @@
         <input id="last-year-cb" type="checkbox" />
         <label for="last-year-cb">last year</label>
       </div>
-      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary col-span-2">Filter</button>
+      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary col-span-2 cursor-pointer">Filter</button>
     </menu>
   </div>
 </template>
 
 <script setup lang="ts">
-let isOpen = $ref(false)
-let menuRef = ref<HTMLElement>()
+import { ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+import { ICalender } from '~/components/icons'
+
+const isOpen = ref(false)
+const menuRef = ref<HTMLElement>()
 onClickOutside(menuRef, () => {
-  isOpen = false
+  isOpen.value = false
 })
 </script>
 

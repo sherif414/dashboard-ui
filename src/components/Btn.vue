@@ -16,6 +16,8 @@
   </button>
 </template>
 <script setup lang="ts">
+import { computed } from 'vue'
+
 interface Props {
   type?: 'submit' | 'button' | 'reset'
   loading?: boolean
@@ -24,5 +26,5 @@ interface Props {
 }
 const { type = 'button', loading = false, disabled = false, variant = 'primary' } = defineProps<Props>()
 
-let isDisabled = $computed(() => disabled || loading)
+const isDisabled = computed(() => disabled || loading)
 </script>

@@ -1,57 +1,60 @@
-import { User } from '@supabase/supabase-js'
-import type { Profile } from 'types'
+import { ref } from 'vue'
+import type { Profile, User } from 'types'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { supabase } from '../api'
+import { authService } from '~/services/authService'
+import { defaultProfile, defaultUser } from '~/services/mock/seedData'
 
 export const useAuthStore = defineStore('main', () => {
   const publicPages = ['/login', '/signup', '/email-confirmation']
   const redirectPath = ref('')
-  const user = useLocalStorage<User | null>('user', null, { serializer: StorageSerializers.object })
-  const profile = useLocalStorage<Profile | null>('profile', null, { serializer: StorageSerializers.object })
 
-  async function login(email: string, password: string) {
-    return (await supabase.auth.signInWithPassword({ email, password })).error
+  // Pre-seed with demo user and profile if empty for an instant frictionless showcase
+  const user = useLocalStorage<User | null>('user', defaultUser, { serializer: StorageSerializers.object })
+  const profile = useLocalStorage<Profile | null>('profile', defaultProfile, { serializer: StorageSerializers.object })
+
+  async function login(email: string, password?: string) {
+    const res = await authService.login(email, password)
+    if ('error' in res) {
+      return res.error
+    }
+    user.value = res.user
+    profile.value = res.profile
+    return null
   }
 
   async function signUp(email: string, password: string, fullName: string) {
-    return (await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } })).error
+    const res = await authService.signUp(email, password, fullName)
+    if (res.error) return res.error
+    return null
   }
 
   async function signOut() {
-    return (await supabase.auth.signOut()).error
+    await authService.signOut()
+    user.value = null
+    profile.value = null
+    return null
   }
 
   async function getUser() {
-    return (await supabase.auth.getUser()).data.user ?? null
+    if (!user.value) return null
+    return await authService.getUser(user.value.id)
   }
 
   async function getProfile() {
-    profile.value = (await supabase.from('profiles').select('*').eq('id', user.value?.id).single()).data ?? null
+    if (!user.value) return
+    const p = await authService.getProfile(user.value.id)
+    if (p) profile.value = p
   }
 
   async function updateProfile(userProfile: Partial<Profile>, imageFile?: File | null) {
-    let imagePath: string | null = null
-    if (imageFile) {
-      const { data, error } = await supabase.storage
-        .from('profile-image')
-        .upload(`${useUUID()}.${imageFile.name.split('.').pop()}`, imageFile)
-
-      if (error) return error
-      if (data?.path) imagePath = data.path
-    }
-
-    const { error, data } = await supabase
-      .from('profiles')
-      .update({ ...userProfile, profile_image: imagePath })
-      .eq('id', user.value?.id)
-      .select()
-      .single()
-    if (data) profile.value = data
+    if (!user.value) return { message: 'Not logged in' }
+    const { profile: updated, error } = await authService.updateProfile(user.value.id, userProfile, imageFile)
+    if (updated) profile.value = updated
     return error
   }
 
-  supabase.auth.onAuthStateChange((event, session) => {
+  authService.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
       user.value = session?.user ?? null
       getProfile()

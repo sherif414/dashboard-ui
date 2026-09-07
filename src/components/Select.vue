@@ -6,10 +6,10 @@
     <div class="relative">
       <div tabindex="0" :style="{ height: `${height}rem` }" :class="classes" @click="isOpen = !isOpen">
         <!-- placeholder -->
-        <span v-if="!modelValue.length" class="typo-clr-muted"> {{ placeholder }} </span>
+        <span v-if="!modelValue || !modelValue.length" class="typo-clr-muted"> {{ placeholder }} </span>
         <template v-else>
           <!-- multiple values -->
-          <template v-if="typeof modelValue !== 'string' && true">
+          <template v-if="typeof modelValue !== 'string'">
             <span class="px4 h-60% my-auto flex items-center rounded-md surface-1 mr-1">
               {{ modelValue[0] }}
             </span>
@@ -48,7 +48,11 @@
 </template>
 
 <script setup lang="ts">
-const { modelValue, size = 'md' } = defineProps<{
+import { ref, computed } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+import { ICaretDown, ICheckCircle } from '~/components/icons'
+
+const { modelValue, size = 'md', options, placeholder = '' } = defineProps<{
   modelValue: string | string[]
   options: string[]
   size?: 'sm' | 'md' | 'lg'
@@ -59,35 +63,37 @@ const emit = defineEmits<{
   (event: 'update:modelValue', value: string | string[]): void
 }>()
 
+const isOpen = ref(false)
+const menuRef = ref<HTMLElement>()
+onClickOutside(menuRef, () => (isOpen.value = false))
+
 function handleEmit(newValue: string) {
   if (typeof modelValue === 'string') {
-    isOpen = modelValue === newValue
+    isOpen.value = false
     emit('update:modelValue', modelValue === newValue ? '' : newValue)
     return
   }
 
-  if (modelValue.includes(newValue))
+  if (modelValue.includes(newValue)) {
     emit(
       'update:modelValue',
       modelValue.filter((_value) => _value !== newValue)
     )
-  else emit('update:modelValue', [...modelValue, newValue])
+  } else {
+    emit('update:modelValue', [...modelValue, newValue])
+  }
 }
 
-let isOpen = $ref(false)
-let menuRef = ref<HTMLElement>()
-onClickOutside(menuRef, () => (isOpen = false))
-
-const height = $computed(() => {
+const height = computed(() => {
   if (size === 'md') return 3
   if (size === 'lg') return 3.5
   return 2
 })
 
-let classes = [
+const classes = computed(() => [
   'rounded-md surface-2 focus:(outline-indigo-4 dark:outline-violet-4) flex items-center justify-start truncate px-4 outline-none outline-offset-0! min-w-10rem w-full cursor-pointer',
   {
-    'outline-indigo-4 dark:outline-violet': isOpen,
+    'outline-indigo-4 dark:outline-violet': isOpen.value,
   },
-]
+])
 </script>

@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { PieChart } from 'chartist'
 import type { PieChartData, PieChartOptions } from 'chartist'
 

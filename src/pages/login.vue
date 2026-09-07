@@ -16,15 +16,15 @@
         <TextField required v-model="password" placeholder="password" type="password">
           <template #prepend><ILock /></template>
         </TextField>
-        <router-link to="login" active-class="" class="self-end typo-clr-primary hover:underline"
-          >Recover Password</router-link
+        <router-link to="/login" active-class="" class="self-end typo-clr-primary hover:underline text-sm"
+          >Demo password: password</router-link
         >
       </div>
 
       <!-- footer -->
-      <h3 class="self-center">
+      <h3 class="self-center typo-sm">
         don't have an account?
-        <router-link active-class="" class="typo-clr-primary hover:underline" to="signup">signup</router-link>
+        <router-link active-class="" class="typo-clr-primary hover:underline ml-1" to="/signup">signup</router-link>
       </h3>
       <Btn type="submit" class="mx-auto" :loading="isSubmitting">login</Btn>
     </form>
@@ -32,28 +32,34 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/store/auth'
+import { useMessage } from '~/composables/message'
+import TextField from '~/components/TextField.vue'
+import Btn from '~/components/Btn.vue'
+import { ILogo, IEmail, ILock } from '~/components/icons'
 
 const auth = useAuthStore()
 const router = useRouter()
 
-let email = $ref('admin@admin.com')
-let password = $ref('password')
+const email = ref('admin@admin.com')
+const password = ref('password')
+const isSubmitting = ref(false)
 
-let isSubmitting = $ref(false)
 async function handleLogin() {
-  if (email && password) {
-    isSubmitting = true
-    const error = await auth.login(email, password)
-    isSubmitting = false
+  if (email.value && password.value) {
+    isSubmitting.value = true
+    const error = await auth.login(email.value, password.value)
+    isSubmitting.value = false
 
     if (!error) {
-      email = ''
-      password = ''
-      useMessage('success', 'you are logged in')
+      email.value = ''
+      password.value = ''
+      useMessage('success', 'You are logged in!')
       router.push(auth.redirectPath ? auth.redirectPath : '/')
     } else {
-      useMessage('error', error.message)
+      useMessage('error', error.message || 'Login failed')
     }
   }
 }

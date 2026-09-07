@@ -27,9 +27,9 @@
       <SummaryCard
         :filter="false"
         :data="[
-          { name: 'out of stock', value: '5' },
-          { name: 'expired', value: '2' },
-          { name: '1 star rating', value: '3' },
+          { name: 'out of stock', value: '0' },
+          { name: 'low stock (< 20)', value: '2' },
+          { name: 'in stock', value: store.countAll },
         ]"
       >
         <template #icon>
@@ -48,14 +48,14 @@
     >
       <template #body>
         <template v-if="store.products">
-          <tr class="[&_td]:(p2 px-4)" v-for="row in store.products">
+          <tr class="[&_td]:(p2 px-4)" v-for="row in store.products" :key="row.id">
             <TableBodyCell :value="row.id" />
             <TableBodyCell :value="row.name" variant="link" :to="`/products/${row.id}`" />
             <TableBodyCell :value="row.created_at" variant="date" />
             <TableBodyCell :value="row.category" />
             <TableBodyCell :value="row.stock" />
-            <TableBodyCell :value="row.sell_price" />
-            <TableBodyCell :value="row.delivery_type?.toString() || ''" />
+            <TableBodyCell :value="'$' + (row.sell_price || 0)" />
+            <TableBodyCell :value="Array.isArray(row.delivery_type) ? row.delivery_type.join(', ') : (row.delivery_type || '-')" />
             <TableBodyCell
               :value="row.published ? 'published' : 'unpublished'"
               variant="chip"
@@ -69,7 +69,12 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useProductsStore } from '~/store/products'
+import SummaryCard from '~/components/SummaryCard.vue'
+import BaseTable from '~/components/BaseTable.vue'
+import TableBodyCell from '~/components/TableBodyCell.vue'
+import { IAdd, IInventory } from '~/components/icons'
 
 const headings = ['id', 'name', 'created_at', 'category', 'stock', 'sell_price', 'delivery_type', 'published']
 const store = useProductsStore()

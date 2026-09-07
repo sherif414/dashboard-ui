@@ -5,10 +5,8 @@
     class="transition-all duration-300 grid grid-cols-[max-content_1fr] p2 px-4 gap-x-2"
   >
     <img
-      class="w-10 self-center h-10 rounded-full overflow-hidden"
-      :src="
-        avatar ? avatarLink : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'
-      "
+      class="w-10 self-center h-10 rounded-full overflow-hidden object-cover"
+      :src="avatarLink"
       alt="avatar"
     />
     <div class="flex flex-col gap-2 justify-center typo-sm min-w-0">
@@ -26,6 +24,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useTimeAgo } from '@vueuse/core'
+import { getProfileImageUrl } from '~/services/imageUtils'
+
 const { avatar = '' } = defineProps<{
   conversationId: string
   title?: string | null
@@ -33,7 +35,5 @@ const { avatar = '' } = defineProps<{
   lastMessageDate?: string | null
 }>()
 
-let avatarLink = $computed(
-  () => 'https://mcvcidxgqdmfkoctzgbl.supabase.co/storage/v1/object/public/profile-image/' + avatar
-)
+const avatarLink = computed(() => getProfileImageUrl(avatar))
 </script>

@@ -1,4 +1,4 @@
-import { Ref } from 'vue'
+import { ref, onMounted, watch, type Ref } from 'vue'
 
 export function useLoadingOverlay(
   el: Ref<HTMLElement | null>,

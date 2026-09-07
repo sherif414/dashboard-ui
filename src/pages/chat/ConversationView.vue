@@ -1,19 +1,19 @@
 <template>
   <section class="flex flex-col surface-1 rounded-md col-span-2">
     <header class="flex justify-between items-center border-b border-b-gray-2 dark:border-b-dark-3 p-2 typo-sm">
-      <div class="flex gap-2">
-        <img class="w-14 h-14 rounded-full" src="../../assets/img/profile.jpg" alt="profile image" />
-        <div class="flex flex-col gap-2 items-start justify-center">
-          <h2>{{ otherMember?.full_name }}</h2>
-          <h3>online <span class="typo-clr-muted">10:30 pm</span></h3>
+      <div class="flex gap-2 items-center">
+        <img class="w-12 h-12 rounded-full object-cover" :src="getProfileImageUrl(otherMember?.profile_image)" alt="profile image" />
+        <div class="flex flex-col gap-1 items-start justify-center">
+          <h2 class="font-medium typo-base">{{ otherMember?.full_name ?? 'Contact' }}</h2>
+          <h3 class="text-xs text-success">online <span class="typo-clr-muted text-xs">now</span></h3>
         </div>
       </div>
       <div class="grid grid-cols-[max-content_max-content] grid-rows-2 gap-2 items-center justify-between">
-        <Chip status>New Customer</Chip>
-        <a class="typo-clr-primary" href="#">view profile</a>
-        <span class="flex items-center gap-2 row-start-2 col-start-2"
-          ><IShoppingBag width="14" height="14" />0 orders</span
-        >
+        <Chip :status="true">Active Contact</Chip>
+        <span class="typo-clr-muted text-xs">{{ otherMember?.city || 'Cairo' }}, {{ otherMember?.country || 'Egypt' }}</span>
+        <span class="flex items-center gap-2 row-start-2 col-start-2 typo-clr-muted text-xs">
+          <IShoppingBag width="14" height="14" /> {{ otherMember?.phone_number ? '+' + otherMember.phone_number : 'Direct message' }}
+        </span>
       </div>
     </header>
     <div class="grow relative">
@@ -25,9 +25,8 @@
         class="w-full h-full overflow-y-auto flex flex-col-reverse gap-6 p-8 absolute py-2"
       >
         <ConversationMessage
-          v-if="messages"
           v-for="msg in messages"
-          :is-from-me="me?.id === msg.sent_by"
+          :is-from-me="auth.profile?.id === msg.sent_by"
           :time="msg.created_at ?? ''"
           :key="msg.id"
         >
@@ -37,7 +36,7 @@
     </div>
     <footer class="p-2">
       <form
-        @submit.prevent="handleSend(formData)"
+        @submit.prevent="handleSend"
         class="flex items-stretch p1 rounded-lg border border-gray-2 dark:border-dark-3 gap-4"
       >
         <button type="button" class="bg-accent-3 rounded-md grid place-items-center px-4 text-gray-9">
@@ -46,10 +45,10 @@
         <input
           v-model="formData"
           type="text"
-          placeholder="your message"
-          class="grow outline-none! border-none! bg-inherit"
+          placeholder="Type your message..."
+          class="grow outline-none! border-none! bg-inherit px-2"
         />
-        <button type="submit" class="flex items-center gap-2 p-2 px-3 bg-accent-3 rounded-md text-gray-9">
+        <button type="submit" class="flex items-center gap-2 p-2 px-3 bg-accent-3 rounded-md text-gray-9 cursor-pointer hover:opacity-90">
           <span>Send</span>
           <ISend width="16" height="16" />
         </button>
@@ -59,59 +58,69 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, watch, onUnmounted } from 'vue'
 import type { Message, ConversationWithProfile } from 'types'
+import { useAuthStore } from '~/store/auth'
+import { chatService } from '~/services/chatService'
+import { getProfileImageUrl } from '~/services/imageUtils'
+import { useMessage } from '~/composables/message'
+import Chip from '~/components/Chip.vue'
+import ConversationMessage from '~/components/ConversationMessage.vue'
+import { IShoppingBag, IAdd, ISend } from '~/components/icons'
 
-const { data } = defineProps<{
+const props = defineProps<{
   data: ConversationWithProfile
 }>()
 
 const auth = useAuthStore()
 
-const me = $computed(() =>
-  data.created_by_profile?.id === auth.profile?.id ? data.created_by_profile : data.other_member_profile
-)
-const otherMember = $computed(() =>
-  data.created_by_profile?.id !== auth.profile?.id ? data.created_by_profile : data.other_member_profile
+const otherMember = computed(() =>
+  props.data.created_by_profile?.id !== auth.profile?.id ? props.data.created_by_profile : props.data.other_member_profile
 )
 
-let messages = $ref<Message[] | null>(null)
-async function getMessages() {
-  const { data: msgs, error } = await supabase
-    .from('message')
-    .select('*')
-    .eq('conversation_id', data.id)
-    .order('created_at', { ascending: false })
-    .limit(20)
-  if (error) useMessage('error', error.message ?? 'message failed')
-  messages = msgs
-}
-getMessages()
+const messages = ref<Message[]>([])
+let unsubLive: (() => void) | null = null
 
-// realtime
-const messagesChannel = supabase.channel(`public:message:conversation_id=eq.${data.id}`)
-
-messagesChannel.on(
-  'postgres_changes',
-  { event: 'INSERT', schema: 'public', table: 'message', filter: `conversation_id=eq.${data.id}` },
-  ({ new: newMessage }) => {
-    messages?.unshift(newMessage as Message)
+async function loadMessages(conversationId: string) {
+  try {
+    messages.value = await chatService.getMessages(conversationId)
+  } catch (err: any) {
+    useMessage('error', err.message || 'Failed loading messages')
   }
+
+  // Subscribe to realtime updates
+  if (unsubLive) unsubLive()
+  unsubLive = chatService.subscribeToMessages(conversationId, (newMsg) => {
+    // Only add if not already in list
+    if (!messages.value.some((m) => m.id === newMsg.id)) {
+      messages.value.unshift(newMsg)
+    }
+  })
+}
+
+watch(
+  () => props.data.id,
+  (newId) => {
+    if (newId) loadMessages(newId)
+  },
+  { immediate: true }
 )
-messagesChannel.subscribe()
 
 onUnmounted(() => {
-  messagesChannel.unsubscribe()
+  if (unsubLive) unsubLive()
 })
 
-// inserting messages
-let formData = $ref('')
+const formData = ref('')
 
-async function handleSend(content: string) {
-  formData = ''
-  const { error } = await supabase.from('message').insert({
-    content: content,
-    conversation_id: data.id,
-  })
-  if (error) useMessage('error', error.message ?? 'message failed')
+async function handleSend() {
+  const content = formData.value.trim()
+  if (!content) return
+  formData.value = ''
+
+  const sentBy = auth.profile?.id || 'user-demo-admin'
+  const newMsg = await chatService.sendMessage(props.data.id, sentBy, content)
+  if (!messages.value.some((m) => m.id === newMsg.id)) {
+    messages.value.unshift(newMsg)
+  }
 }
 </script>

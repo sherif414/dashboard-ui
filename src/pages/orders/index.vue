@@ -1,7 +1,7 @@
 <template>
   <main class="p4 flex flex-col gap-y-4 overflow-y-auto">
     <button
-      class="fixed bottom-5rem right-5rem fill-primary-2 rounded-full p-3 shadow-lg typo-clr-on-primary"
+      class="fixed bottom-5rem right-5rem fill-primary-2 rounded-full p-3 shadow-lg typo-clr-on-primary cursor-pointer hover:scale-105 transition-transform"
       @click="orderDialogRef?.openModal"
     >
       <IAdd />
@@ -12,9 +12,9 @@
       <!-- all orders summary -->
       <SummaryCard
         :data="[
-          { name: 'all orders', value: '450' },
-          { name: 'pending', value: '50' },
-          { name: 'completed', value: '400' },
+          { name: 'all orders', value: store.countAll ?? '8' },
+          { name: 'pending', value: '3' },
+          { name: 'completed', value: '5' },
         ]"
       >
         <template #icon>
@@ -25,8 +25,8 @@
       <!-- orders by state summary -->
       <SummaryCard
         :data="[
-          { name: 'canceled orders', value: '30' },
-          { name: 'returned', value: '10' },
+          { name: 'canceled orders', value: '0' },
+          { name: 'returned', value: '0' },
           { name: 'damaged', value: '0' },
         ]"
       >
@@ -38,8 +38,8 @@
       <!-- carts summary -->
       <SummaryCard
         :data="[
-          { name: 'abandoned carts', value: '20%' },
-          { name: 'customers', value: '30' },
+          { name: 'conversion rate', value: '88%' },
+          { name: 'active customers', value: '10' },
         ]"
       >
         <template #icon>
@@ -74,10 +74,10 @@
         <tbody v-if="store.orderList">
           <tr v-for="order in store.orderList" :key="order.id">
             <TableBodyCell :value="order.id" variant="link" :to="`/orders/${order.id}`" />
-            <TableBodyCell :value="order.customers.name" />
+            <TableBodyCell :value="order.customers?.name ?? 'Customer #' + order.owner" />
             <TableBodyCell :value="order.created_at" variant="date" />
             <TableBodyCell :value="order.type" />
-            <TableBodyCell :value="order.total_purchases" />
+            <TableBodyCell :value="'$' + (order.total_purchases ?? 0)" />
             <TableBodyCell :value="order.status" variant="chip" :chip-status="order.status === 'completed'" />
           </tr>
         </tbody>
@@ -90,10 +90,16 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useOrderStore } from '~/store/orders'
+import SummaryCard from '~/components/SummaryCard.vue'
+import BaseTable from '~/components/BaseTable.vue'
+import TableHeaderCell from '~/components/TableHeaderCell.vue'
+import TableBodyCell from '~/components/TableBodyCell.vue'
 import OrderDialog from '~/components/OrderDialog.vue'
+import { IAdd, IShoppingBag, ICart } from '~/components/icons'
 
-const orderDialogRef = $ref<InstanceType<typeof OrderDialog> | null>(null)
+const orderDialogRef = ref<InstanceType<typeof OrderDialog> | null>(null)
 const store = useOrderStore()
 const headers = [
   {

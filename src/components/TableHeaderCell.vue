@@ -14,6 +14,8 @@
 </template>
 
 <script setup lang="ts">
+import { ISort } from '~/components/icons'
+
 interface Props {
   column: string
   orderBy: string

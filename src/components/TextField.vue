@@ -42,6 +42,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
+
 interface Props {
   label?: string
   type?: 'text' | 'email' | 'password' | 'date' | 'number' | 'tel' | 'time' | 'url' | 'search'
@@ -53,33 +55,33 @@ interface Props {
 
 const { type = 'text', modelValue, modelModifiers = {}, size = 'md' } = defineProps<Props>()
 const emits = defineEmits(['update:modelValue'])
-const inputEl = $ref<HTMLInputElement | null>(null)
+const inputEl = ref<HTMLInputElement | null>(null)
 
-let height = $computed(() => {
+const height = computed(() => {
   if (size === 'md') return 3
   if (size === 'lg') return 3.5
   return 2
 })
-let eventType = $computed(() => (modelModifiers?.noLazy ? 'input' : 'change'))
-let isInvalid = $ref(false)
+const eventType = computed(() => (modelModifiers?.noLazy ? 'input' : 'change'))
+const isInvalid = ref(false)
 
 function handleEmit(e: Event) {
   let value: string | number | undefined = (e.target as HTMLInputElement)?.value
 
   if (!modelModifiers?.noTrim) {
-    value = value.trim()
+    value = value?.trim()
   }
 
   if (type === 'number' || modelModifiers?.isNumber) {
-    value = parseFloat(value) || undefined
+    value = parseFloat(value as string) || undefined
   }
 
   emits('update:modelValue', value)
 }
 
-let _errorMsg = $ref<string>()
+const _errorMsg = ref<string>()
 function validate() {
-  _errorMsg = inputEl?.validationMessage
-  inputEl?.checkValidity()
+  _errorMsg.value = inputEl.value?.validationMessage
+  inputEl.value?.checkValidity()
 }
 </script>

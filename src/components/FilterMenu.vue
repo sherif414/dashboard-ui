@@ -36,16 +36,22 @@
           <TextField size="sm" type="number" v-model="filterData.priceMax" label="max price" />
         </div>
       </div>
-      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary">Filter</button>
+      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary cursor-pointer">Filter</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-let menuRef = ref<HTMLElement>()
-let isOpen = $ref(false)
+import { ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+import { IFilter } from '~/components/icons'
+import Select from '~/components/Select.vue'
+import TextField from '~/components/TextField.vue'
 
-let filterData = $ref({
+const menuRef = ref<HTMLElement>()
+const isOpen = ref(false)
+
+const filterData = ref({
   customer: '',
   status: '',
   priceMin: undefined,
@@ -53,6 +59,6 @@ let filterData = $ref({
 })
 
 onClickOutside(menuRef, () => {
-  isOpen = false
+  isOpen.value = false
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <main class="p4 flex flex-col gap-4 overflow-y-auto">
     <button
-      class="fixed right-20 bottom-24 fill-primary-2 rounded-full p-3 typo-clr-on-primary"
+      class="fixed right-20 bottom-24 fill-primary-2 rounded-full p-3 typo-clr-on-primary cursor-pointer shadow-lg hover:scale-105 transition-transform"
       @click="ModalRef?.openModal"
     >
       <IAdd />
@@ -12,9 +12,9 @@
       <!-- all customers summary -->
       <SummaryCard
         :data="[
-          { name: 'all customers', value: '450' },
-          { name: 'active', value: '100', growth: '+20' },
-          { name: 'inactive', value: '30' },
+          { name: 'all customers', value: store.countAll ?? '10' },
+          { name: 'active', value: '8', growth: '+20%' },
+          { name: 'suspended', value: '2' },
         ]"
       >
         <template #icon>
@@ -25,17 +25,15 @@
       <!-- customers by state summary -->
       <SummaryCard
         :data="[
-          { name: 'new customers', value: '50', growth: '+10%' },
-          { name: 'purchasing', value: '200', growth: '+20' },
-          { name: 'canceled', value: '5' },
+          { name: 'new customers', value: '4', growth: '+15%' },
+          { name: 'purchasing', value: '8', growth: '+25%' },
+          { name: 'canceled', value: '0' },
         ]"
       >
         <template #icon>
           <IShoppingBag width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
-
-      <!-- carts summary -->
     </div>
 
     <!-- data-table  -->
@@ -70,10 +68,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useCustomersStore } from '~/store/customers'
+import SummaryCard from '~/components/SummaryCard.vue'
+import BaseTable from '~/components/BaseTable.vue'
+import TableBodyCell from '~/components/TableBodyCell.vue'
 import CreateCustomerModal from '~/components/CreateCustomerModal.vue'
+import { IAdd, ICustomers, IShoppingBag } from '~/components/icons'
 
-const ModalRef = $ref<InstanceType<typeof CreateCustomerModal> | null>(null)
+const ModalRef = ref<InstanceType<typeof CreateCustomerModal> | null>(null)
 const headers = ['id', 'name', 'email', 'created_at', 'phone', 'status']
 
 const store = useCustomersStore()

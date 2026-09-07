@@ -1,19 +1,27 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/store/auth'
+import {
+  ILogo,
+  IDashboard,
+  IShoppingBag,
+  ICustomers,
+  IInventory,
+  IMessage,
+  ISetting,
+  ILogout,
+} from '~/components/icons'
 
 const auth = useAuthStore()
 const router = useRouter()
 
-let isExpanded = $ref(false)
-let linkNameOpacity = $computed(() => (isExpanded ? '1' : '0'))
+const isExpanded = ref(false)
+const linkNameOpacity = computed(() => (isExpanded.value ? '1' : '0'))
 
 async function signOut() {
-  const signOutError = await auth.signOut()
-  if (!signOutError) {
-    router.push('/login')
-    return
-  }
-  alert(signOutError.message)
+  await auth.signOut()
+  router.push('/login')
 }
 </script>
 

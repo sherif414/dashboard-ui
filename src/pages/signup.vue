@@ -19,9 +19,9 @@
           <template #prepend><ILock /></template>
         </TextField>
       </div>
-      <h3 class="self-center">
+      <h3 class="self-center typo-sm">
         already have an account?
-        <router-link active-class="" class="typo-clr-primary hover:underline" to="login">login</router-link>
+        <router-link active-class="" class="typo-clr-primary hover:underline ml-1" to="/login">login</router-link>
       </h3>
       <Btn :loading="isSubmitting" type="submit" class="mx-auto"> create account </Btn>
     </form>
@@ -29,25 +29,32 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/store/auth'
+import { useMessage } from '~/composables/message'
+import TextField from '~/components/TextField.vue'
+import Btn from '~/components/Btn.vue'
+import { ILogo, ICustomers, IEmail, ILock } from '~/components/icons'
 
 const auth = useAuthStore()
 const router = useRouter()
 
-let isSubmitting = $ref(false)
-let fullName = $ref('')
-let email = $ref('')
-let password = $ref('')
+const isSubmitting = ref(false)
+const fullName = ref('')
+const email = ref('')
+const password = ref('')
 
 async function handleSignup() {
-  if (email && password && fullName) {
-    isSubmitting = true
-    const error = await auth.signUp(email, password, fullName)
-    isSubmitting = false
+  if (email.value && password.value && fullName.value) {
+    isSubmitting.value = true
+    const error = await auth.signUp(email.value, password.value, fullName.value)
+    isSubmitting.value = false
     if (error) {
       useMessage('error', error.message)
     } else {
-      router.push('/email-confirmation')
+      useMessage('success', 'Account created! Welcome.')
+      router.push('/')
     }
   }
 }

@@ -56,35 +56,44 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useAuthStore } from '~/store/auth'
+import { useMessage } from '~/composables/message'
+import Btn from '~/components/Btn.vue'
+import TextField from '~/components/TextField.vue'
+import FileUpload from '~/components/FileUpload.vue'
+import { ICustomers, IEmail, ILocation, IImg } from '~/components/icons'
+
 const auth = useAuthStore()
 
-let fullName = $ref(auth.profile?.full_name)
-let email = $ref(auth.profile?.email ?? null)
-let phone_number = $ref(auth.profile?.phone_number ?? null)
-let address = $ref(auth.profile?.address ?? null)
-let state = $ref(auth.profile?.address ?? null)
-let country = $ref(auth.profile?.country)
-let city = $ref(auth.profile?.city)
-let image = $ref<File>()
+const fullName = ref(auth.profile?.full_name ?? '')
+const email = ref(auth.profile?.email ?? '')
+const phone_number = ref(auth.profile?.phone_number ?? '')
+const address = ref(auth.profile?.address ?? '')
+const state = ref(auth.profile?.state ?? '')
+const country = ref(auth.profile?.country ?? '')
+const city = ref(auth.profile?.city ?? '')
+const image = ref<File>()
 
-let isLoading = $ref(false)
+const isLoading = ref(false)
+
 async function handleSubmit() {
-  isLoading = true
+  isLoading.value = true
 
   const error = await auth.updateProfile(
     {
-      full_name: fullName,
-      email,
-      state,
-      country,
-      city,
-      address,
-      phone_number,
+      full_name: fullName.value,
+      email: email.value,
+      state: state.value,
+      country: country.value,
+      city: city.value,
+      address: address.value,
+      phone_number: phone_number.value,
     },
-    image
+    image.value
   )
 
-  useMessage(error ? 'error' : 'success', error?.message ?? 'profile updated')
-  isLoading = false
+  useMessage(error ? 'error' : 'success', error?.message ?? 'Profile updated successfully')
+  isLoading.value = false
 }
 </script>

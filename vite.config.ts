@@ -1,41 +1,21 @@
-import path from 'path'
+import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
-import Components from 'unplugin-vue-components/vite'
-import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 
 export default defineConfig({
   resolve: {
-    alias: {
-      '~/': `${path.resolve(__dirname, 'src')}/`,
-    },
+    alias: [
+      { find: /^~\//, replacement: `${fileURLToPath(new URL('./src/', import.meta.url))}` },
+      { find: '~', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+    ],
+  },
+  server: {
+    host: '127.0.0.1',
+    port: 3000,
   },
   plugins: [
-    Vue({
-      reactivityTransform: true,
-    }),
-
-    // https://github.com/antfu/unplugin-auto-import
-    AutoImport({
-      imports: [
-        'vue',
-        'vue/macros',
-        'vue-router',
-        '@vueuse/core',
-        {
-          motion: ['animate', 'spring', 'timeline', 'stagger'],
-        },
-      ],
-      dts: true,
-      dirs: ['./src/composables', './src/api', './src/store'],
-      vueTemplate: true,
-    }),
-
-    // https://github.com/antfu/vite-plugin-components
-    Components({
-      dts: true,
-    }),
+    Vue(),
 
     // https://github.com/antfu/unocss
     // see unocss.config.ts for config

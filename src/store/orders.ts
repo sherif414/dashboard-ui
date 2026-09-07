@@ -1,25 +1,21 @@
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { getTableDataParams } from 'types'
-import { supabase } from '~/api'
+import type { getTableDataParams } from 'types'
+import { orderService, type OrderWithCustomer } from '~/services/orderService'
+import { useMessage } from '~/composables/message'
 
 export const useOrderStore = defineStore('order', () => {
-  const orderList = ref<any[] | null>(null)
+  const orderList = ref<OrderWithCustomer[] | null>(null)
   const countAll = ref<number | null>(null)
 
-  async function getOrders({ orderOptions, itemsPerPage, page }: getTableDataParams) {
-    const from = (page - 1) * itemsPerPage
-    const to = page * itemsPerPage - 1
-    const { ascending, column, foreignTable } = orderOptions
-
-    const { data, count, error } = await supabase
-      .from('orders')
-      .select('id, customers(name), created_at, type, status, total_purchases', { count: 'estimated' })
-      .order(column, { ascending, foreignTable, nullsFirst: false })
-      .range(from, to)
-
-    if (error) useMessage('error', error.message ?? 'an error has occurred')
-    orderList.value = data
-    countAll.value = count
+  async function getOrders(params: getTableDataParams) {
+    try {
+      const { data, count } = await orderService.getOrders(params)
+      orderList.value = data
+      countAll.value = count
+    } catch (e: any) {
+      useMessage('error', e.message ?? 'an error has occurred')
+    }
   }
 
   return {

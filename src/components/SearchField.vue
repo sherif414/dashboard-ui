@@ -25,6 +25,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { watchDebounced } from '@vueuse/core'
+import { supabase } from '../api'
+import { useMessage } from '~/composables/message'
+import TextField from '~/components/TextField.vue'
+import { ICustomers } from '~/components/icons'
+
 interface Props {
   searchFn?: (searchTerm: string) => Promise<SearchResults>
   tableName?: string
@@ -36,9 +43,9 @@ interface Emits {
 const { searchFn, tableName } = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-let searchResults = $ref<SearchResults>(null)
-let searchValue = $ref('')
-let isSearching = $ref(false)
+const searchResults = ref<SearchResults>(null)
+const searchValue = ref('')
+const isSearching = ref(false)
 
 async function getResults(searchTerm: string) {
   const { data, error } = await supabase
@@ -51,11 +58,11 @@ async function getResults(searchTerm: string) {
 }
 
 watchDebounced(
-  $$(searchValue),
+  searchValue,
   async () => {
-    isSearching = true
-    searchResults = searchFn ? await searchFn(searchValue) : await getResults(searchValue)
-    isSearching = false
+    isSearching.value = true
+    searchResults.value = searchFn ? await searchFn(searchValue.value) : await getResults(searchValue.value)
+    isSearching.value = false
   },
   { debounce: 1000 }
 )

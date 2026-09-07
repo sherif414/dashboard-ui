@@ -3,7 +3,7 @@
     <form @submit.prevent="submit" class="flex flex-col gap-4 h-full">
       <!-- title  -->
       <header class="flex items-center gap-4">
-        <h1 class="typo-head">Create New Products</h1>
+        <h1 class="typo-head">Create New Product</h1>
         <Btn class="ml-auto" type="submit" :loading="isSubmitting"> add product </Btn>
       </header>
       <div class="grow grid grid-cols-3 gap-x-4">
@@ -23,7 +23,7 @@
             </TextField>
 
             <!-- category -->
-            <Select v-model="formData.category" :options="categories">category</Select>
+            <Select v-model="formData.category" :options="categories" placeholder="Select category">category</Select>
 
             <!-- pricing -->
             <fieldset class="grid grid-cols-2 gap-4 items-center">
@@ -44,7 +44,7 @@
             <TextField required v-model="formData.stock" type="number" placeholder="0" label="in stock" />
 
             <!-- delivery type -->
-            <Select v-model="formData.delivery_type" :options="['home delivery', 'pick up']">delivery type</Select>
+            <Select v-model="formData.delivery_type" :options="['home delivery', 'pick up']" placeholder="Select delivery">delivery type</Select>
           </div>
           <!-- description -->
           <div class="flex flex-col w-full gap-y-4">
@@ -87,60 +87,93 @@
 </template>
 
 <script setup lang="ts">
-const categories = ['phone', 'computer', 'laptop', 'clothes', 'shoes', 'accessory', 'gadget']
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useProductsStore } from '~/store/products'
+import { useMessage } from '~/composables/message'
+import { useUUID } from '~/composables/uuid'
+import TextField from '~/components/TextField.vue'
+import Select from '~/components/Select.vue'
+import FileUpload from '~/components/FileUpload.vue'
+import Btn from '~/components/Btn.vue'
+import { IShoppingBag, IMoney } from '~/components/icons'
+
+const router = useRouter()
+const categories = ['Gadgets', 'Laptops', 'Audio', 'Wearables', 'Tablets', 'Accessories', 'Displays']
 const store = useProductsStore()
 
-let productImage = $ref<File | undefined>()
-let formData = $ref({
+const productImage = ref<File | undefined>()
+const formData = ref<{
+  name?: string
+  description?: string
+  category: string
+  sell_price?: number
+  cost_price?: number
+  stock?: number
+  delivery_type: string | string[]
+  discount_type: string
+  discount_value?: number
+  expiration_date?: string
+}>({
   name: undefined,
   description: undefined,
-  category: '',
+  category: 'Gadgets',
   sell_price: undefined,
   cost_price: undefined,
   stock: undefined,
-  delivery_type: [],
+  delivery_type: ['home delivery'],
   discount_type: '',
   discount_value: undefined,
   expiration_date: undefined,
 })
 
-let isSubmitting = $ref(false)
-async function submit() {
-  isSubmitting = true
-  let imageName
+const isSubmitting = ref(false)
 
-  if (productImage) {
-    const res = await store.insertImage(productImage, `${useUUID()}.${productImage.name.split('.').pop()}`)
+async function submit() {
+  isSubmitting.value = true
+  let imageName: string | undefined
+
+  if (productImage.value) {
+    const res = await store.insertImage(productImage.value, `${useUUID()}.${productImage.value.name.split('.').pop()}`)
 
     if (res.error) {
-      useMessage('error', res.error.message ?? 'an error has ocurred')
-      isSubmitting = false
+      useMessage('error', 'An error occurred uploading image')
+      isSubmitting.value = false
       return
     }
     imageName = res.data.path
   }
 
-  const err = await store.insertProduct({ ...formData, image: imageName })
-  useMessage(err ? 'error' : 'success', err ? err.message : 'product was added successfully')
+  const err = await store.insertProduct({
+    ...formData.value,
+    delivery_type: Array.isArray(formData.value.delivery_type) ? formData.value.delivery_type : [formData.value.delivery_type],
+    image: imageName,
+  })
+
+  useMessage(err ? 'error' : 'success', err ? err.message : 'Product was added successfully!')
 
   if (!err) {
     resetForm()
+    setTimeout(() => {
+      router.push('/products')
+    }, 400)
   }
   setTimeout(() => {
-    isSubmitting = false
+    isSubmitting.value = false
   }, 200)
 }
 
 function resetForm() {
-  formData.name = undefined
-  formData.description = undefined
-  formData.category = ''
-  formData.sell_price = undefined
-  formData.cost_price = undefined
-  formData.stock = undefined
-  formData.delivery_type = []
-  formData.discount_type = ''
-  formData.discount_value = undefined
-  formData.expiration_date = undefined
+  formData.value.name = undefined
+  formData.value.description = undefined
+  formData.value.category = ''
+  formData.value.sell_price = undefined
+  formData.value.cost_price = undefined
+  formData.value.stock = undefined
+  formData.value.delivery_type = []
+  formData.value.discount_type = ''
+  formData.value.discount_value = undefined
+  formData.value.expiration_date = undefined
+  productImage.value = undefined
 }
 </script>

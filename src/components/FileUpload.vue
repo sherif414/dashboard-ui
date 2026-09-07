@@ -23,15 +23,19 @@
       <input class="hidden w-1px h-1px" @change="handleChange" type="file" :value="modelValue" :accept="accept" />
     </label>
     <div v-else class="relative">
-      <div @click="removePreviewImg" class="p2 bg-accent-6 rounded-md absolute top-3 right-3 shadow-md text-dark">
+      <div @click="removePreviewImg" class="p2 bg-accent-6 rounded-md absolute top-3 right-3 shadow-md text-dark cursor-pointer">
         <ITrash width="14" height="14" />
       </div>
-      <img class="overflow-hidden rounded-md" :src="imgSrc || ''" />
+      <img class="overflow-hidden rounded-md max-h-48 mx-auto" :src="imgSrc || ''" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useDropZone } from '@vueuse/core'
+import { IImg, ITrash } from '~/components/icons'
+
 const { accept = 'image/*', modelValue } = defineProps<{
   accept?: string
   modelValue?: File
@@ -41,20 +45,23 @@ const emit = defineEmits<{
   (event: 'update:modelValue', value?: File): void
 }>()
 
-let imgSrc = $ref<string | null>(null)
+const imgSrc = ref<string | null>(null)
 
 function removePreviewImg(): void {
-  if (imgSrc) {
+  if (imgSrc.value) {
     emit('update:modelValue', undefined)
-    URL.revokeObjectURL(imgSrc)
-    imgSrc = null
+    URL.revokeObjectURL(imgSrc.value)
+    imgSrc.value = null
   }
 }
 
 function handleChange(e: Event): void {
   if (e.target instanceof HTMLInputElement && e.target.files) {
-    emit('update:modelValue', e.target.files.item(0)!)
-    imgSrc = URL.createObjectURL(e.target.files.item(0)!)
+    const file = e.target.files.item(0)
+    if (file) {
+      emit('update:modelValue', file)
+      imgSrc.value = URL.createObjectURL(file)
+    }
   }
 }
 
@@ -62,10 +69,10 @@ function handleChange(e: Event): void {
 function handleDrop(files: File[] | null): void {
   if (files && files[0].type.startsWith('image')) {
     emit('update:modelValue', files[0])
-    imgSrc = URL.createObjectURL(files[0])
+    imgSrc.value = URL.createObjectURL(files[0])
   }
 }
 
-const dropzoneEl = $ref<HTMLDivElement | null>(null)
-let { isOverDropZone } = useDropZone($$(dropzoneEl), handleDrop)
+const dropzoneEl = ref<HTMLDivElement | null>(null)
+const { isOverDropZone } = useDropZone(dropzoneEl, handleDrop)
 </script>

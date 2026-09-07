@@ -29,16 +29,15 @@
           @click="handleCreation(profile.id)"
         >
           <img
-            class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden"
-            src="../assets/img/profile.jpg"
+            class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden object-cover"
+            :src="getProfileImageUrl(profile.profile_image)"
             :alt="`${profile.full_name}'s profile image'`"
           />
           <span class="row-span-1 col-span-1 typo-clr-base">
             {{ profile.full_name }}
           </span>
           <div class="flex justify-between items-center gap-x-12">
-            <span>Last activity</span>
-            <span>2 days ago</span>
+            <span>{{ profile.email }}</span>
           </div>
         </li>
       </ul>
@@ -47,79 +46,68 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { watchDebounced } from '@vueuse/core'
 import type { Profile } from 'types'
+import { useAuthStore } from '~/store/auth'
+import { useLoadingOverlay } from '~/composables/LoadingOverlay'
+import { useMessage } from '~/composables/message'
+import { chatService } from '~/services/chatService'
+import { getProfileImageUrl } from '~/services/imageUtils'
+import TextField from '~/components/TextField.vue'
+import { IAdd, ISearch } from '~/components/icons'
 
 const auth = useAuthStore()
 const emit = defineEmits(['close', 'conversationCreated'])
-const self = $ref<HTMLDialogElement | null>(null)
-const container = $ref<HTMLElement | null>(null)
-const overlay = useLoadingOverlay($$(container))
+const self = ref<HTMLDialogElement | null>(null)
+const container = ref<HTMLElement | null>(null)
+const overlay = useLoadingOverlay(container)
 
-let searchValue = $ref('')
-let isLoading = $ref(false)
-let searchResult = $ref<Pick<Profile, 'id' | 'full_name' | 'profile_image'>[] | null>(null)
-let errorMsg = $ref('')
+const searchValue = ref('')
+const isLoading = ref(false)
+const searchResult = ref<Profile[] | null>(null)
+const errorMsg = ref('')
 
 async function handleCreation(userId: string) {
-  errorMsg = ''
+  errorMsg.value = ''
   overlay.isLoading.value = true
-  const { data: newConversation, error } = await supabase
-    .from('conversation')
-    .insert({ name: 'new conversation' })
-    .select()
-    .single()
 
-  if (error) {
-    overlay.isLoading.value = false
-    errorMsg = error.message ?? 'an error has happened'
-    return
-  }
-  if (!newConversation) {
-    overlay.isLoading.value = false
-    errorMsg = 'an error has happened'
-    return
-  }
-
-  await supabase
-    .from('conversation_member')
-    .insert({ user_id: userId, conversation_id: newConversation.id })
-    .select()
-    .single()
+  const currentUserId = auth.user?.id || 'user-demo-admin'
+  const newConversation = await chatService.createConversation(currentUserId, userId)
 
   overlay.isLoading.value = false
   emit('conversationCreated', userId, newConversation.id)
+  closeModal()
 }
 
 async function getUsers(searchTerm: string): Promise<void> {
-  let _searchTerm = searchTerm.split(' ').join(':*&') + ':*'
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('id, full_name, profile_image')
-    .textSearch('full_name', _searchTerm)
-    .neq('id', auth.user?.id)
-    .limit(10)
-
-  searchResult = data
-  if (error) useMessage('error', error.message ?? 'an error has happened')
+  try {
+    searchResult.value = await chatService.searchProfiles(searchTerm, auth.user?.id)
+  } catch (err: any) {
+    useMessage('error', err.message ?? 'an error has happened')
+  }
 }
 
 watchDebounced(
-  $$(searchValue),
+  searchValue,
   async () => {
-    if (!searchValue) return
-    isLoading = true
-    await getUsers(searchValue)
-    isLoading = false
+    if (!searchValue.value) {
+      searchResult.value = null
+      return
+    }
+    isLoading.value = true
+    await getUsers(searchValue.value)
+    isLoading.value = false
   },
   { debounce: 500 }
 )
 
 function closeModal() {
-  self?.close()
+  self.value?.close()
 }
 
 function openModal() {
-  self?.showModal()
+  self.value?.showModal()
 }
 
 defineExpose({

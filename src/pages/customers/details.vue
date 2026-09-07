@@ -38,7 +38,7 @@
           </div>
           <span
             class="bg-opacity-30 absolute right-2 top-2 px2 py1 rounded-md"
-            :class="[customer?.status ? 'bg-success text-success' : 'bg-error  text-error']"
+            :class="[customer?.status ? 'bg-success text-success' : 'bg-error text-error']"
             >{{ customer?.status ? 'active' : 'inActive' }}</span
           >
         </template>
@@ -59,8 +59,8 @@
       <SummaryCard
         :filter="false"
         :data="[
-          { name: 'total purchases', value: '$250,000' },
-          { name: 'total orders', value: '120' },
+          { name: 'total purchases', value: '$' + totalPurchases },
+          { name: 'total orders', value: orders?.length ?? 0 },
         ]"
       >
         <template #icon>
@@ -103,41 +103,57 @@
 </template>
 
 <script setup lang="ts">
-import { Customer, Order } from 'types'
-
-let customer = $ref<Customer | null>(null)
-async function getCustomer(id: string): Promise<Customer | null> {
-  const res = await supabase.from('customers').select('*').eq('id', +id).single()
-  if (res.error) useMessage('error', res.error.message)
-  return res.data
-}
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useDateFormat } from '@vueuse/core'
+import type { Customer, Order } from 'types'
+import { customerService } from '~/services/customerService'
+import { useMessage } from '~/composables/message'
+import Btn from '~/components/Btn.vue'
+import SummaryCard from '~/components/SummaryCard.vue'
+import BaseTable from '~/components/BaseTable.vue'
+import TableHeaderCell from '~/components/TableHeaderCell.vue'
+import TableBodyCell from '~/components/TableBodyCell.vue'
+import { ICustomers, ILocation, IShoppingBag } from '~/components/icons'
 
 const route = useRoute()
+const customer = ref<Customer | null>(null)
+const orders = ref<Order[] | null>(null)
+const isSuspending = ref(false)
+const headers = ['order date', 'Tracking Id', 'total purchases', 'type', 'status']
 
-let isSuspending = $ref(false)
-async function handleSuspend() {
-  isSuspending = true
-  if (!customer) return
-  const res = await supabase.from('customers').update({ status: !customer.status })
-  if (res.error) useMessage('error', res.error.message)
-  customer.status = !customer.status
-  isSuspending = false
+const totalPurchases = computed(() => {
+  if (!orders.value) return 0
+  return orders.value.reduce((sum, o) => sum + (o.total_purchases ?? 0), 0)
+})
+
+async function getCustomer(id: string): Promise<Customer | null> {
+  const data = await customerService.getCustomerById(+id)
+  if (!data) useMessage('error', 'Customer not found')
+  return data
 }
 
-let orders = $ref<Order[] | null>(null)
+async function handleSuspend() {
+  if (!customer.value) return
+  isSuspending.value = true
+  const res = await customerService.toggleCustomerStatus(customer.value.id)
+  isSuspending.value = false
+  if (res.error) {
+    useMessage('error', res.error.message)
+    return
+  }
+  if (res.data) customer.value = res.data
+  useMessage('success', `Customer status updated to ${customer.value.status ? 'active' : 'suspended'}`)
+}
+
 async function getOrders(): Promise<Order[] | null> {
-  if (!customer) return null
-  const res = await supabase.from('orders').select('*').eq('owner', customer?.id)
-  if (res.error) useMessage('error', res.error.message)
-  return res.data
+  if (!customer.value) return null
+  return await customerService.getCustomerOrders(customer.value.id)
 }
 
 onMounted(async () => {
   if (Array.isArray(route.params.id)) return
-
-  customer = await getCustomer(route.params.id)
-  orders = await getOrders()
+  customer.value = await getCustomer(route.params.id as string)
+  orders.value = await getOrders()
 })
-
-const headers = ['order date', 'Tracking Id', 'total purchases', 'type', 'status']
 </script>

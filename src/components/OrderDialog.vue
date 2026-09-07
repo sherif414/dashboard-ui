@@ -46,36 +46,36 @@
                 @click="handleSearchResultClick(product)"
               >
                 <img
-                  class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden"
-                  src="../assets/img/iphone14.png"
-                  :alt="`${product.name}'s profile image'`"
+                  class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden object-cover"
+                  :src="getProductImageUrl(product.image)"
+                  :alt="`${product.name}'s image'`"
                 />
                 <span class="row-span-1 col-span-1 typo-clr-base">
                   {{ product.name }}
                 </span>
                 <div class="flex justify-between items-center gap-x-12">
-                  <span>Last activity</span>
-                  <span>2 days ago</span>
+                  <span>Price: ${{ product.sell_price }}</span>
+                  <span>Stock: {{ product.stock }}</span>
                 </div>
               </li>
             </ul>
           </template>
         </TextField>
 
-        <div v-if="true" class="grow relative">
+        <div v-if="orderItemsList.length" class="grow relative min-h-40">
           <ul
             class="flex flex-col typo-sm divide-y divide-gray-2 dark:divide-dark-3 w-full h-full absolute top-0 left-0 overflow-y-auto"
           >
             <!-- order item -->
             <li
-              v-for="(item, idx) in orderItems"
+              v-for="(item, idx) in orderItemsList"
               :key="idx"
               class="grid grid-cols-[max-content_max-content_1fr] grid-rows-2 gap-x-2 gap-y-1 items-center p2"
             >
-              <img class="w-12 h-12 row-span-2" src="../assets/img/iphone14.png" alt="product image" />
+              <img class="w-12 h-12 row-span-2 object-cover rounded" :src="getProductImageUrl(item.product.image)" alt="product image" />
               <h3>{{ item.product.name ?? '-' }}</h3>
-              <button type="button" @click="orderItems.delete(item)" class="justify-self-end text-error">remove</button>
-              <span>{{ item.product.sell_price ?? '-' }}</span>
+              <button type="button" @click="removeItem(item)" class="justify-self-end text-error cursor-pointer">remove</button>
+              <span>${{ item.product.sell_price ?? '-' }}</span>
               <div class="justify-self-end flex gap-3 items-center">
                 <IMinus
                   v-show="item.quantity > 1"
@@ -97,149 +97,143 @@
         </div>
 
         <!-- empty state -->
-        <div v-else class="grid grow place-content-center gap-8">
+        <div v-else class="grid grow place-content-center gap-8 py-8">
           <IShoppingBag
             width="56"
             height="56"
             class="surface-2 [&_path]:stroke-gray-4 stroke-width-2 p-8 box-content rounded-full mx-auto"
           />
-          <h3 class="typo-head">Add Products To Your Order</h3>
+          <h3 class="typo-head text-center">Add Products To Your Order</h3>
         </div>
       </section>
 
       <!-- dialog submission -->
       <Btn type="button" variant="text" class="justify-self-end" @click="target?.close()">cancel</Btn>
-      <Btn :loading="isSubmitting" :disabled="!orderItems.size" type="submit">Create Order</Btn>
+      <Btn :loading="isSubmitting" :disabled="!orderItemsList.length" type="submit">Create Order</Btn>
     </form>
   </dialog>
 </template>
 
 <script setup lang="ts">
-import type { Product, OrderItem } from 'types'
+import { ref } from 'vue'
+import { watchDebounced } from '@vueuse/core'
+import type { Product } from 'types'
+import ComboBox from '~/components/ComboBox.vue'
+import Select from '~/components/Select.vue'
+import TextField from '~/components/TextField.vue'
+import Btn from '~/components/Btn.vue'
+import { ISearch, IMinus, IAdd, IShoppingBag } from '~/components/icons'
+import { orderService } from '~/services/orderService'
+import { productService } from '~/services/productService'
+import { getProductImageUrl } from '~/services/imageUtils'
+import { useMessage } from '~/composables/message'
 
 const emits = defineEmits(['success'])
-let customer = $ref<{ id?: number; name?: string }>({})
-let formData = $ref({
+const customer = ref<{ id?: number; name?: string } | null>(null)
+const formData = ref({
   paymentType: '',
   orderType: '',
-  orderStatus: '',
-  orderDate: '',
+  orderStatus: 'pending',
+  orderDate: new Date().toISOString().split('T')[0],
   orderNote: '',
 })
-let orderItems = $ref<Set<{ product: Product; quantity: number }>>(new Set())
 
-const target = $ref<HTMLDialogElement | null>(null)
+interface SelectedOrderItem {
+  product: Product
+  quantity: number
+}
+
+const orderItemsList = ref<SelectedOrderItem[]>([])
+
+const target = ref<HTMLDialogElement | null>(null)
 const openModal = () => {
-  target?.showModal()
+  target.value?.showModal()
+}
+
+function removeItem(item: SelectedOrderItem) {
+  orderItemsList.value = orderItemsList.value.filter((i) => i.product.id !== item.product.id)
 }
 
 // insert order
-let isSubmitting = $ref(false)
+const isSubmitting = ref(false)
 async function handleSubmit() {
-  if (!orderItems.size || !customer.id) return
-  isSubmitting = true
+  if (!orderItemsList.value.length || !customer.value?.id) {
+    useMessage('error', 'Please select a customer and at least one product')
+    return
+  }
+  isSubmitting.value = true
 
-  const orderRes = await supabase
-    .from('orders')
-    .insert({
-      status: formData.orderStatus,
-      note: formData.orderNote,
-      type: formData.orderType,
-      created_at: formData.orderDate ?? undefined,
-      owner: +customer.id,
-      total_purchases: getTotalPrice(),
-    })
-    .select()
-    .single()
+  const total = getTotalPrice()
+  const items = orderItemsList.value.map((item) => ({
+    product_id: item.product.id,
+    quantity: item.quantity,
+    discount: null,
+    status: formData.value.orderStatus,
+  }))
 
-  if (orderRes.error) {
-    useMessage('error', orderRes.error.message ?? 'an error has occurred')
-    isSubmitting = false
+  const res = await orderService.createOrder(
+    {
+      owner: +customer.value.id,
+      type: formData.value.orderType || 'delivery',
+      status: formData.value.orderStatus || 'pending',
+      note: formData.value.orderNote,
+      created_at: formData.value.orderDate ? new Date(formData.value.orderDate).toISOString() : new Date().toISOString(),
+      total_purchases: total,
+    },
+    items
+  )
+
+  isSubmitting.value = false
+
+  if (res.error) {
+    useMessage('error', res.error.message ?? 'an error has occurred')
     return
   }
 
-  const orderItemsRes = await supabase.from('order_item').insert(getOrderItems(orderRes.data.id, orderRes.data.status))
-
-  if (orderItemsRes.error) {
-    useMessage('error', orderItemsRes.error.message ?? 'an error has occurred')
-    isSubmitting = false
-    return
-  }
-
-  isSubmitting = false
-  useMessage('success', 'order was added')
+  useMessage('success', 'order was added successfully!')
   emits('success')
-  target?.close()
+  orderItemsList.value = []
+  target.value?.close()
 }
 
 function getTotalPrice() {
-  let totalPrice = 0
-  orderItems.forEach((item) => {
-    totalPrice += (item.product.sell_price ?? 0) * item.quantity
-  })
-  return totalPrice
-}
-
-function getOrderItems(orderId: number, orderStatus: string | null) {
-  let _orderItems: Omit<OrderItem, 'created_at'>[] = []
-
-  orderItems.forEach((item) => {
-    _orderItems.push({
-      order_id: orderId,
-      product_id: item.product.id,
-      quantity: item.quantity,
-      discount: null,
-      status: orderStatus,
-    })
-  })
-
-  return _orderItems
+  return orderItemsList.value.reduce((total, item) => {
+    return total + (item.product.sell_price ?? 0) * item.quantity
+  }, 0)
 }
 
 // search
-let isSearching = $ref(false)
-let searchResults = $ref<Product[] | null>(null)
-let searchValue = $ref('')
-
-async function getProducts(searchTerm: string): Promise<Product[] | null> {
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .textSearch('name', searchTerm.split(' ').join(':*&') + ':*')
-    .limit(10)
-
-  if (error) useMessage('error', error.message ?? 'an error has happened')
-  return data
-}
+const isSearching = ref(false)
+const searchResults = ref<Product[] | null>(null)
+const searchValue = ref('')
 
 watchDebounced(
-  $$(searchValue),
+  searchValue,
   async () => {
-    if (!searchValue) return
-    isSearching = true
-    searchResults = await getProducts(searchValue)
-    isSearching = false
+    if (!searchValue.value) {
+      searchResults.value = null
+      return
+    }
+    isSearching.value = true
+    searchResults.value = await productService.searchProducts(searchValue.value)
+    isSearching.value = false
   },
   { debounce: 500 }
 )
 
 // order items
 function handleSearchResultClick(product: Product) {
-  let alreadyExists = false
-
-  orderItems.forEach((item) => {
-    if (item.product.id === product.id) {
-      alreadyExists = true
-      return
-    }
-  })
-
-  if (alreadyExists) return
-
-  orderItems.add({
-    product: product,
-    quantity: 1,
-  })
+  const existing = orderItemsList.value.find((item) => item.product.id === product.id)
+  if (existing) {
+    existing.quantity++
+  } else {
+    orderItemsList.value.push({
+      product,
+      quantity: 1,
+    })
+  }
+  searchValue.value = ''
+  searchResults.value = null
 }
 
 defineExpose({

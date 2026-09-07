@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
 
 //register the used functions

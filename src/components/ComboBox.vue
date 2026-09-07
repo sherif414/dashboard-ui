@@ -7,8 +7,8 @@
         autocomplete="none"
         class="surface-2 h-10 p2 rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none"
         :placeholder="placeholder"
-        :display-value="(option: any) => option.name"
-        @input="searchValue = $event.target.value"
+        :display-value="(option: any) => option?.name || ''"
+        @input="searchValue = ($event.target as HTMLInputElement).value"
       ></ComboboxInput>
       <ComboboxButton class="absolute right-2 inset-y-0% z-1">
         <IChevronUpDown width="20" height="20" />
@@ -39,6 +39,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { watchDebounced } from '@vueuse/core'
 import {
   Combobox as cb,
   ComboboxButton,
@@ -47,17 +49,29 @@ import {
   ComboboxOptions,
   ComboboxOption,
 } from '@headlessui/vue'
+import { supabase } from '../api'
+import { useMessage } from '~/composables/message'
+import { IChevronUpDown, ICheckCircle } from '~/components/icons'
 
 interface Props {
   label?: string
   placeholder?: string
   tableName?: string
+  modelValue?: any
 }
-const { tableName } = defineProps<Props>()
+const { tableName, modelValue } = defineProps<Props>()
+const emit = defineEmits(['update:modelValue'])
 
-let value = $ref('')
-let searchValue = $ref('')
-let options = $ref<{ id: string; name: string }[] | null>([])
+const value = ref(modelValue || null)
+const searchValue = ref('')
+const options = ref<{ id: string | number; name: string }[] | null>([])
+
+watchDebounced(
+  value,
+  (newVal) => {
+    emit('update:modelValue', newVal)
+  }
+)
 
 async function getOptions(table: string, searchTerm: string) {
   const res = await supabase
@@ -70,9 +84,9 @@ async function getOptions(table: string, searchTerm: string) {
 }
 
 watchDebounced(
-  $$(searchValue),
+  searchValue,
   async () => {
-    if (tableName) options = await getOptions(tableName, searchValue)
+    if (tableName) options.value = await getOptions(tableName, searchValue.value)
   },
   { debounce: 500 }
 )

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { PropType } from 'vue'
+import { PropType, ref, watch, computed } from 'vue'
+import { ICaretDown } from '~/components/icons'
 
 type Options = {
   label: number | string
@@ -146,22 +147,6 @@ const changePage = (type: any, num: number) => {
   emit('update:pageSize', pageSize.value)
 }
 
-let pageSizebackup = ref('20')
-
-const checkPageSize = (e: any) => {
-  if (!e) {
-    return
-  }
-
-  let pageSizeStr = e
-  pageSizeStr = e.replace(/[^\d]/g, '')
-  let pageSizeNum = Number(pageSizeStr)
-  if (pageSizeNum < 1) {
-    pageSizeNum = 1
-  }
-  pageSize.value = pageSizeNum
-  changePage(false, pageNum.value)
-}
 </script>
 
 <template>

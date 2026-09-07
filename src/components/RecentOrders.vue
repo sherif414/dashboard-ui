@@ -11,13 +11,15 @@
           :key="item.products?.id ?? idx"
           class="flex items-center justify-start gap-x-4 py2"
         >
-          <div><img width="48" heigh="48" src="../assets/img/iphone14.png" /></div>
+          <div>
+            <img width="48" height="48" class="rounded object-cover" :src="getProductImageUrl(item.products?.image)" />
+          </div>
           <div class="inline-flex flex-col gap-y-1">
             <h2>{{ item.products?.name }}</h2>
             <h3>{{ item.products?.sell_price ? `$ ${item.products.sell_price}` : '-' }}</h3>
           </div>
-          <div class="inline-flex flex-col items-end items-start gap-y-1 ml-auto">
-            <span class="typo-clr-muted">{{ new Date(item.created_at!).toLocaleTimeString() }} </span>
+          <div class="inline-flex flex-col items-end gap-y-1 ml-auto">
+            <span class="typo-clr-muted">{{ item.created_at ? new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-' }} </span>
             <Chip :status="item.status === 'completed'">{{ item.status }}</Chip>
           </div>
         </li>
@@ -27,24 +29,20 @@
 </template>
 
 <script setup lang="ts">
-interface RecentOrders {
-  products: { id: number; name: string | null; sell_price: number | null; image: string | null } | null
-  status: string | null
-  created_at: string | null
-}
+import { ref, onMounted } from 'vue'
+import Chip from '~/components/Chip.vue'
+import { orderService, type RecentOrderItem } from '~/services/orderService'
+import { getProductImageUrl } from '~/services/imageUtils'
+import { useMessage } from '~/composables/message'
 
-let data = $ref<RecentOrders[] | null>(null)
+const data = ref<RecentOrderItem[] | null>(null)
 
 async function getData() {
-  const res = await supabase
-    .from('order_item')
-    .select('products(id, name, sell_price, image), status, created_at')
-    .order('created_at', { ascending: false })
-    .limit(20)
-
-  if (res.error) useMessage('error', res.error.message || 'failed loading recent orders')
-
-  data = res.data as RecentOrders[]
+  try {
+    data.value = await orderService.getRecentOrders(20)
+  } catch (err: any) {
+    useMessage('error', err.message || 'Failed loading recent orders')
+  }
 }
 
 onMounted(() => {

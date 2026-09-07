@@ -3,8 +3,8 @@
     <!-- sales summary -->
     <SummaryCard
       :data="[
-        { name: 'sales', value: '400,000,00', growth: '+ 125%' },
-        { name: 'volume', value: 450, growth: '+20' },
+        { name: 'sales', value: '$8,333.00', growth: '+12.5%' },
+        { name: 'volume', value: '450', growth: '+20' },
       ]"
     >
       <template #icon>
@@ -16,7 +16,7 @@
     <SummaryCard
       :data="[
         { name: 'customers', value: customerStore.countAll ?? '', growth: '+1' },
-        { name: 'active', value: '67%', growth: '+2%' },
+        { name: 'active', value: '80%', growth: '+2%' },
       ]"
     >
       <template #icon>
@@ -27,9 +27,9 @@
     <!-- orders summary -->
     <SummaryCard
       :data="[
-        { name: 'all orders', value: '450' },
-        { name: 'pending', value: '50' },
-        { name: 'completed', value: '400' },
+        { name: 'all orders', value: '8' },
+        { name: 'pending', value: '3' },
+        { name: 'completed', value: '5' },
       ]"
     >
       <template #icon>
@@ -43,7 +43,7 @@
     <SummaryCard
       :data="[
         { name: 'all products', value: productStore.countAll ?? '' },
-        { name: 'active', value: '50', growth: '+20%' },
+        { name: 'active', value: productStore.countPublished ?? '0', growth: '+20%' },
       ]"
       fill="primary"
     >
@@ -56,7 +56,7 @@
     <SummaryCard
       :data="[
         { name: 'all products', value: productStore.countAll ?? '' },
-        { name: 'active', value: '50', growth: '+20%' },
+        { name: 'active', value: productStore.countPublished ?? '0', growth: '+20%' },
       ]"
     >
       <template #icon>
@@ -72,8 +72,14 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useProductsStore } from '~/store/products'
 import { useCustomersStore } from '~/store/customers'
+import SummaryCard from '~/components/SummaryCard.vue'
+import ChartDonut from '~/components/ChartDonut.vue'
+import ChartBar from '~/components/ChartBar.vue'
+import RecentOrders from '~/components/RecentOrders.vue'
+import { IChart, ICustomers, IShoppingBag, IInventory } from '~/components/icons'
 
 const productStore = useProductsStore()
 const customerStore = useCustomersStore()

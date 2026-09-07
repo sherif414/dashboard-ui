@@ -6,6 +6,8 @@
 </template>
 
 <script setup lang="ts">
+import { useDateFormat } from '@vueuse/core'
+
 const { isFromMe = true } = defineProps<{
   time: string
   isFromMe?: boolean

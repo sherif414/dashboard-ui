@@ -28,7 +28,7 @@
       <div class="grow relative overflow-hidden">
         <RouterView v-slot="{ Component }">
           <Transition :name="transitionName">
-            <Component :is="Component" />
+            <component :is="Component" />
           </Transition>
         </RouterView>
       </div>
@@ -37,43 +37,48 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted, watchEffect } from 'vue'
+import { useRouter, useRoute, RouterLink, RouterView } from 'vue-router'
+
 const router = useRouter()
 const route = useRoute()
-const tabPointer = $ref<HTMLElement | null>(null)
+const tabPointer = ref<HTMLElement | null>(null)
 
-let transitionName = $ref<'slide-left' | 'slide-right'>('slide-right')
+const transitionName = ref<'slide-left' | 'slide-right'>('slide-right')
 const removeGuard = router.beforeEach((to, from) => {
   if (from.path === '/settings/security') {
-    if (to.path === '/settings/edit-info') transitionName = 'slide-right'
-    else transitionName = 'slide-left'
+    if (to.path === '/settings/edit-info') transitionName.value = 'slide-right'
+    else transitionName.value = 'slide-left'
+  } else if (from.path === '/settings/edit-info') {
+    transitionName.value = 'slide-left'
+  } else {
+    transitionName.value = 'slide-right'
   }
-  //
-  else if (from.path === '/settings/edit-info') transitionName = 'slide-left'
-  else transitionName = 'slide-right'
 })
 
 onUnmounted(removeGuard)
 
 onMounted(() => {
   watchEffect(() => {
-    if (!tabPointer) return
-    //
-    else if (route.name === 'personalize') {
+    if (!tabPointer.value) return
+    if (route.name === 'personalize') {
       const personalize = document.querySelector('.personalize-link') as HTMLElement
-      tabPointer.style.left = personalize.offsetLeft + 'px'
-      tabPointer.style.width = personalize.getBoundingClientRect().width + 'px'
-    }
-    //
-    else if (route.name === 'security') {
+      if (personalize) {
+        tabPointer.value.style.left = personalize.offsetLeft + 'px'
+        tabPointer.value.style.width = personalize.getBoundingClientRect().width + 'px'
+      }
+    } else if (route.name === 'security') {
       const security = document.querySelector('.security-link') as HTMLElement
-      tabPointer.style.left = security.offsetLeft + 'px'
-      tabPointer.style.width = security.getBoundingClientRect().width + 'px'
-    }
-    //
-    else if (route.name === 'edit info') {
+      if (security) {
+        tabPointer.value.style.left = security.offsetLeft + 'px'
+        tabPointer.value.style.width = security.getBoundingClientRect().width + 'px'
+      }
+    } else if (route.name === 'edit info') {
       const editInfo = document.querySelector('.edit-info-link') as HTMLElement
-      tabPointer.style.left = editInfo.offsetLeft + 'px'
-      tabPointer.style.width = editInfo.getBoundingClientRect().width + 'px'
+      if (editInfo) {
+        tabPointer.value.style.left = editInfo.offsetLeft + 'px'
+        tabPointer.value.style.width = editInfo.getBoundingClientRect().width + 'px'
+      }
     }
   })
 })

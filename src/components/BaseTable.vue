@@ -57,7 +57,7 @@
         <slot name="body">
           <tbody v-if="data" class="typo-sm">
             <tr v-for="(row, idx) in data" :key="idx">
-              <td v-for="(v, k) in row" :key="k" class="p2 px-4">{{ v || '-' }}</td>
+              <td v-for="(v, k) in (row as any)" :key="k" class="p2 px-4">{{ v || '-' }}</td>
             </tr>
           </tbody>
         </slot>
@@ -110,8 +110,14 @@
 </template>
 
 <script setup lang="ts">
-import { getTableDataParams } from 'types'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { watchDebounced } from '@vueuse/core'
+import type { getTableDataParams } from 'types'
 import { supabase } from '../api'
+import TextField from '~/components/TextField.vue'
+import TableHeaderCell from '~/components/TableHeaderCell.vue'
+import { ISearch, ICaretDown } from '~/components/icons'
 
 interface Props {
   data: object[] | null
@@ -134,61 +140,65 @@ const {
   hideHeader = false,
 } = defineProps<Props>()
 
-const headers = $computed(() => (data && data.length ? Object.keys(data[0]) : null))
+const headers = computed(() => (data && data.length ? Object.keys(data[0]) : null))
 
 // pagination
-let page = $ref(1)
-let orderBy = $ref({ column: orderColumn, foreignTable: '', ascending: false })
-let itemsPerPage = $ref(10)
-let lastPage = $computed(() => Math.ceil((itemsCount ?? 0) / itemsPerPage))
+const page = ref(1)
+const orderBy = ref({ column: orderColumn, foreignTable: '', ascending: false })
+const itemsPerPage = ref(10)
+const lastPage = computed(() => Math.ceil((itemsCount ?? 0) / itemsPerPage.value))
 
 function changePage(to: 'next' | 'prev') {
-  if (to === 'next' && page < lastPage) page++
-  else if (to === 'prev' && page > 1) page--
+  if (to === 'next' && page.value < lastPage.value) page.value++
+  else if (to === 'prev' && page.value > 1) page.value--
 }
 
 function onChangeItemsPerPage(e: Event) {
   let _value = +(e.target as HTMLInputElement).value
   if (itemsCount && _value <= itemsCount) {
-    itemsPerPage = _value
-    page = 1
+    itemsPerPage.value = _value
+    page.value = 1
   }
 }
 
 // sorting
 function sort(column: string, foreignTable?: string) {
   if (!getData) return
-  if (!foreignTable === !orderBy.foreignTable && orderBy.column === column) orderBy.ascending = !orderBy.ascending
-  else orderBy.ascending = false
+  if (!foreignTable === !orderBy.value.foreignTable && orderBy.value.column === column) {
+    orderBy.value.ascending = !orderBy.value.ascending
+  } else {
+    orderBy.value.ascending = false
+  }
 
-  orderBy.column = column
-  orderBy.foreignTable = foreignTable || ''
-  getData({ page, itemsPerPage, orderOptions: { ...orderBy } })
+  orderBy.value.column = column
+  orderBy.value.foreignTable = foreignTable || ''
+  getData({ page: page.value, itemsPerPage: itemsPerPage.value, orderOptions: { ...orderBy.value } })
 }
 
 if (getData) {
-  watchDebounced($$(page), () => getData({ page, itemsPerPage, orderOptions: orderBy }), {
+  watchDebounced(page, () => getData({ page: page.value, itemsPerPage: itemsPerPage.value, orderOptions: orderBy.value }), {
     debounce: 300,
     flush: 'post',
   })
 }
 
 // searching
-let searchValue = $ref<string>('')
-let searchResults = $ref<{ id: string; name: string }[] | null>(null)
-let isSearching = $ref(false)
+const searchValue = ref<string>('')
+const searchResults = ref<{ id: string; name: string }[] | null>(null)
+const isSearching = ref(false)
 
 async function search() {
-  if (!searchValue) return
-  isSearching = true
-  let _searchTerm = searchValue.split(' ').join(':*&') + ':*'
+  if (!searchValue.value) return
+  isSearching.value = true
+  let _searchTerm = searchValue.value.split(' ').join(':*&') + ':*'
 
   const { data } = await supabase.from(tableName).select('id, name').textSearch('name', _searchTerm).limit(10)
-  searchResults = data
-  isSearching = false
+  searchResults.value = data
+  isSearching.value = false
 }
+
 if (showSearch) {
-  watchDebounced($$(searchValue), search, { debounce: 500 })
+  watchDebounced(searchValue, search, { debounce: 500 })
 }
 
 const router = useRouter()

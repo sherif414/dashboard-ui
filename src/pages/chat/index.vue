@@ -27,16 +27,15 @@
               @click="handleSearchResultClick(profile.id)"
             >
               <img
-                class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden"
-                src="../../assets/img/profile.jpg"
+                class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden object-cover"
+                :src="getProfileImageUrl(profile.profile_image)"
                 :alt="`${profile.full_name}'s profile image'`"
               />
               <span class="row-span-1 col-span-1 typo-clr-base">
                 {{ profile.full_name }}
               </span>
               <div class="flex justify-between items-center gap-x-12">
-                <span>Last activity</span>
-                <span>2 days ago</span>
+                <span>{{ profile.email }}</span>
               </div>
             </li>
           </ul>
@@ -53,7 +52,6 @@
           class="absolute w-full h-full flex flex-col overflow-y-auto border-t dark:border-dark-3 no-scrollbar"
         >
           <ConversationLink
-            v-if="conversations"
             v-for="conversation in conversations"
             @click="activeConversation = conversation"
             :key="conversation.id"
@@ -84,126 +82,85 @@
         </KeepAlive>
       </RouterView>
     </template>
-    <div v-else class="surface-1 rounded-md col-span-2"></div>
+    <div v-else class="surface-1 rounded-md col-span-2 flex items-center justify-center text-gray-4">
+      Select a conversation to begin chatting
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import type { Profile, MaybeArray, ConversationWithProfile } from 'types'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, RouterView } from 'vue-router'
+import { watchDebounced } from '@vueuse/core'
+import type { Profile, ConversationWithProfile } from 'types'
+import { useAuthStore } from '~/store/auth'
+import { chatService } from '~/services/chatService'
+import { getProfileImageUrl } from '~/services/imageUtils'
+import { useMessage } from '~/composables/message'
+import TextField from '~/components/TextField.vue'
+import ConversationLink from '~/components/ConversationLink.vue'
+import { ISearch } from '~/components/icons'
 
 const router = useRouter()
 const auth = useAuthStore()
-const myId = $computed(() => auth.profile?.id ?? '')
-let conversations = $ref<ConversationWithProfile[] | null>(null)
-let activeConversation = $ref<ConversationWithProfile | null>(null)
+const myId = computed(() => auth.profile?.id || 'user-demo-admin')
+const conversations = ref<ConversationWithProfile[]>([])
+const activeConversation = ref<ConversationWithProfile | null>(null)
 
-async function handleSearchResultClick(userId: string) {
-  searchResults = null
-  searchValue = ''
-  const existingConversation = (
-    await supabase.from('conversation_member').select('conversation_id, user_id').eq('user_id', userId).maybeSingle()
-  ).data
-
-  // already in conversation with
-  if (existingConversation) {
-    const idx = conversations?.findIndex(({ id }) => id === existingConversation.conversation_id)
-    if (idx !== undefined && idx !== -1) activeConversation = conversations?.splice(idx, 1)[0] ?? activeConversation
-    else {
-      const res = await getConversationWithProfile({ conversationId: existingConversation.conversation_id })
-      if (!Array.isArray(res)) activeConversation = res
-    }
-    conversations?.unshift(activeConversation!)
-    router.push('/chat/' + activeConversation?.id)
-  }
-
-  // not in conversation with
-  else {
-    const newConversation = await createConversation(userId)
-    if (!newConversation) return
-
-    if (conversations) {
-      conversations.unshift(newConversation)
-    } else {
-      conversations = [newConversation]
-    }
-    router.push('/chat/' + newConversation.id)
+async function loadConversations() {
+  const res = await chatService.getConversations(myId.value)
+  conversations.value = res
+  if (res.length && !activeConversation.value) {
+    activeConversation.value = res[0]
+    router.push('/chat/' + res[0].id)
   }
 }
 
-async function createConversation(userId: string): Promise<ConversationWithProfile | null> {
-  const { data: newConversation, error } = await supabase
-    .from('conversation')
-    .insert({ other_member_id: userId })
-    .select(`*, created_by_profile:created_by(*), other_member_profile:other_member_id(*)`)
-    .maybeSingle()
-
-  if (error || !newConversation) {
-    useMessage('error', error?.message ?? 'an error has happened')
-    return null
-  }
-
-  await supabase
-    .from('conversation_member')
-    .insert({ user_id: userId, conversation_id: newConversation.id })
-    .select()
-    .single()
-
-  return newConversation as ConversationWithProfile
-}
-
-async function getConversationWithProfile(
-  options: { conversationId?: string; from?: number; to?: number } = {}
-): Promise<MaybeArray<ConversationWithProfile> | null> {
-  if (options.conversationId) {
-    const { data } = await supabase
-      .from('conversation')
-      .select(`*, created_by_profile:created_by(*), other_member_profile:other_member_id(*)`)
-      .eq('id', options.conversationId)
-      .order('last_message_at', { ascending: false, nullsFirst: false })
-      .single()
-    return data as ConversationWithProfile
-  }
-
-  const { data } = await supabase
-    .from('conversation')
-    .select(`*, created_by_profile:created_by(*), other_member_profile:other_member_id(*)`)
-    .order('last_message_at', { ascending: false })
-    .range(options.from ?? 0, options.to ?? 20)
-
-  return data as ConversationWithProfile[]
-}
-
-getConversationWithProfile({ from: 0, to: 20 }).then((res) => {
-  if (!Array.isArray(res)) return
-  conversations = res
-  activeConversation = conversations[0]
-  if (activeConversation) router.push('/chat/' + activeConversation.id)
+onMounted(() => {
+  loadConversations()
 })
 
+async function handleSearchResultClick(userId: string) {
+  searchResults.value = null
+  searchValue.value = ''
+
+  const existingConversation = await chatService.findExistingConversation(userId, myId.value)
+
+  if (existingConversation) {
+    activeConversation.value = existingConversation
+    router.push('/chat/' + existingConversation.id)
+  } else {
+    const newConv = await chatService.createConversation(myId.value, userId)
+    conversations.value.unshift(newConv)
+    activeConversation.value = newConv
+    router.push('/chat/' + newConv.id)
+  }
+}
+
 // search logic
-let searchValue = $ref('')
-let isSearching = $ref(false)
-let searchResults = $ref<Profile[] | null>(null)
+const searchValue = ref('')
+const isSearching = ref(false)
+const searchResults = ref<Profile[] | null>(null)
 
 async function getProfiles(searchTerm: string): Promise<Profile[] | null> {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .textSearch('full_name', searchTerm.split(' ').join(':*&') + ':*')
-    .neq('id', auth.user?.id)
-    .limit(10)
-
-  if (error) useMessage('error', error.message ?? 'an error has happened')
-  return data
+  try {
+    return await chatService.searchProfiles(searchTerm, auth.user?.id)
+  } catch (err: any) {
+    useMessage('error', err.message ?? 'Search error')
+    return null
+  }
 }
 
 watchDebounced(
-  $$(searchValue),
+  searchValue,
   async () => {
-    if (!searchValue) return
-    isSearching = true
-    searchResults = await getProfiles(searchValue)
-    isSearching = false
+    if (!searchValue.value) {
+      searchResults.value = null
+      return
+    }
+    isSearching.value = true
+    searchResults.value = await getProfiles(searchValue.value)
+    isSearching.value = false
   },
   { debounce: 500 }
 )

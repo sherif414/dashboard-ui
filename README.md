@@ -1,49 +1,132 @@
-<h5 align='center'>
-<b>Lightweight version of <a href="https://github.com/antfu/vitesse">Vitesse</a></b>
-</h5>
+# Metrix — Modern Store Dashboard (Frontend Showcase)
 
-<br>
+An enterprise-grade, responsive e-commerce store management dashboard built with **Vue 3**, **Vite**, **TypeScript**, **Pinia**, and **UnoCSS**.
 
-## Features
+Designed as a frontend portfolio showcase demonstrating clean architectural patterns, robust state management, explicit component composition, and a fully self-contained, offline-first mock backend with reactive real-time capabilities.
 
-- ⚡️ [Vue 3](https://github.com/vuejs/core), [Vite 3](https://github.com/vitejs/vite), [pnpm](https://pnpm.io/), [ESBuild](https://github.com/evanw/esbuild) - born with fastness
+---
 
-- 🗂 [File based routing](./src/pages)
+## 🌟 Key Highlights & Architecture
 
-- 📦 [Components auto importing](./src/components)
+### 1. Clean Layered Architecture
+The codebase strictly adheres to modular separation of concerns:
+```
+Presentation Layer (Vue Components & Views)
+        ↓
+State Management (Pinia Stores with Composition API)
+        ↓
+Domain Service Layer (authService, customerService, productService, orderService, chatService)
+        ↓
+Persistence & Mock DB Engine (LocalStorage, In-memory pub/sub EventEmitter)
+```
 
-- 🎨 [UnoCSS](https://github.com/antfu/unocss) - The instant on-demand atomic CSS engine.
+### 2. 100% Local / Zero Remote Dependencies
+- Replaced third-party cloud backends with an in-browser local storage engine (`dashboard_mock_db_v1`).
+- Seeded with realistic e-commerce data: 10 customers, 10 products with inventory, 8 multi-item orders, chat conversations, and an admin user profile.
+- Supports full client-side CRUD: creating orders, toggling customer status, publishing products, uploading images (Base64 encoding), and updating user settings.
+- Features a **"Reset Data"** button in the header to effortlessly restore sample demo data at any time.
 
-- 😃 Use icons from any icon sets in [Pure CSS](https://github.com/antfu/unocss/tree/main/packages/preset-icons)
+### 3. Interactive Real-Time Demo Chat
+- Built-in pub/sub event system simulating real-time conversations.
+- Automated simulated response engine: sending a message triggers a contextual simulated reply after ~1.2s to demonstrate live chat dynamics offline.
 
-- 🔥 Use the [new `<script setup>` style](https://github.com/vuejs/rfcs/pull/227)
+### 4. Strict Explicit Imports
+- Eliminates magic auto-imports and implicit globals.
+- Every Vue component explicitly imports its child components, Vue Composition APIs, composables, and typed icon components (`~/components/icons`).
 
-- ✅ Use [Vitest](http://vitest.dev/) for unit and components testing
+---
 
-- 🦾 TypeScript, of course
+## 🚀 Features
 
-- ☁️ Deploy on Netlify, zero-config
+- **Executive Analytics Dashboard**: Summary cards, revenue line charts, order distribution donut charts, and recent activity tables.
+- **Orders Management**: Paginated table, status filtering, order details with items breakdown, order lifecycle progression, and interactive order creation modal.
+- **Customers Directory**: Paginated customer list, customer search, details view with purchase history, and new customer modal.
+- **Products & Inventory**: Catalog management, stock tracking, publish status toggle, image uploads, and product creation.
+- **Live Team & Customer Messaging**: Real-time conversation threads with simulated responses and search.
+- **Account & Personalization Settings**:
+  - Profile info editing with avatar image upload.
+  - Dark / Light mode toggle with responsive UI transitions.
+  - Security & 2FA toggles and password change simulation.
 
+---
 
-<br>
+## 🛠 Tech Stack
 
-See [Vitesse](https://github.com/antfu/vitesse) for full featureset.
+- **Framework**: [Vue 3](https://vuejs.org/) (Composition API, `<script setup>`)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
+- **Styling**: [UnoCSS](https://unocss.dev/) (On-demand atomic CSS engine)
+- **State Management**: [Pinia](https://pinia.vuejs.org/)
+- **Routing**: [Vue Router 4](https://router.vuejs.org/)
+- **Charts**: [Chart.js](https://www.chartjs.org/) & [Chartist](https://gionkunz.github.io/chartist-js/)
+- **Utilities**: [@vueuse/core](https://vueuse.org/), [dayjs](https://day.js.org/)
+- **Package Manager**: [pnpm](https://pnpm.io/)
 
-## Pre-packed
+---
 
-### UI Frameworks
+## 💻 Getting Started
 
-- [UnoCSS](https://github.com/antfu/unocss) - The instant on-demand atomic CSS engine.
+### Prerequisites
+- Node.js 18+ (tested up to Node.js 24)
+- pnpm 9+ / 11+
 
-### Icons
+### Installation
 
-- [Iconify](https://iconify.design) - use icons from any icon sets [🔍Icônes](https://icones.netlify.app/)
-- [Pure CSS Icons via UnoCSS](https://github.com/antfu/unocss/tree/main/packages/preset-icons)
+```bash
+# Clone the repository
+git clone https://github.com/sherif414/dashboard-ui.git
+cd dashboard-ui
 
-### Plugins
+# Install dependencies
+pnpm install
+```
 
-- [Vue Router](https://github.com/vuejs/vue-router)
-  - [`vite-plugin-pages`](https://github.com/hannoeru/vite-plugin-pages) - file system based routing
-- [`unplugin-auto-import`](https://github.com/antfu/unplugin-auto-import) - Directly use Vue Composition API and others without importing
-- [`unplugin-vue-components`](https://github.com/antfu/unplugin-vue-components) - components auto import
-- [VueUse](https://github.com/antfu/vueuse) - collection of useful composition APIs
+### Development
+
+```bash
+# Start local development server (http://127.0.0.1:3000)
+pnpm dev
+```
+
+### Build & Typecheck
+
+```bash
+# Run TypeScript typecheck
+pnpm typecheck
+
+# Build for production
+pnpm build
+
+# Preview production build locally
+pnpm preview
+```
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── api/             # Local API client shim
+├── assets/          # Static assets and images
+├── components/      # Reusable UI components (Buttons, Inputs, Tables, Charts, Modals)
+│   └── icons/       # Typed SVG icon components with barrel export
+├── composables/     # Composition utilities (theme, messages, loaders)
+├── pages/           # Route views (dashboard, orders, customers, products, chat, settings)
+├── services/        # Business logic services & mock database engine
+│   ├── mock/        # mockDb.ts, seedData.ts
+│   ├── authService.ts
+│   ├── customerService.ts
+│   ├── productService.ts
+│   ├── orderService.ts
+│   └── chatService.ts
+├── store/           # Pinia stores (auth, customers, orders, products)
+├── styles/          # Global styles and resets
+├── App.vue          # Root application shell
+└── main.ts          # Application entrypoint
+```
+
+---
+
+## 📄 License
+MIT

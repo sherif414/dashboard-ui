@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { BarChart } from 'chartist'
 import type { BarChartData, BarChartOptions } from 'chartist'
 

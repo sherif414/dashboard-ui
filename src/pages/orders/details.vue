@@ -1,9 +1,9 @@
 <template>
   <main class="p4 flex flex-col gap-4 overflow-y-auto">
     <!-- delete order dialog -->
-    <dialog ref="dialogDelete" class="surface-1 rounded-md">
+    <dialog ref="dialogDelete" class="surface-1 rounded-md p6 shadow-lg border border-gray-2 dark:border-dark-3">
       <div class="grid grid-cols-2 gap-4">
-        <h1 class="col-span-2">delete order #{{ order?.id }} ?</h1>
+        <h1 class="col-span-2 typo-head">Delete order #{{ order?.id }}?</h1>
         <Btn class="w-max px-8" variant="text" @click="dialogDelete?.close()">cancel</Btn>
         <Btn
           class="w-max px-8 bg-error bg-opacity-10 text-error hover:bg-error hover:bg-opacity-30"
@@ -22,7 +22,7 @@
       <h2 class="typo-head">
         Date:
         <span class="typo-clr-muted typo-base">{{
-          order?.created_at ? useDateFormat(order?.created_at, 'DD MMM YYYY - hh:mm aa').value : '-'
+          order?.created_at ? useDateFormat(order.created_at, 'DD MMM YYYY - hh:mm aa').value : '-'
         }}</span>
       </h2>
       <h2 class="typo-head">
@@ -60,7 +60,7 @@
             <h3>
               customer since
               <span class="typo-clr-muted">{{
-                customer?.created_at ? useDateFormat(customer?.created_at, 'DD MMM YYYY').value : '-'
+                customer?.created_at ? useDateFormat(customer.created_at, 'DD MMM YYYY').value : '-'
               }}</span>
             </h3>
           </div>
@@ -84,8 +84,8 @@
       <SummaryCard
         :filter="false"
         :data="[
-          { name: 'payment method', value: 'master card' },
-          { name: 'delivery type', value: order?.type },
+          { name: 'payment method', value: 'Credit Card' },
+          { name: 'delivery type', value: order?.type || 'delivery' },
         ]"
       >
         <template #icon>
@@ -115,11 +115,11 @@
       <template #body>
         <tbody v-if="orderItems">
           <tr v-for="item in orderItems" :key="item.product_id">
-            <TableBodyCell :value="item.products.name" variant="link" :to="`/products/${item.product_id}`" />
-            <TableBodyCell :value="'$' + (item.products.sell_price || 0)" />
+            <TableBodyCell :value="item.products?.name ?? 'Product #' + item.product_id" variant="link" :to="`/products/${item.product_id}`" />
+            <TableBodyCell :value="'$' + (item.products?.sell_price || 0)" />
             <TableBodyCell :value="item.quantity" />
-            <TableBodyCell :value="'$00.0'" />
-            <TableBodyCell :value="'$' + item.quantity * item.products.sell_price" />
+            <TableBodyCell :value="item.discount ? item.discount + '%' : '$0.00'" />
+            <TableBodyCell :value="'$' + ((item.quantity || 1) * (item.products?.sell_price || 0))" />
             <TableBodyCell :value="item.status" variant="chip" :chip-status="item.status === 'completed'" />
           </tr>
         </tbody>
@@ -130,28 +130,47 @@
 </template>
 
 <script setup lang="ts">
-import { Customer, Order } from 'types'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useDateFormat } from '@vueuse/core'
+import type { Customer, Order } from 'types'
+import { orderService } from '~/services/orderService'
+import { useMessage } from '~/composables/message'
+import Btn from '~/components/Btn.vue'
+import SummaryCard from '~/components/SummaryCard.vue'
+import BaseTable from '~/components/BaseTable.vue'
+import TableHeaderCell from '~/components/TableHeaderCell.vue'
+import TableBodyCell from '~/components/TableBodyCell.vue'
+import { ICustomers, ILocation, ICreditCard } from '~/components/icons'
 
 const route = useRoute()
 const router = useRouter()
-let customer = $ref<Customer | null | undefined>(null)
-let order = $ref<Order | null>(null)
-let orderItems = $ref<any[] | null>(null)
+const customer = ref<Customer | null | undefined>(null)
+const order = ref<Order | null>(null)
+const orderItems = ref<any[] | null>(null)
 const headers = ['product name', 'unit price', 'quantity', 'discount', 'total price', 'status']
 
 async function getData(orderId: string) {
-  const { data, error } = await supabase
-    .from('orders')
-    .select('*, customers(*), order_item(product_id, products(name, sell_price), quantity, status)')
-    .eq('id', orderId)
-    .maybeSingle()
-
-  if (error) useMessage('error', error.message || 'an error has occurred')
-  if (!data) return
-  const { customers, ...orderData } = data
-  customer = Array.isArray(data?.customers) ? data?.customers[0] : data?.customers
-  orderItems = Array.isArray(data?.order_item) ? data?.order_item : data?.order_item ? [data.order_item] : orderItems
-  order = orderData
+  try {
+    const data = await orderService.getOrderById(+orderId)
+    if (!data) {
+      useMessage('error', 'Order not found')
+      return
+    }
+    customer.value = data.customers
+    orderItems.value = data.order_item
+    order.value = {
+      id: data.id,
+      owner: data.owner,
+      type: data.type,
+      status: data.status,
+      note: data.note,
+      total_purchases: data.total_purchases,
+      created_at: data.created_at,
+    }
+  } catch (err: any) {
+    useMessage('error', err.message || 'An error has occurred')
+  }
 }
 
 onMounted(() => {
@@ -159,52 +178,46 @@ onMounted(() => {
 })
 
 // deletion
-let isDeleting = $ref(false)
-const dialogDelete = $ref<HTMLDialogElement | null>(null)
+const isDeleting = ref(false)
+const dialogDelete = ref<HTMLDialogElement | null>(null)
 
 async function deleteOrder() {
-  if (!order?.id) return
-  isDeleting = true
-  const res = await supabase.from('order_item').delete().eq('order_id', order.id)
+  if (!order.value?.id) return
+  isDeleting.value = true
+  const res = await orderService.deleteOrder(order.value.id)
+  isDeleting.value = false
+
   if (res.error) {
-    useMessage('error', res.error.message || 'an error has occurred')
-    isDeleting = false
-    dialogDelete?.close()
+    useMessage('error', res.error.message)
+    dialogDelete.value?.close()
     return
   }
 
-  const res2 = await supabase.from('orders').delete().eq('id', order.id)
-  if (res2.error) {
-    useMessage('error', res2.error.message || 'an error has occurred')
-    isDeleting = false
-    dialogDelete?.close()
-    return
-  }
-
-  useMessage('success', 'order deleted!')
-  isDeleting = false
+  useMessage('success', 'Order deleted!')
   router.push('/orders')
 }
 
 // mark complete
-let isMarkingComplete = $ref(false)
-let orderCompleted = $computed(() => order?.status === 'completed')
+const isMarkingComplete = ref(false)
+const orderCompleted = computed(() => order.value?.status === 'completed')
+
 async function handleMarkComplete() {
-  isMarkingComplete = true
+  if (!order.value) return
+  isMarkingComplete.value = true
 
-  const res = await supabase
-    .from('orders')
-    .update({ status: order?.status === 'completed' ? 'pending' : 'completed' })
-    .eq('id', order?.id)
+  const nextStatus = order.value.status === 'completed' ? 'pending' : 'completed'
+  const res = await orderService.updateOrderStatus(order.value.id, nextStatus)
 
+  isMarkingComplete.value = false
   if (res.error) {
-    useMessage('error', res.error.message || 'an error has occurred')
-    isMarkingComplete = false
+    useMessage('error', res.error.message)
     return
   }
 
-  if (order?.status) order.status = orderCompleted ? 'pending' : 'completed'
-
-  isMarkingComplete = false
+  order.value.status = nextStatus
+  if (orderItems.value) {
+    orderItems.value.forEach((item) => (item.status = nextStatus))
+  }
+  useMessage('success', `Order marked as ${nextStatus}`)
 }
 </script>
