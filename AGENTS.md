@@ -4,11 +4,26 @@ This file is the single source of truth for AI agents (Claude, Copilot, Cursor, 
 
 ---
 
-## 1. Project Overview & Purpose
+## 1. Project Overview & Showcase Philosophy
 
-- **Role**: This is a **frontend portfolio showcase project** built to highlight clean code, responsive design, state management, and modern component architecture to recruiters, hiring managers, and prospective employers.
-- **Nature**: It is **not** a real-world enterprise app connected to a cloud database. It is designed to run **100% locally and offline**.
-- **Supabase is EXCISED**: The original Supabase backend has been completely removed. Do **NOT** install `@supabase/supabase-js`, do not configure remote database URLs, and do not connect to external APIs.
+### Purpose & Target Audience
+- **Frontend Portfolio Showcase**: This project is built specifically as a **portfolio showcase application** to demonstrate advanced frontend engineering capabilities, clean architectural design, scalable state management, and component craftsmanship to **recruiters, hiring managers, and prospective employers**.
+- **Not a Production Cloud Application**: It is **not** a real-world enterprise app connected to a cloud database or remote infrastructure. It is intentionally designed to run **100% locally, client-side, and offline**.
+
+### Why It Is Local-First (Zero Friction for Evaluators)
+- **Frictionless Onboarding**: Anyone reviewing this project (an interviewer, recruiter, or peer) must be able to run `pnpm install && pnpm dev` and immediately experience every single feature—with **zero** requirement to create accounts, configure `.env` secrets, seed remote databases, or install Docker containers.
+- **Supabase is Completely Excised**: The original Supabase backend has been completely removed. Do **NOT** install `@supabase/supabase-js`, do not configure remote database URLs, and do not connect to external APIs.
+- **Self-Contained Mock Database Engine (`mockDb`)**: All persistence runs directly in the browser via `localStorage` (`dashboard_mock_db_v1`) featuring realistic pre-seeded data, relational foreign key joins, full client-side CRUD (orders, customers, products), and Base64 image conversions.
+- **Simulated Real-Time Dynamics**:
+  - The live chat feature uses an in-memory event emitter pub/sub system with an automated reply bot that simulates realistic customer responses after ~1.2 seconds.
+  - A prominent **"Reset Data"** button in the header allows evaluators to reset mock data to its pristine seed state with a single click at any time.
+
+### Guiding Principles for AI Agents
+When modifying or extending this codebase, keep the showcase nature at the forefront:
+1. **Code Cleanliness is Paramount**: Prospective employers review this code directly. Prioritize readability, clear domain naming, explicit typing, and zero tech debt over quick hacks.
+2. **Explicit Contracts**: Keep components modular, self-contained, and explicit. Avoid hidden magic, auto-import trickery, or implicit global state.
+3. **UX Polish**: Ensure fluid dark/light transitions, responsive table layouts, informative empty states, and descriptive user feedback via toast messages (`useMessage`).
+
 
 ---
 
