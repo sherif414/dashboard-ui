@@ -12,7 +12,7 @@ This file is the single source of truth for AI agents (Claude, Copilot, Cursor, 
 
 ### Why It Is Local-First (Zero Friction for Evaluators)
 - **Frictionless Onboarding**: Anyone reviewing this project (an interviewer, recruiter, or peer) must be able to run `pnpm install && pnpm dev` and immediately experience every single feature—with **zero** requirement to create accounts, configure `.env` secrets, seed remote databases, or install Docker containers.
-- **Supabase is Completely Excised**: The original Supabase backend has been completely removed. Do **NOT** install `@supabase/supabase-js`, do not configure remote database URLs, and do not connect to external APIs.
+- **Zero Remote Dependencies / Fully Offline**: The application operates 100% in-browser without connecting to external APIs or remote databases. Do not introduce remote database clients, external backend connectors, or cloud credentials.
 - **Self-Contained Mock Database Engine (`mockDb`)**: All persistence runs directly in the browser via `localStorage` (`dashboard_mock_db_v1`) featuring realistic pre-seeded data, relational foreign key joins, full client-side CRUD (orders, customers, products), and Base64 image conversions.
 - **Simulated Real-Time Dynamics**:
   - The live chat feature uses an in-memory event emitter pub/sub system with an automated reply bot that simulates realistic customer responses after ~1.2 seconds.
@@ -48,17 +48,16 @@ pnpm preview       # Preview production build locally
 
 ### A. Strictly No Global Component Registration
 - **Never** register components globally via `app.component(...)` in `main.ts` or plugins.
-- **Never** use magic auto-import plugins (`unplugin-auto-import`, `unplugin-vue-components`).
+- **No auto-import plugins**: All imports must be explicitly declared in code.
 - **Every** Vue component must explicitly import its dependencies within `<script setup>`:
   - Child components (e.g., `import Btn from '~/components/Btn.vue'`)
   - Icons (e.g., `import { ICart, ISearch } from '~/components/icons'`)
   - Vue Composition APIs (e.g., `import { ref, computed, onMounted } from 'vue'`)
   - Composables and stores (e.g., `import { useAuthStore } from '~/store/auth'`)
 
-### B. No Reactivity Transform ($ref, $computed)
-- Vue's experimental Reactivity Transform has been removed and is deprecated in Vue 3.4+.
-- Do **NOT** use `$ref`, `$computed`, or `$$()`.
+### B. Standard Vue Composition API
 - Always use standard Vue Composition API: `ref()`, `computed()`, `watch()`, `reactive()`, with `.value` access in script.
+- Do **NOT** use `$ref`, `$computed`, or `$$()`.
 
 ### C. Local Mock Database (`mockDb`) as the Backend
 - All data persistence runs in the browser through `src/services/mock/mockDb.ts` backed by `localStorage` (`dashboard_mock_db_v1`).
@@ -76,7 +75,7 @@ pnpm preview       # Preview production build locally
 
 ```
 src/
-├── api/             # Legacy query builder shim routing to mockDb (if needed)
+├── api/             # Local query builder shim routing to mockDb
 ├── assets/          # Static bundled assets (images, logos)
 ├── components/      # Reusable UI component library
 │   ├── icons/       # SVG icons with typed barrel export (src/components/icons/index.ts)
@@ -161,7 +160,7 @@ import {
 
 When implementing features, fixing bugs, or refactoring:
 
-1. [ ] **No Blind Dependency Installs**: Never reinstall removed packages without explicit user instruction.
+1. [ ] **No Unnecessary Dependency Installs**: Do not install external packages without explicit user instruction.
 2. [ ] **Explicit Imports**: Check that every `.vue` file imports all components, icons, and composables used in its template.
 3. [ ] **Type Correctness**: All new functions and services must have explicit TypeScript types defined in `types/index.ts`.
 4. [ ] **No Dead Code**: Remove unused imports, variables, and placeholder files.
