@@ -1,11 +1,12 @@
 <template>
   <label :class="wrapperClass" class="flex flex-col gap-1 relative">
-    <div class="capitalize typo-sm">
+    <div v-if="label" class="capitalize typo-sm font-medium">
       {{ label }}
     </div>
     <div :class="{ 'text-error': isInvalid }" class="relative w-full">
       <input
         ref="inputEl"
+        :aria-label="!label ? ($attrs['aria-label'] as string || $attrs['placeholder'] as string) : undefined"
         :class="[
           $slots.prepend ? 'pl-11' : 'pl-4',
           $slots.append ? 'pr-11' : 'pr-4',

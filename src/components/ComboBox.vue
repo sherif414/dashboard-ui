@@ -1,22 +1,22 @@
 <template>
   <cb v-model="value" as="div" class="relative flex flex-col gap-1">
-    <ComboboxLabel>{{ label }}</ComboboxLabel>
+    <ComboboxLabel v-if="label" class="typo-sm font-medium">{{ label }}</ComboboxLabel>
     <div class="relative">
       <!-- input -->
       <ComboboxInput
         autocomplete="none"
-        class="surface-2 h-10 p2 rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none"
+        class="surface-2 h-10 p2 rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none border border-transparent focus:border-indigo-4 dark:focus:border-violet-5"
         :placeholder="placeholder"
         :display-value="(option: any) => option?.name || ''"
         @input="searchValue = ($event.target as HTMLInputElement).value"
       ></ComboboxInput>
-      <ComboboxButton class="absolute right-2 inset-y-0% z-1">
+      <ComboboxButton class="absolute right-2 inset-y-0% z-1 flex items-center">
         <IChevronUpDown width="20" height="20" />
       </ComboboxButton>
 
       <!-- dropdown -->
       <ComboboxOptions
-        class="surface-2 rounded-md flex flex-col absolute w-full overflow-y-auto top-110% left-0 shadow-md z-1"
+        class="surface-2 rounded-md flex flex-col absolute w-full overflow-y-auto top-110% left-0 shadow-lg z-20 border border-gray-2 dark:border-dark-3 max-h-60"
       >
         <ComboboxOption
           v-for="option in options"

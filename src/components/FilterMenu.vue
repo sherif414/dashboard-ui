@@ -1,33 +1,36 @@
 <template>
   <div class="relative">
-    <div
+    <button
+      type="button"
+      :aria-expanded="isOpen"
+      aria-haspopup="dialog"
       @click="isOpen = !isOpen"
-      class="border dark:border-none border-gray-3 p-2 pr-3 rounded-md flex items-center gap-x-2 cursor-pointer select-none"
-      :class="{ 'dark:bg-dark-6 border-indigo-6': isOpen }"
+      class="border border-gray-2 dark:border-dark-3 p-2 pr-3 rounded-md flex items-center gap-x-2 cursor-pointer select-none text-typo-muted hover:text-typo transition-colors"
+      :class="{ 'dark:bg-dark-6 border-indigo-6! dark:border-indigo-5!': isOpen }"
     >
-      <IFilter width="14" height="14" /> filter
-    </div>
+      <IFilter width="14" height="14" /> Filter
+    </button>
     <div
       ref="menuRef"
       v-if="isOpen"
-      class="grid items-start text-left gap-y-4 p4 absolute z-11 bg-white dark:bg-dark-300 rounded-md w-16rem mt2 border dark:border-none border-gray-2"
+      class="grid items-start text-left gap-y-4 p4 absolute z-11 surface-1 rounded-md w-16rem mt2 border border-gray-2 dark:border-dark-3 shadow-lg"
     >
-      <h3 class="">Order Type</h3>
+      <h3 class="font-medium text-sm">Order Type</h3>
 
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-x-2">
-          <input id="filter-menu-home-delivery" type="checkbox" />
-          <label for="filter-menu-home-delivery">Home delivery</label>
+          <input id="filter-menu-home-delivery" type="checkbox" class="accent-indigo-6" />
+          <label for="filter-menu-home-delivery" class="text-xs cursor-pointer">Home delivery</label>
         </div>
         <div class="flex items-center gap-x-2">
-          <input id="filter-menu-pickup" type="checkbox" />
-          <label for="filter-menu-pickup">Pick Up</label>
+          <input id="filter-menu-pickup" type="checkbox" class="accent-indigo-6" />
+          <label for="filter-menu-pickup" class="text-xs cursor-pointer">Pick Up</label>
         </div>
       </div>
-      <Select :options="['published', 'unpublished']" size="sm" v-model="filterData.status" label="status"
+      <Select :options="['published', 'unpublished']" size="sm" v-model="filterData.status"
         >Status</Select
       >
-      <Select :options="['John Doe', 'Jane Doe']" size="sm" v-model="filterData.customer" label="customer"
+      <Select :options="['John Doe', 'Jane Doe']" size="sm" v-model="filterData.customer"
         >Customer</Select
       >
       <div>
@@ -36,7 +39,7 @@
           <TextField size="sm" type="number" v-model="filterData.priceMax" label="max price" />
         </div>
       </div>
-      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary cursor-pointer">Filter</button>
+      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary cursor-pointer text-xs font-medium hover:opacity-90 transition-opacity">Apply Filter</button>
     </div>
   </div>
 </template>

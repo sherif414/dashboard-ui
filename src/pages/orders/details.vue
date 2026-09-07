@@ -15,36 +15,40 @@
       </div>
     </dialog>
 
-    <header class="flex gap-4 2xl:gap-8 items-center justify-start">
-      <h2 class="typo-head">
-        Order Id: <span class="typo-clr-muted typo-base">#{{ order?.id }}</span>
-      </h2>
-      <h2 class="typo-head">
-        Date:
-        <span class="typo-clr-muted typo-base">{{
-          order?.created_at ? useDateFormat(order.created_at, 'DD MMM YYYY - hh:mm aa').value : '-'
-        }}</span>
-      </h2>
-      <h2 class="typo-head">
-        Total purchases: <span class="typo-clr-muted typo-base">${{ order?.total_purchases }}</span>
-      </h2>
-      <Btn
-        @click="dialogDelete?.showModal()"
-        variant="text"
-        class="ml-auto bg-error bg-opacity-10 text-error hover:bg-error hover:bg-opacity-30"
-      >
-        Delete Order
-      </Btn>
-      <Btn
-        :loading="isMarkingComplete"
-        @click="handleMarkComplete"
-        :class="orderCompleted ? 'bg-black! text-gray-1! dark:bg-gray-1! dark:text-dark!' : ''"
-        >mark as {{ orderCompleted ? 'pending' : 'completed' }}</Btn
-      >
+    <header class="flex flex-wrap gap-4 items-center justify-between surface-1 p4 rounded-md border border-gray-2 dark:border-dark-3">
+      <div class="flex flex-wrap gap-4 sm:gap-6 items-center">
+        <h2 class="typo-head">
+          Order Id: <span class="typo-clr-muted typo-base">#{{ order?.id }}</span>
+        </h2>
+        <h2 class="typo-head">
+          Date:
+          <span class="typo-clr-muted typo-base">{{
+            order?.created_at ? useDateFormat(order.created_at, 'DD MMM YYYY - hh:mm aa').value : '-'
+          }}</span>
+        </h2>
+        <h2 class="typo-head">
+          Total: <span class="typo-clr-primary typo-base font-bold">${{ order?.total_purchases }}</span>
+        </h2>
+      </div>
+      <div class="flex items-center gap-3 ml-auto">
+        <Btn
+          @click="dialogDelete?.showModal()"
+          variant="text"
+          class="bg-error bg-opacity-10 text-error hover:bg-error hover:bg-opacity-20 px-4"
+        >
+          Delete Order
+        </Btn>
+        <Btn
+          :loading="isMarkingComplete"
+          @click="handleMarkComplete"
+          :class="orderCompleted ? 'bg-black! text-gray-1! dark:bg-gray-1! dark:text-dark!' : ''"
+          >mark as {{ orderCompleted ? 'pending' : 'completed' }}</Btn
+        >
+      </div>
     </header>
 
     <!-- summary cards grid -->
-    <section class="grid grid-cols-3 gap-4 row-span-1">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
       <!-- all orders summary -->
       <SummaryCard
         :filter="false"

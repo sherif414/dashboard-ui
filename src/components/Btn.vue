@@ -1,6 +1,6 @@
 <template>
   <button
-    class="transition h-10 capitalize w-25ch text-center rounded-md focus:outline-none grid place-items-center"
+    class="transition h-10 capitalize w-25ch max-w-full text-center rounded-md focus:outline-none focus-visible:(outline-2 outline-offset-2 outline-indigo-5 dark:outline-violet-5) grid place-items-center"
     :disabled="isDisabled"
     :type="type"
     :class="{

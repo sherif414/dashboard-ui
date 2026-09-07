@@ -1,15 +1,23 @@
 <template>
   <dialog
-    class="open:backdrop:backdrop-blur-4 rounded-md px-6 surface-1 typo-clr-base typo-base shadow-md dark:border dark:border-dark-3"
+    class="open:backdrop:backdrop-blur-4 rounded-md p-4 sm:p-6 surface-1 typo-clr-base typo-base shadow-xl border border-gray-2 dark:border-dark-3 w-full max-w-4xl max-h-[90vh] overflow-y-auto"
     ref="target"
   >
     <!-- dialog header -->
-    <div class="my-2">
-      <h2 class="typo-head mb-4">Create New Order</h2>
+    <div class="my-2 flex items-center justify-between pb-2 border-b border-gray-2 dark:border-dark-3">
+      <h2 class="typo-head">Create New Order</h2>
+      <button
+        type="button"
+        aria-label="Close dialog"
+        class="typo-clr-muted hover:typo-clr-base text-lg font-bold p-1 leading-none cursor-pointer transition"
+        @click="target?.close()"
+      >
+        ✕
+      </button>
     </div>
-    <form @submit.prevent="handleSubmit" class="grid grid-cols-2 gap-8">
+    <form @submit.prevent="handleSubmit" class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
       <!-- dialog order form-->
-      <div class="grid grid-cols-2 gap-x-2 gap-y-4 min-w-20rem">
+      <div class="grid grid-cols-2 gap-x-3 gap-y-4">
         <ComboBox table-name="customers" class="col-span-2" v-model="customer" placeholder="customer" />
         <Select :options="['cash', 'credit card']" v-model="formData.paymentType" placeholder="Payment Type"></Select>
         <Select :options="['delivery', 'pickup']" v-model="formData.orderType" placeholder="Order Type"></Select>
@@ -20,13 +28,13 @@
         <textarea
           placeholder="add a note"
           class="col-span-2 resize-none surface-2 p4 rounded-md outline-none outline-offset-0! focus:(outline-indigo-4 outline-2 dark:outline-violet)"
-          rows="6"
+          rows="5"
           v-model.trim.lazy="formData.orderNote"
         />
       </div>
 
       <!-- dialog order items -->
-      <section class="flex flex-col gap-y-4 pt-18px">
+      <section class="flex flex-col gap-y-4">
         <TextField placeholder="search products" v-model.noLazy="searchValue">
           <template #prepend>
             <ISearch width="20" height="20" />
@@ -64,7 +72,7 @@
 
         <div v-if="orderItemsList.length" class="grow relative min-h-40">
           <ul
-            class="flex flex-col typo-sm divide-y divide-gray-2 dark:divide-dark-3 w-full h-full absolute top-0 left-0 overflow-y-auto"
+            class="flex flex-col typo-sm divide-y divide-gray-2 dark:divide-dark-3 w-full h-full max-h-60 overflow-y-auto"
           >
             <!-- order item -->
             <li
@@ -78,13 +86,12 @@
               <span>${{ item.product.sell_price ?? '-' }}</span>
               <div class="justify-self-end flex gap-3 items-center">
                 <IMinus
-                  v-show="item.quantity > 1"
-                  @click="item.quantity--"
+                  @click="item.quantity > 1 ? item.quantity-- : removeItem(item)"
                   class="box-content py-1 px-2 surface-2 rounded-lg cursor-pointer"
                   width="12"
                   height="12"
                 />
-                {{ item.quantity }}
+                <span class="typo-base">{{ item.quantity }}</span>
                 <IAdd
                   @click="item.quantity++"
                   class="box-content py-1 px-2 surface-2 rounded-lg cursor-pointer"
@@ -97,19 +104,21 @@
         </div>
 
         <!-- empty state -->
-        <div v-else class="grid grow place-content-center gap-8 py-8">
+        <div v-else class="grid grow place-content-center gap-4 py-8">
           <IShoppingBag
-            width="56"
-            height="56"
-            class="surface-2 [&_path]:stroke-gray-4 stroke-width-2 p-8 box-content rounded-full mx-auto"
+            width="48"
+            height="48"
+            class="surface-2 [&_path]:stroke-gray-4 stroke-width-2 p-6 box-content rounded-full mx-auto"
           />
           <h3 class="typo-head text-center">Add Products To Your Order</h3>
         </div>
       </section>
 
       <!-- dialog submission -->
-      <Btn type="button" variant="text" class="justify-self-end" @click="target?.close()">cancel</Btn>
-      <Btn :loading="isSubmitting" :disabled="!orderItemsList.length" type="submit">Create Order</Btn>
+      <div class="md:col-span-2 flex justify-end gap-3 pt-4 border-t border-gray-2 dark:border-dark-3">
+        <Btn type="button" variant="text" @click="target?.close()">cancel</Btn>
+        <Btn :loading="isSubmitting" :disabled="!orderItemsList.length" type="submit">Create Order</Btn>
+      </div>
     </form>
   </dialog>
 </template>

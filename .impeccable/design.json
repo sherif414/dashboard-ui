@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-07T18:06:25Z",
+  "title": "Design System: Metrix",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Electric Indigo",
+        "canonical": "oklch(53% 0.24 280)",
+        "tonalRamp": ["#1e1b4b", "#312e81", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#818cf8", "#c7d2fe"]
+      },
+      "primary-dark": {
+        "role": "primary",
+        "displayName": "Ultramarine Violet",
+        "canonical": "oklch(55% 0.26 295)",
+        "tonalRamp": ["#2e1065", "#4c1d95", "#5b21b6", "#6d28d9", "#7c3aed", "#8b5cf6", "#a78bfa", "#ddd6fe"]
+      },
+      "accent-apricot": {
+        "role": "secondary",
+        "displayName": "Sunlit Apricot",
+        "canonical": "oklch(92% 0.05 60)",
+        "tonalRamp": ["#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#f97316", "#fb923c", "#FFCC91", "#FFE5C8"]
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Signal Emerald",
+        "canonical": "oklch(76% 0.18 155)",
+        "tonalRamp": ["#064e3b", "#065f46", "#047857", "#059669", "#10b981", "#2DD881", "#6ee7b7", "#d1fae5"]
+      },
+      "error": {
+        "role": "tertiary",
+        "displayName": "Signal Crimson",
+        "canonical": "oklch(60% 0.22 25)",
+        "tonalRamp": ["#450a0a", "#7f1d1d", "#991b1b", "#b91c1c", "#dc2626", "#e63946", "#f87171", "#fee2e2"]
+      },
+      "warn": {
+        "role": "tertiary",
+        "displayName": "Alert Ochre",
+        "canonical": "oklch(70% 0.19 65)",
+        "tonalRamp": ["#451a03", "#78350f", "#92400e", "#b45309", "#d97706", "#f59e0b", "#fb8500", "#fef3c7"]
+      },
+      "neutral-bg-dark": {
+        "role": "neutral",
+        "displayName": "Deep Black Canvas",
+        "canonical": "oklch(15% 0 0)",
+        "tonalRamp": ["#0a0a0a", "#121212", "#18181b", "#27272a", "#3f3f46", "#52525b", "#71717a", "#a1a1aa"]
+      },
+      "neutral-surface-light": {
+        "role": "neutral",
+        "displayName": "Card Surface Light",
+        "canonical": "oklch(100% 0 0)",
+        "tonalRamp": ["#e5e7eb", "#f3f4f6", "#f8fafc", "#f9fafb", "#fafafa", "#ffffff", "#ffffff", "#ffffff"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero metrics and primary view banners."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Card titles, modal dialog headers."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Table captions, group headers, navigation links."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Data table cells, customer emails, chat messages, input values."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Table column headers, status badges, secondary timestamps."
+      }
+    },
+    "shadows": [
+      {
+        "name": "overlay-flyout",
+        "value": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+        "purpose": "Used exclusively on active dropdown menus, date pickers, and search flyouts."
+      },
+      {
+        "name": "notification-toast",
+        "value": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+        "purpose": "Floats centered notification toasts."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default timing for button hovers and surface color shifts."
+      },
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Micro-interaction response for hover and active states."
+      },
+      {
+        "name": "duration-medium",
+        "value": "300ms",
+        "purpose": "Sidebar expand/collapse and toast enter/exit animations."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Dominant call-to-action button with high-contrast electric fill.",
+      "html": "<button class=\"ds-btn-primary\">New Order</button>",
+      "css": ".ds-btn-primary { background: #4f46e5; color: #ffffff; height: 40px; padding: 8px 16px; border-radius: 6px; font-family: Roboto, sans-serif; font-size: 14px; font-weight: 500; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms ease; } .ds-btn-primary:hover { background: #4338ca; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #7c3aed; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Button",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Secondary action button without solid background.",
+      "html": "<button class=\"ds-btn-text\">Cancel</button>",
+      "css": ".ds-btn-text { background: transparent; color: #4f46e5; height: 40px; padding: 8px 16px; border-radius: 6px; font-family: Roboto, sans-serif; font-size: 14px; font-weight: 500; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background 150ms ease; } .ds-btn-text:hover { background: rgba(79, 70, 229, 0.08); }"
+    },
+    {
+      "name": "Success Status Chip",
+      "kind": "chip",
+      "refersTo": "chip-success",
+      "description": "Pill badge denoting active status or completed lifecycle.",
+      "html": "<span class=\"ds-chip-success\">Active</span>",
+      "css": ".ds-chip-success { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px; font-family: Roboto, sans-serif; font-size: 12px; font-weight: 500; background: rgba(45, 216, 129, 0.12); color: #2DD881; }"
+    },
+    {
+      "name": "Text Field Input",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Standard single-line text input field with embedded icon support.",
+      "html": "<div class=\"ds-input-wrapper\"><input class=\"ds-input\" placeholder=\"Search orders...\" /></div>",
+      "css": ".ds-input-wrapper { display: flex; flex-direction: column; width: 100%; } .ds-input { height: 40px; border-radius: 6px; background: #f0f0f0; border: 1px solid transparent; padding: 0 16px; font-family: Roboto, sans-serif; font-size: 14px; color: #111827; outline: none; transition: border-color 150ms ease, background 150ms ease; } .ds-input:focus { border-color: #4f46e5; background: #ffffff; }"
+    },
+    {
+      "name": "Summary Metric Card",
+      "kind": "card",
+      "refersTo": "card-summary",
+      "description": "Key analytical metric summary with icon anchor and metric progression.",
+      "html": "<article class=\"ds-summary-card\"><div class=\"ds-card-top\"><span class=\"ds-card-icon\">⚡</span><span class=\"ds-card-filter\">this week</span></div><div class=\"ds-card-bottom\"><div class=\"ds-card-title\">Total Sales</div><div class=\"ds-card-value\">$48,920 <span class=\"ds-growth\">+14%</span></div></div></article>",
+      "css": ".ds-summary-card { background: #ffffff; border-radius: 6px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border: 1px solid #e5e7eb; font-family: Roboto, sans-serif; } .ds-card-top { display: flex; justify-content: space-between; align-items: center; } .ds-card-icon { width: 32px; height: 32px; border-radius: 12px; background: #FFE5C8; display: grid; place-items: center; } .ds-card-filter { font-size: 12px; color: #9ca3af; } .ds-card-title { font-size: 12px; color: #9ca3af; text-transform: capitalize; } .ds-card-value { font-size: 16px; font-weight: 700; color: #111827; margin-top: 4px; } .ds-growth { color: #2DD881; font-size: 12px; font-weight: 500; margin-left: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Editorial Ledger",
+    "overview": "Metrix balances the utilitarian density of an e-commerce operational command center with the razor-sharp aesthetic authority of an avant-garde editorial journal. It rejects generic pastel gradients, puffy borders, and toy-like illustrations typical of commodity SaaS templates. Instead, it pairs a disciplined monochromatic substrate with vibrant electric indigo and ultramarine accents that guide evaluators through complex datasets with immediate visual priority.",
+    "keyCharacteristics": [
+      "Tabular Precision: Clean horizontal rule dividers and tabular number alignments that prioritize scanability across high-density operational data.",
+      "Tonal Substrates: Crisp hierarchy between app canvas, nested surfaces, and actionable containers without murky drop shadows.",
+      "Chromatic Signal Discipline: Color is not mere decoration; it systematically encodes operational state, trends, and focus.",
+      "Micro-Interaction Elasticity: Springy, purposeful transitions that respond decisively to pointer and keyboard engagement."
+    ],
+    "rules": [
+      {
+        "name": "The Chromatic Feedback Rule",
+        "body": "Color actively encodes domain statuses across all cards, graphs, and metric badges with explicit semantic meaning; decorative color without semantic value is prohibited.",
+        "section": "colors"
+      },
+      {
+        "name": "The Contrast Parity Rule",
+        "body": "Every interactive element, status indicator, and typography level must achieve equivalent WCAG AA contrast ratios in both light and dark modes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Alignment Rule",
+        "body": "All monetary figures, order counts, dates, and quantitative values must align with monospace or tabular numerals to maintain columnar scanning stability.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces remain completely flat at rest, bounded only by 1px hairline borders and background tonal contrast. Elevation shadows are permitted only during temporary spatial detachment (dialogs, dropdowns, floating toasts).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve 100% explicit imports across all Vue components, icons, and composables.",
+      "Do use surface-1, surface-2, and surface-3 tokens instead of hardcoded hex codes inside component templates.",
+      "Do ensure every interactive state provides both visual hover feedback and accessible keyboard focus styling.",
+      "Do maintain tabular numeric alignment for all price, quantity, and date columns.",
+      "Do use the single-click 'Reset Data' flow to test clean-slate states during development and evaluation."
+    ],
+    "donts": [
+      "Don't use diffuse, fuzzy drop shadows on resting cards or tables; keep surfaces flat and tonally separated.",
+      "Don't introduce global component auto-importing or register components in main.ts.",
+      "Don't invent third-party cloud backend calls or external API endpoints; all data operations must pass through mockDb.",
+      "Don't use saturated accent colors purely for decorative whimsy; color must convey status, focus, or brand identity.",
+      "Don't break dark/light mode parity; every new view must look equally intentional in both themes."
+    ]
+  }
+}

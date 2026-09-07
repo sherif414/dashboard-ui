@@ -1,13 +1,13 @@
 <template>
-  <main class="p4">
-    <form @submit.prevent="submit" class="flex flex-col gap-4 h-full">
+  <main class="p4 lg:p6 overflow-y-auto w-full">
+    <form @submit.prevent="submit" class="flex flex-col gap-6 h-full w-full">
       <!-- title  -->
-      <header class="flex items-center gap-4">
+      <header class="flex items-center justify-between surface-1 p4 rounded-md border border-gray-2 dark:border-dark-3">
         <h1 class="typo-head">Create New Product</h1>
-        <Btn class="ml-auto" type="submit" :loading="isSubmitting"> add product </Btn>
+        <Btn type="submit" :loading="isSubmitting"> add product </Btn>
       </header>
-      <div class="grow grid grid-cols-3 gap-x-4">
-        <div class="p8 grid grid-cols-2 gap-x-16 col-span-2 rounded-md surface-1 typo-sm">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full items-start">
+        <div class="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-6 lg:col-span-2 rounded-md surface-1 typo-sm border border-gray-2 dark:border-dark-3">
           <div class="flex flex-col gap-6">
             <!-- product name  -->
             <TextField
@@ -49,11 +49,11 @@
           <!-- description -->
           <div class="flex flex-col w-full gap-y-4">
             <label class="flex flex-col w-full gap-y-1">
-              description
+              <span class="font-medium">description</span>
               <textarea
                 required
                 v-model.trim.lazy="formData.description"
-                rows="10"
+                rows="8"
                 class="surface-2 p4 rounded-md outline-none outline-offset-0! resize-none w-full focus:(outline-indigo-4 outline-2 dark:outline-violet)"
                 placeholder="short description"
               />
@@ -62,7 +62,7 @@
             <TextField v-model="formData.expiration_date" type="date" label="expiration date" />
             <!-- discount -->
             <fieldset class="grid grid-cols-2 gap-4 items-end">
-              <legend class="mb-1 col-span-2">discount</legend>
+              <legend class="mb-1 col-span-2 font-medium">discount</legend>
               <Select
                 v-model="formData.discount_type"
                 placeholder="type"
@@ -77,8 +77,8 @@
           </div>
         </div>
         <!-- picture upload form  -->
-        <div class="p6 rounded-md surface-1 flex flex-col overflow-auto">
-          <h3 class="mb-2">images</h3>
+        <div class="p-6 rounded-md surface-1 flex flex-col overflow-auto border border-gray-2 dark:border-dark-3 lg:col-span-1">
+          <h2 class="typo-head mb-3">Product Image</h2>
           <FileUpload v-model="productImage" />
         </div>
       </div>

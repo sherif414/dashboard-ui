@@ -1,14 +1,17 @@
 <template>
-  <main class="p4 flex flex-col gap-4 overflow-y-auto">
+  <main class="p4 lg:p6 flex flex-col gap-6 overflow-y-auto w-full">
     <button
-      class="fixed right-20 bottom-24 fill-primary-2 rounded-full p-3 typo-clr-on-primary cursor-pointer shadow-lg hover:scale-105 transition-transform"
+      type="button"
+      aria-label="Add new customer"
+      title="Add new customer"
+      class="fixed bottom-6 right-6 sm:(bottom-10 right-10) z-30 fill-primary-2 rounded-full p-3.5 typo-clr-on-primary cursor-pointer shadow-lg hover:scale-105 active:scale-95 transition focus:outline-none focus-visible:(ring-4 ring-offset-2 ring-indigo-5 dark:ring-violet-5)"
       @click="ModalRef?.openModal"
     >
-      <IAdd />
+      <IAdd width="22" height="22" />
     </button>
 
     <!-- summary cards grid -->
-    <div class="grid grid-cols-2 gap-x-4 row-span-1">
+    <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
       <!-- all customers summary -->
       <SummaryCard
         :data="[
@@ -34,7 +37,7 @@
           <IShoppingBag width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
-    </div>
+    </section>
 
     <!-- data-table  -->
     <BaseTable

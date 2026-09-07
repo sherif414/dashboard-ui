@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col grow p4 px-8 gap-y-4 surface-1 rounded-md overflow-auto">
+  <div class="flex flex-col grow p-4 sm:p-6 gap-y-4 surface-1 rounded-md overflow-auto border border-gray-2 dark:border-dark-3">
     <!-- header  -->
-    <caption v-if="!hideHeader" class="flex items-center gap-x-4 typo-sm">
+    <caption v-if="!hideHeader" class="flex flex-wrap items-center gap-4 typo-sm">
       <!-- search box -->
       <h2 class="typo-head capitalize">{{ tableTitle ?? tableName }}</h2>
-      <TextField v-if="showSearch" wrapper-class="ml-4" size="sm" placeholder="search" v-model.noLazy="searchValue">
+      <TextField v-if="showSearch" wrapper-class="ml-0 sm:ml-4" size="sm" placeholder="search" v-model.noLazy="searchValue">
         <template #prepend>
           <ISearch class="w4! h4!" />
         </template>
@@ -35,7 +35,7 @@
     <div class="overflow-auto grow">
       <table class="typo-base w-full">
         <thead
-          class="sticky top-1px left-0 w-full z-1 left-0 capitalize surface-1 outline-1 outline dark:outline-dark-3 outline-gray-2"
+          class="sticky top-0 left-0 w-full z-1 capitalize surface-1 outline-1 outline dark:outline-dark-3 outline-gray-2"
         >
           <tr class="text-left">
             <slot name="header" :orderBy="orderBy" :sort="sort">
@@ -65,44 +65,48 @@
     </div>
 
     <!-- pagination -->
-    <div class="border-t border-gray-2 dark:border-dark-3 flex items-center pt-2 mt-auto">
+    <div class="border-t border-gray-2 dark:border-dark-3 flex flex-wrap items-center justify-between gap-2 pt-3 mt-auto typo-sm">
       <slot name="pagination">
-        <span>
+        <span class="flex items-center gap-1.5">
           <input
             min="1"
+            aria-label="Items per page"
             :max="itemsCount || undefined"
-            class="p1 surface-2 w-8 hide-arrows active:outline-none focus:outline-none"
+            class="p1 surface-2 w-10 text-center rounded border border-gray-2 dark:border-dark-3 hide-arrows active:outline-none focus:outline-none"
             type="number"
             :value="itemsPerPage"
             @change="onChangeItemsPerPage"
           />
-          items / page</span
-        >
-        <div class="flex items-center ml-auto">
+          <span class="typo-clr-muted">items / page</span>
+        </span>
+        <div class="flex items-center ml-auto gap-1">
           <input
             min="1"
+            aria-label="Current page number"
             :max="Math.ceil((itemsCount ?? 0) / itemsPerPage)"
-            class="p1 surface-2 w-8 mr-2 hide-arrowss active:outline-none focus:outline-none"
+            class="p1 surface-2 w-10 text-center rounded border border-gray-2 dark:border-dark-3 hide-arrows active:outline-none focus:outline-none"
             type="number"
             v-model="page"
           />
-          <span class="mr-2"> of {{ Math.ceil((itemsCount ?? 0) / itemsPerPage) }} pages</span>
-          <ICaretDown
+          <span class="mr-2 typo-clr-muted"> of {{ Math.ceil((itemsCount ?? 0) / itemsPerPage) }} pages</span>
+          <button
+            type="button"
+            aria-label="Previous page"
             @click="changePage('prev')"
-            width="16"
-            height="16"
-            class="rotate-90 p2 rounded box-content"
+            class="p-1 rounded transition"
             :class="[page === 1 ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 cursor-pointer']"
-          />
-          <ICaretDown
+          >
+            <ICaretDown width="16" height="16" class="rotate-90" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next page"
             @click="changePage('next')"
-            width="16"
-            height="16"
-            class="rotate-270 p2 rounded box-content"
-            :class="[
-              page === lastPage ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 cursor-pointer',
-            ]"
-          />
+            class="p-1 rounded transition"
+            :class="[page === lastPage ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 cursor-pointer']"
+          >
+            <ICaretDown width="16" height="16" class="rotate-270" />
+          </button>
         </div>
       </slot>
     </div>

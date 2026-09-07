@@ -1,14 +1,17 @@
 <template>
-  <main class="p4 flex flex-col gap-y-4 overflow-y-auto">
+  <main class="p4 lg:p6 flex flex-col gap-6 overflow-y-auto w-full">
     <button
-      class="fixed bottom-5rem right-5rem fill-primary-2 rounded-full p-3 shadow-lg typo-clr-on-primary cursor-pointer hover:scale-105 transition-transform"
+      type="button"
+      aria-label="Create new order"
+      title="Create new order"
+      class="fixed bottom-6 right-6 sm:(bottom-10 right-10) z-30 fill-primary-2 rounded-full p-3.5 shadow-lg typo-clr-on-primary cursor-pointer hover:scale-105 active:scale-95 transition focus:outline-none focus-visible:(ring-4 ring-offset-2 ring-indigo-5 dark:ring-violet-5)"
       @click="orderDialogRef?.openModal"
     >
-      <IAdd />
+      <IAdd width="22" height="22" />
     </button>
 
     <!-- summary cards grid -->
-    <div class="grid grid-cols-3 gap-x-4 row-span-1">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
       <!-- all orders summary -->
       <SummaryCard
         :data="[
@@ -46,7 +49,7 @@
           <ICart width="18" height="18" class="summary-icon" />
         </template>
       </SummaryCard>
-    </div>
+    </section>
 
     <!-- data-table  -->
     <BaseTable

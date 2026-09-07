@@ -1,14 +1,13 @@
 <template>
-  <main class="grid grid-rows-[max-content_1fr] grid-cols-3 gap-4 p4">
-    <header class="flex items-center gap-4 justify-start col-span-full">
-      <h1 class="typo-head">Conversations</h1>
-    </header>
-
-    <section class="surface-1 rounded-md pt4 flex flex-col gap-4 overflow-y-auto">
-      <h2 class="typo-head mx-4">contacts</h2>
+  <main class="flex flex-col md:grid md:grid-cols-3 gap-4 p4 lg:p6 overflow-hidden h-[calc(100vh-58px)] w-full">
+    <section class="surface-1 rounded-md pt4 flex flex-col gap-4 overflow-y-auto border border-gray-2 dark:border-dark-3 md:col-span-1" :class="activeConversation ? 'hidden md:flex' : 'flex'">
+      <div class="flex items-center justify-between mx-4">
+        <h2 class="typo-head">Contacts</h2>
+        <span class="typo-sm typo-clr-muted">{{ conversations.length }} active</span>
+      </div>
 
       <!-- search box -->
-      <TextField wrapper-class="mx-4" placeholder="search contacts" v-model.noLazy="searchValue">
+      <TextField wrapper-class="mx-4" placeholder="Search contacts..." v-model.noLazy="searchValue">
         <template #prepend>
           <ISearch width="20" height="20" />
         </template>
@@ -43,13 +42,13 @@
       </TextField>
 
       <!-- conversations list-->
-      <div class="relative grow">
+      <div class="relative grow min-h-200px">
         <TransitionGroup
           enter-active-class="delay-200 ease"
           move-class="transition-all duration-300 ease-out"
           enter-from-class="opacity-0"
           tag="div"
-          class="absolute w-full h-full flex flex-col overflow-y-auto border-t dark:border-dark-3 no-scrollbar"
+          class="absolute w-full h-full flex flex-col overflow-y-auto border-t dark:border-dark-3 divide-y divide-gray-2 dark:divide-dark-3 no-scrollbar"
         >
           <ConversationLink
             v-for="conversation in conversations"
@@ -76,13 +75,20 @@
 
     <!-- conversation view -->
     <template v-if="activeConversation">
-      <RouterView v-slot="{ Component, route }">
-        <KeepAlive :max="5">
-          <Component :data="activeConversation" :is="Component" :key="route.path" />
-        </KeepAlive>
-      </RouterView>
+      <div class="md:col-span-2 flex flex-col h-full overflow-hidden" :class="activeConversation ? 'flex' : 'hidden md:flex'">
+        <RouterView v-slot="{ Component, route }">
+          <KeepAlive :max="5">
+            <Component
+              :data="activeConversation"
+              :is="Component"
+              :key="route.path"
+              @back="activeConversation = null"
+            />
+          </KeepAlive>
+        </RouterView>
+      </div>
     </template>
-    <div v-else class="surface-1 rounded-md col-span-2 flex items-center justify-center text-gray-4">
+    <div v-else class="surface-1 rounded-md border border-gray-2 dark:border-dark-3 col-span-2 hidden md:flex items-center justify-center text-gray-4">
       Select a conversation to begin chatting
     </div>
   </main>

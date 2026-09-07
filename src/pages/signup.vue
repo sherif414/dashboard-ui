@@ -1,28 +1,28 @@
 <template>
-  <main class="p4 h-screen grid place-items-center">
-    <form class="flex flex-col gap-8 surface-1 p8 py-11 rounded-md w-27rem" @submit.prevent="handleSignup">
-      <ILogo width="100" height="100" class="mx-auto" />
+  <main class="min-h-screen py-8 px-4 grid place-items-center">
+    <form class="flex flex-col gap-8 surface-1 p-6 sm:p-8 py-8 sm:py-11 rounded-md w-full max-w-27rem border border-gray-2 dark:border-dark-3" @submit.prevent="handleSignup">
+      <ILogo width="80" height="80" class="mx-auto" />
       <div class="flex flex-col gap-2">
-        <h1 class="text-center typo-lg last:typo-clr-primary">
-          Get started with <em class="typo-clr-primary font-not-oblique">Metrix</em>
+        <h1 class="text-center typo-lg">
+          Get started with <span class="typo-clr-primary font-bold">Metrix</span>
         </h1>
         <h2 class="text-center typo-clr-muted typo-sm">create your account</h2>
       </div>
       <div class="flex flex-col">
-        <TextField required v-model="fullName" placeholder="your full name" type="text">
+        <TextField label="Full Name" wrapper-class="mb-4" required v-model="fullName" placeholder="Jane Doe" type="text">
           <template #prepend><ICustomers /></template>
         </TextField>
-        <TextField required wrapper-class="my-5" v-model="email" placeholder="Email Address" type="email">
+        <TextField label="Email Address" wrapper-class="mb-4" required v-model="email" placeholder="jane@example.com" type="email">
           <template #prepend><IEmail /></template>
         </TextField>
-        <TextField minlength="6" required v-model="password" placeholder="pick a strong password" type="password">
+        <TextField label="Password" minlength="6" required v-model="password" placeholder="••••••••" type="password">
           <template #prepend><ILock /></template>
         </TextField>
       </div>
-      <h3 class="self-center typo-sm">
+      <p class="self-center typo-sm text-center">
         already have an account?
         <router-link active-class="" class="typo-clr-primary hover:underline ml-1" to="/login">login</router-link>
-      </h3>
+      </p>
       <Btn :loading="isSubmitting" type="submit" class="mx-auto"> create account </Btn>
     </form>
   </main>

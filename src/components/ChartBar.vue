@@ -3,18 +3,23 @@ import { onMounted } from 'vue'
 import { BarChart } from 'chartist'
 import type { BarChartData, BarChartOptions } from 'chartist'
 
+interface Props {
+  title?: string
+}
+const { title = 'Summary' } = defineProps<Props>()
+
 const data: BarChartData = {
   series: [
     [100, 100, 100, 100, 100, 100, 100],
     [20, 80, 20, 60, 40, 40, 80],
   ],
-  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'sun'],
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
 }
 const options: BarChartOptions = {
   low: 0,
   high: 100,
   width: '100%',
-  height: '100%',
+  height: '240px',
   seriesBarDistance: 0,
 
   axisX: {
@@ -31,12 +36,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <article class="surface-1 rounded-3 flex flex-col gap-4 p4">
-    <header class="flex gap-4 items-center hidden!">
-      <h2 class="typo-head">summary</h2>
-      <span>sales</span><span class="ml-auto">last 7 days</span>
+  <article class="surface-1 border border-gray-2 dark:border-dark-3 rounded-md flex flex-col gap-4 p4">
+    <header class="flex gap-4 items-center justify-between">
+      <div class="flex items-center gap-2">
+        <h2 class="typo-head capitalize">{{ title }}</h2>
+        <span class="typo-sm typo-clr-muted">Weekly revenue flow</span>
+      </div>
+      <span class="typo-sm typo-clr-muted surface-2 px-2.5 py-0.5 rounded border border-gray-2 dark:border-dark-3">Last 7 days</span>
     </header>
-    <div id="chart-bar" class="grow typo-clr-base!"></div>
+    <div id="chart-bar" class="grow typo-clr-base! min-h-240px"></div>
   </article>
 </template>
 

@@ -1,73 +1,71 @@
 <template>
-  <main class="grid grid-cols-3 grid-rows-[repeat(5,minmax(max-content,1fr))] gap-4 p4 overflow-y-auto">
-    <!-- sales summary -->
-    <SummaryCard
-      :data="[
-        { name: 'sales', value: '$8,333.00', growth: '+12.5%' },
-        { name: 'volume', value: '450', growth: '+20' },
-      ]"
-    >
-      <template #icon>
-        <IChart width="18" height="18" class="summary-icon" />
-      </template>
-    </SummaryCard>
+  <main class="flex flex-col gap-6 p4 lg:p6 overflow-y-auto w-full">
+    <!-- top summary metrics -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 w-full">
+      <!-- sales summary -->
+      <SummaryCard
+        :data="[
+          { name: 'sales', value: '$8,333.00', growth: '+12.5%' },
+          { name: 'volume', value: '450', growth: '+20' },
+        ]"
+      >
+        <template #icon>
+          <IChart width="18" height="18" class="summary-icon" />
+        </template>
+      </SummaryCard>
 
-    <!-- customers summary -->
-    <SummaryCard
-      :data="[
-        { name: 'customers', value: customerStore.countAll ?? '', growth: '+1' },
-        { name: 'active', value: '80%', growth: '+2%' },
-      ]"
-    >
-      <template #icon>
-        <ICustomers width="18" height="18" class="summary-icon" />
-      </template>
-    </SummaryCard>
+      <!-- customers summary -->
+      <SummaryCard
+        :data="[
+          { name: 'customers', value: customerStore.countAll ?? '', growth: '+1' },
+          { name: 'active', value: '80%', growth: '+2%' },
+        ]"
+      >
+        <template #icon>
+          <ICustomers width="18" height="18" class="summary-icon" />
+        </template>
+      </SummaryCard>
 
-    <!-- orders summary -->
-    <SummaryCard
-      :data="[
-        { name: 'all orders', value: '8' },
-        { name: 'pending', value: '3' },
-        { name: 'completed', value: '5' },
-      ]"
-    >
-      <template #icon>
-        <IShoppingBag width="18" height="18" class="summary-icon" />
-      </template>
-    </SummaryCard>
+      <!-- orders summary -->
+      <SummaryCard
+        :data="[
+          { name: 'all orders', value: '8' },
+          { name: 'pending', value: '3' },
+          { name: 'completed', value: '5' },
+        ]"
+      >
+        <template #icon>
+          <IShoppingBag width="18" height="18" class="summary-icon" />
+        </template>
+      </SummaryCard>
 
-    <ChartDonut class="surface-1 row-span-2 rounded-md"></ChartDonut>
+      <!-- products summary -->
+      <SummaryCard
+        :data="[
+          { name: 'all products', value: productStore.countAll ?? '' },
+          { name: 'active', value: productStore.countPublished ?? '0', growth: '+20%' },
+        ]"
+        fill="primary"
+      >
+        <template #icon>
+          <IInventory width="18" height="18" class="summary-icon fill-primary-3 typo-clr-on-primary!" />
+        </template>
+      </SummaryCard>
+    </section>
 
-    <!-- products summary -->
-    <SummaryCard
-      :data="[
-        { name: 'all products', value: productStore.countAll ?? '' },
-        { name: 'active', value: productStore.countPublished ?? '0', growth: '+20%' },
-      ]"
-      fill="primary"
-    >
-      <template #icon>
-        <IInventory width="18" height="18" class="summary-icon fill-primary-3 typo-clr-on-primary!" />
-      </template>
-    </SummaryCard>
+    <!-- analytical body & recent activity -->
+    <section class="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full items-start">
+      <!-- visual charts -->
+      <div class="xl:col-span-2 flex flex-col gap-6 w-full">
+        <ChartBar title="sales" />
+        <ChartDonut />
+      </div>
 
-    <!-- products summary -->
-    <SummaryCard
-      :data="[
-        { name: 'all products', value: productStore.countAll ?? '' },
-        { name: 'active', value: productStore.countPublished ?? '0', growth: '+20%' },
-      ]"
-    >
-      <template #icon>
-        <IInventory width="18" height="18" class="summary-icon" />
-      </template>
-    </SummaryCard>
-
-    <RecentOrders class="row-span-4 col-start-3 row-start-2" />
-
-    <!-- data visualization -->
-    <ChartBar title="sales" class="col-span-2 row-span-2" />
+      <!-- recent orders activity panel -->
+      <div class="xl:col-span-1 w-full">
+        <RecentOrders />
+      </div>
+    </section>
   </main>
 </template>
 

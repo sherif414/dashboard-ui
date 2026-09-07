@@ -1,15 +1,17 @@
 <template>
-  <main class="flex flex-col gap-4 overflow-auto p4">
-    <header class="flex gap-4 2xl:gap-8 items-center justify-start">
-      <h2 class="typo-head">
-        customer Id: <span class="typo-clr-muted typo-base">#{{ customer?.id }}</span>
-      </h2>
-      <h2 class="typo-head">
-        customer since:
-        <span class="typo-clr-muted typo-base">{{
-          customer?.created_at ? useDateFormat(customer.created_at, 'DD MMM YYYY - hh:mm aa').value : '-'
-        }}</span>
-      </h2>
+  <main class="flex flex-col gap-6 overflow-auto p4 lg:p6 w-full">
+    <header class="flex flex-wrap gap-4 items-center justify-between surface-1 p4 rounded-md border border-gray-2 dark:border-dark-3">
+      <div class="flex flex-wrap gap-4 sm:gap-6 items-center">
+        <h2 class="typo-head">
+          Customer Id: <span class="typo-clr-muted typo-base">#{{ customer?.id }}</span>
+        </h2>
+        <h2 class="typo-head">
+          Customer Since:
+          <span class="typo-clr-muted typo-base">{{
+            customer?.created_at ? useDateFormat(customer.created_at, 'DD MMM YYYY - hh:mm aa').value : '-'
+          }}</span>
+        </h2>
+      </div>
       <Btn
         :loading="isSuspending"
         class="ml-auto"
@@ -22,7 +24,7 @@
         >{{ customer?.status ? 'suspend' : 'unsuspend' }} customer</Btn
       >
     </header>
-    <section class="grid grid-cols-3 gap-4">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
       <SummaryCard
         :filter="false"
         :data="[

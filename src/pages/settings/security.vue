@@ -8,13 +8,13 @@
     </header>
 
     <!-- Change Password Card -->
-    <form @submit.prevent="handleChangePassword" class="surface-2 rounded-xl p-5 flex flex-col gap-4">
+    <form @submit.prevent="handleChangePassword" class="surface-2 rounded-md border border-gray-2 dark:border-dark-3 p-5 flex flex-col gap-4">
       <div class="flex items-center gap-3">
         <div class="p-2.5 rounded-lg bg-indigo-1 dark:bg-dark-2 typo-clr-primary">
           <ILock class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="font-medium text-sm typo-clr-base">Change Password</h3>
+          <h3 class="font-medium typo-sm typo-clr-base">Change Password</h3>
           <p class="text-xs typo-clr-muted">Ensure your account is using a long, random password to stay secure.</p>
         </div>
       </div>
@@ -25,7 +25,7 @@
           type="password"
           placeholder="••••••••"
           v-model="currentPassword"
-          wrapper-class="col-span-2"
+          wrapper-class="col-span-1 md:col-span-2"
         />
         <TextField
           label="New Password"
@@ -47,13 +47,13 @@
     </form>
 
     <!-- Two-Factor Authentication Card -->
-    <div class="surface-2 rounded-xl p-5 flex items-center justify-between">
+    <div class="surface-2 rounded-md border border-gray-2 dark:border-dark-3 p-5 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="p-2.5 rounded-lg bg-indigo-1 dark:bg-dark-2 typo-clr-primary">
           <ICheckCircle class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="font-medium text-sm typo-clr-base">Two-Factor Authentication (2FA)</h3>
+          <h3 class="font-medium typo-sm typo-clr-base">Two-Factor Authentication (2FA)</h3>
           <p class="text-xs typo-clr-muted">Add an extra layer of security to your showcase account</p>
         </div>
       </div>
@@ -61,14 +61,14 @@
     </div>
 
     <!-- Active Sessions -->
-    <div class="surface-2 rounded-xl p-5 flex flex-col gap-3">
-      <h3 class="font-medium text-sm typo-clr-base">Active Device Sessions</h3>
+    <div class="surface-2 rounded-md border border-gray-2 dark:border-dark-3 p-5 flex flex-col gap-3">
+      <h3 class="font-medium typo-sm typo-clr-base">Active Device Sessions</h3>
       <div class="flex items-center justify-between text-xs py-2">
         <div>
           <p class="font-semibold typo-clr-base">Chrome on Windows (Current Session)</p>
           <p class="typo-clr-muted">Active right now • Local Host</p>
         </div>
-        <span class="text-emerald-500 font-medium">Active</span>
+        <span class="text-success font-medium">Active</span>
       </div>
     </div>
   </div>

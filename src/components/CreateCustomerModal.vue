@@ -1,18 +1,28 @@
 <template>
-  <dialog class="open:backdrop:backdrop-blur-4 typo-sm rounded-3 p4 surface-1 typo-clr-base px-6" ref="self">
+  <dialog class="open:backdrop:backdrop-blur-4 typo-sm rounded-md p4 sm:p-6 surface-1 typo-clr-base shadow-xl border border-gray-2 dark:border-dark-3 w-full max-w-md" ref="self">
     <!-- modal header -->
-    <h2 class="typo-head mb-4">Add New Customer</h2>
+    <div class="flex items-center justify-between pb-3 mb-4 border-b border-gray-2 dark:border-dark-3">
+      <h2 class="typo-head">Add New Customer</h2>
+      <button
+        type="button"
+        aria-label="Close dialog"
+        class="typo-clr-muted hover:typo-clr-base text-lg font-bold p-1 leading-none cursor-pointer transition"
+        @click="self?.close()"
+      >
+        ✕
+      </button>
+    </div>
 
     <!-- modal body -->
-    <form @submit.prevent="handleSubmit" class="flex flex-col gap-x-2 gap-y-6">
-      <div v-if="!!errorMsg" class="text-error text-center bg-error bg-opacity-10 p-1">{{ errorMsg }}</div>
-      <TextField required v-model="name" placeholder="john doe" label="customer name" />
-      <TextField required v-model="email" placeholder="example@email.com" label="email" type="email" />
-      <TextField required v-model="phone" label="phone number" />
+    <form @submit.prevent="handleSubmit" class="flex flex-col gap-4">
+      <div v-if="!!errorMsg" class="text-error text-center bg-error bg-opacity-10 p-2 rounded typo-sm">{{ errorMsg }}</div>
+      <TextField required v-model="name" placeholder="John Doe" label="Customer Name" />
+      <TextField required v-model="email" placeholder="john@example.com" label="Email Address" type="email" />
+      <TextField required v-model="phone" placeholder="+1 (555) 000-0000" label="Phone Number" />
 
-      <div class="grid grid-cols-2 gap-x-4 mt-4">
-        <Btn type="button" variant="text" @click="self?.close()"> cancel </Btn>
-        <Btn :loading="isSubmitting" type="submit">Create</Btn>
+      <div class="flex justify-end gap-3 mt-4 pt-3 border-t border-gray-2 dark:border-dark-3">
+        <Btn type="button" variant="text" @click="self?.close()">cancel</Btn>
+        <Btn :loading="isSubmitting" type="submit">Create Customer</Btn>
       </div>
     </form>
   </dialog>

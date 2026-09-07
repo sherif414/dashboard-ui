@@ -3,19 +3,21 @@
     <h1 class="typo-head text-xl">Product was not found</h1>
     <router-link to="/products" class="typo-clr-primary mt-4 hover:underline">Back to products</router-link>
   </main>
-  <main v-else class="flex flex-col gap-4 p4">
-    <header class="flex gap-8 items-center typo-head">
-      <h1>{{ product?.name ?? '-' }}</h1>
-      <h2>
-        Date added: <span class="typo-clr-muted typo-sm">{{ product?.created_at ? new Date(product.created_at).toDateString() : '-' }}</span>
-      </h2>
-      <h2>
-        product id: <span class="typo-clr-muted typo-sm">{{ route.params.id }}</span>
-      </h2>
+  <main v-else class="flex flex-col gap-6 p4 lg:p6 overflow-y-auto w-full">
+    <header class="flex flex-wrap gap-4 items-center justify-between surface-1 p4 rounded-md border border-gray-2 dark:border-dark-3 typo-head">
+      <div class="flex flex-wrap gap-4 sm:gap-6 items-center">
+        <h1 class="font-bold">{{ product?.name ?? '-' }}</h1>
+        <h2>
+          Date Added: <span class="typo-clr-muted typo-sm font-normal">{{ product?.created_at ? new Date(product.created_at).toDateString() : '-' }}</span>
+        </h2>
+        <h2>
+          Product ID: <span class="typo-clr-muted typo-sm font-normal">#{{ route.params.id }}</span>
+        </h2>
+      </div>
       <div class="ml-auto">
         <Btn
           :loading="isLoading"
-          class="ml-auto typo-sm"
+          class="typo-sm"
           :class="
             !product?.published
               ? 'bg-black! text-gray-1! dark:bg-gray-1! dark:text-dark!'
@@ -26,10 +28,12 @@
         >
       </div>
     </header>
-    <section class="flex flex-col gap-4 w-full h-full">
-      <div class="grid grid-cols-8 gap-4">
-        <div class="rounded-md surface-1 p2 flex items-center justify-center">
-          <img class="max-h-32 object-cover rounded" :src="getProductImageUrl(product?.image)" />
+
+    <section class="flex flex-col gap-6 w-full">
+      <!-- top product metric cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 w-full">
+        <div class="rounded-md surface-1 p3 flex items-center justify-center border border-gray-2 dark:border-dark-3">
+          <img class="max-h-28 max-w-full object-cover rounded" :src="getProductImageUrl(product?.image)" :alt="product?.name || 'Product'" />
         </div>
         <SummaryCard
           :data="[
@@ -37,16 +41,15 @@
             { name: 'status', value: product?.published ? 'published' : 'unpublished' },
             { name: 'in-stock', value: product?.stock },
           ]"
-          class="col-span-3"
         >
           <template #icon>
             <IInventory width="18" height="18" class="summary-icon" />
           </template>
         </SummaryCard>
 
-        <SummaryCard :data="[{ name: 'total orders', value: orderItems?.length || 0 }]" class="col-span-2">
+        <SummaryCard :data="[{ name: 'total orders', value: orderItems?.length || 0 }]" fill="primary">
           <template #icon>
-            <IInventory width="18" height="18" class="summary-icon" />
+            <IInventory width="18" height="18" class="summary-icon fill-primary-3 typo-clr-on-primary!" />
           </template>
         </SummaryCard>
 
@@ -55,7 +58,6 @@
             { name: 'views', value: '1,500' },
             { name: 'favorites', value: '350' },
           ]"
-          class="col-span-2"
         >
           <template #icon>
             <IInventory width="18" height="18" class="summary-icon" />
@@ -63,7 +65,7 @@
         </SummaryCard>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <SummaryCard
           :data="[
             { name: 'all orders', value: orderItems?.length || 0, growth: '+24%' },

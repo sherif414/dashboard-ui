@@ -28,24 +28,29 @@ async function signOut() {
 <template>
   <aside
     :class="isExpanded ? 'w-12rem' : 'w-4rem'"
-    class="sidebar h-screen transition-width duration-300 ease flex flex-col py-2 px-3 surface-1 typo-clr-base"
+    class="sidebar h-screen transition-width duration-300 ease flex flex-col py-2 px-3 surface-1 typo-clr-base border-r border-gray-2 dark:border-dark-3 shrink-0"
   >
     <router-link activeClass="" to="/" class="sidebar__link p-0">
       <ILogo width="45" height="45" />
       <span class="sidebar__link__name typo-lg font-normal">Metrix</span>
     </router-link>
     <nav class="flex flex-col w-full grow gap-y-4 typo-sm pt-2rem">
-      <svg
-        class="ml-2 self-start cursor-pointer"
+      <button
+        type="button"
+        :aria-label="isExpanded ? 'Collapse sidebar' : 'Expand sidebar'"
+        class="ml-2 self-start cursor-pointer bg-transparent border-none p-1 rounded focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5)"
         @click="isExpanded = !isExpanded"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
       >
-        <path d="M3 7h18M3 12h18M3 17h18" stroke="gray" stroke-width="1.5" stroke-linecap="round"></path>
-      </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+      </button>
       <router-link class="sidebar__link" active-class="sidebar__link--active" to="/">
         <IDashboard />
         <span class="sidebar__link__name">Dashboard</span>
