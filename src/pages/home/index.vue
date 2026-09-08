@@ -62,7 +62,7 @@
     <!-- 2. Visual KPI Matrix (Tabular Monospace Stat Tiles with Mini-Metrics) -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <!-- Total Gross Revenue (Anchor Metric Card) -->
-      <div class="surface-1 rounded-lg p-5 border border-indigo-5/30 dark:border-violet-5/30 bg-gradient-to-br from-indigo-5/5 via-surface-1 to-surface-1 dark:from-violet-5/10 dark:via-surface-1 dark:to-surface-1 shadow-xs flex flex-col justify-between min-h-[190px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-indigo-5/50 dark:hover:border-violet-5/50">
+      <div class="surface-1 rounded-lg p-5 border border-indigo-5/30 dark:border-violet-5/30 bg-gradient-to-br from-indigo-5/5 via-surface-1 to-surface-1 dark:from-violet-5/10 dark:via-surface-1 dark:to-surface-1 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-indigo-5/60 dark:hover:border-violet-5/60">
         <div class="flex items-center justify-between">
           <span class="text-11px font-mono font-bold uppercase tracking-wider typo-clr-primary">Total Revenue</span>
           <div class="w-8 h-8 rounded-md bg-indigo-6 dark:bg-violet-6 text-white flex items-center justify-center shadow-xs">
@@ -96,7 +96,7 @@
       </div>
 
       <!-- Sales Volume & Order Units -->
-      <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-gray-3 dark:hover:border-dark-2">
+      <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-gray-4 dark:hover:border-dark-1">
         <div class="flex items-center justify-between">
           <span class="text-11px font-mono font-bold uppercase tracking-wider typo-clr-muted">Units Sold</span>
           <div class="w-8 h-8 rounded-md bg-amber-5/10 dark:bg-amber-5/15 flex items-center justify-center text-warn">
@@ -130,7 +130,7 @@
       </div>
 
       <!-- Order Fulfillment Velocity -->
-      <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-gray-3 dark:hover:border-dark-2">
+      <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-gray-4 dark:hover:border-dark-1">
         <div class="flex items-center justify-between">
           <span class="text-11px font-mono font-bold uppercase tracking-wider typo-clr-muted">Fulfillment Rate</span>
           <div class="w-8 h-8 rounded-md bg-success/10 dark:bg-success/15 flex items-center justify-center text-success">
@@ -159,7 +159,7 @@
       </div>
 
       <!-- Active Catalog Inventory -->
-      <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-gray-3 dark:hover:border-dark-2">
+      <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-gray-4 dark:hover:border-dark-1">
         <div class="flex items-center justify-between">
           <span class="text-11px font-mono font-bold uppercase tracking-wider typo-clr-muted">Active Catalog</span>
           <div class="w-8 h-8 rounded-md bg-indigo-5/10 dark:bg-violet-5/15 flex items-center justify-center typo-clr-primary">
