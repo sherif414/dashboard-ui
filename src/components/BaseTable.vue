@@ -32,8 +32,16 @@
     </caption>
 
     <!-- table -->
-    <div class="overflow-auto grow">
-      <table class="typo-base w-full">
+    <div class="overflow-auto grow relative min-h-180px">
+      <!-- Progress shimmer line across top of table when loading -->
+      <div
+        v-if="isTableLoading"
+        class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-indigo-5 dark:via-violet-5 to-transparent animate-pulse z-10"
+      />
+      <table
+        class="typo-base w-full transition-opacity duration-200"
+        :class="{ 'opacity-60 pointer-events-none': isTableLoading }"
+      >
         <thead
           class="sticky top-0 left-0 w-full z-1 capitalize surface-1 outline-1 outline dark:outline-dark-3 outline-gray-2"
         >
@@ -56,7 +64,7 @@
         </thead>
         <slot name="body">
           <tbody v-if="data" class="typo-sm">
-            <tr v-for="(row, idx) in data" :key="idx">
+            <tr v-for="(row, idx) in data" :key="idx" class="hover:surface-2 transition-colors duration-150">
               <td v-for="(v, k) in (row as any)" :key="k" class="p2 px-4">{{ v || '-' }}</td>
             </tr>
           </tbody>
@@ -93,8 +101,8 @@
             type="button"
             aria-label="Previous page"
             @click="changePage('prev')"
-            class="p-1 rounded transition"
-            :class="[page === 1 ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 cursor-pointer']"
+            class="p-1 rounded transition-all duration-150"
+            :class="[page === 1 ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 hover:scale-105 active:scale-90 cursor-pointer']"
           >
             <ICaretDown width="16" height="16" class="rotate-90" />
           </button>
@@ -102,8 +110,8 @@
             type="button"
             aria-label="Next page"
             @click="changePage('next')"
-            class="p-1 rounded transition"
-            :class="[page === lastPage ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 cursor-pointer']"
+            class="p-1 rounded transition-all duration-150"
+            :class="[page === lastPage ? 'opacity-30 cursor-default pointer-events-none' : 'hover:surface-2 hover:scale-105 active:scale-90 cursor-pointer']"
           >
             <ICaretDown width="16" height="16" class="rotate-270" />
           </button>
@@ -165,6 +173,18 @@ function onChangeItemsPerPage(e: Event) {
   }
 }
 
+const isTableLoading = ref(false)
+
+async function triggerGetData(params: getTableDataParams) {
+  if (!getData) return
+  isTableLoading.value = true
+  try {
+    await getData(params)
+  } finally {
+    isTableLoading.value = false
+  }
+}
+
 // sorting
 function sort(column: string, foreignTable?: string) {
   if (!getData) return
@@ -176,11 +196,11 @@ function sort(column: string, foreignTable?: string) {
 
   orderBy.value.column = column
   orderBy.value.foreignTable = foreignTable || ''
-  getData({ page: page.value, itemsPerPage: itemsPerPage.value, orderOptions: { ...orderBy.value } })
+  triggerGetData({ page: page.value, itemsPerPage: itemsPerPage.value, orderOptions: { ...orderBy.value } })
 }
 
 if (getData) {
-  watchDebounced(page, () => getData({ page: page.value, itemsPerPage: itemsPerPage.value, orderOptions: orderBy.value }), {
+  watchDebounced(page, () => triggerGetData({ page: page.value, itemsPerPage: itemsPerPage.value, orderOptions: orderBy.value }), {
     debounce: 300,
     flush: 'post',
   })

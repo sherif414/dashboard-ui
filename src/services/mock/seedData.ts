@@ -3,6 +3,7 @@ import type { Customer, Order, OrderItem, Product, Profile, User, Conversation, 
 export const defaultUser: User = {
   id: 'user-demo-admin',
   email: 'admin@admin.com',
+  password: 'password',
   user_metadata: {
     full_name: 'Sherif Admin',
   },
@@ -398,6 +399,24 @@ export const seedOrders: Order[] = [
     total_purchases: 1298,
     created_at: '2023-10-05T12:00:00Z',
   },
+  {
+    id: 1009,
+    owner: 3,
+    type: 'delivery',
+    status: 'completed',
+    note: 'Morning delivery preferred.',
+    total_purchases: 498,
+    created_at: '2023-10-05T08:30:00Z',
+  },
+  {
+    id: 1010,
+    owner: 6,
+    type: 'delivery',
+    status: 'completed',
+    note: 'Contactless delivery.',
+    total_purchases: 848,
+    created_at: '2023-10-05T16:45:00Z',
+  },
 ]
 
 export const seedOrderItems: OrderItem[] = [
@@ -488,6 +507,30 @@ export const seedOrderItems: OrderItem[] = [
     discount: null,
     status: 'pending',
     created_at: '2023-10-05T12:00:00Z',
+  },
+  {
+    order_id: 1009,
+    product_id: 9,
+    quantity: 2,
+    discount: null,
+    status: 'completed',
+    created_at: '2023-10-05T08:30:00Z',
+  },
+  {
+    order_id: 1010,
+    product_id: 5,
+    quantity: 1,
+    discount: null,
+    status: 'completed',
+    created_at: '2023-10-05T16:45:00Z',
+  },
+  {
+    order_id: 1010,
+    product_id: 9,
+    quantity: 1,
+    discount: null,
+    status: 'completed',
+    created_at: '2023-10-05T16:45:00Z',
   },
 ]
 

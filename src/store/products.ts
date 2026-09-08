@@ -8,14 +8,18 @@ export const useProductsStore = defineStore('products', () => {
   const products = ref<ProductTable[] | null>(null)
   const countAll = ref<number | null>(null)
   const countPublished = ref<number | null>(null)
+  const isLoading = ref(false)
 
   async function getProducts(params: getTableDataParams) {
+    isLoading.value = true
     try {
       const { data, count } = await productService.getProducts(params)
       products.value = data
       countAll.value = count
     } catch (e: any) {
       useMessage('error', e.message || 'an error has occurred')
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -37,6 +41,7 @@ export const useProductsStore = defineStore('products', () => {
     products,
     countAll,
     countPublished,
+    isLoading,
     getProducts,
     getCount,
     insertProduct,

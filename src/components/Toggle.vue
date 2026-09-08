@@ -7,7 +7,7 @@
     @keydown.space.prevent="$emit('update:modelValue', !modelValue)"
     @keydown.enter.prevent="$emit('update:modelValue', !modelValue)"
     :style="{ transform: scale ? `scale(${scale})` : undefined }"
-    class="w-42px h-24px rounded-full relative select-none transition duration-300 cursor-pointer inline-block focus:outline-none focus-visible:(ring-2 ring-offset-2 ring-indigo-5 dark:ring-violet-5)"
+    class="w-42px h-24px rounded-full relative select-none cursor-pointer inline-block transition-all duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-95 focus:outline-none focus-visible:(ring-2 ring-offset-2 ring-indigo-5 dark:ring-violet-5)"
     :class="{ 'fill-primary-3': modelValue, 'bg-gray-3 dark:bg-dark-1': !modelValue }"
   >
     <span
@@ -15,7 +15,7 @@
         'fill-primary-2 translate-x-20px border-indigo-6 dark:border-violet-6': modelValue,
         'surface-1 border-white dark:border-dark-9 translate-x-3px': !modelValue,
       }"
-      class="h-18px absolute w-18px left-0 top-0 rounded-full transition-all select-none duration-300 border-2px translate-y-3px shadow"
+      class="h-18px absolute w-18px left-0 top-0 rounded-full transition-all duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] select-none border-2px translate-y-3px shadow-sm"
     ></span>
   </div>
 </template>

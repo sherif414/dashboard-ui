@@ -1,5 +1,6 @@
 import { mockDb } from '~/services/mock/mockDb'
 import { authService } from '~/services/authService'
+import { simulateLatency } from '~/services/delay'
 import type { Message } from 'types'
 
 class MockQueryBuilder {
@@ -141,6 +142,7 @@ class MockQueryBuilder {
 
   async then(resolve: (result: { data: any; count: number; error: any }) => any, reject?: (err: any) => any) {
     try {
+      await simulateLatency(160, 260)
       const { data, count } = this.executeQuery()
       return resolve({ data, count, error: null })
     } catch (e: any) {
@@ -150,17 +152,20 @@ class MockQueryBuilder {
   }
 
   async single() {
+    await simulateLatency(100, 180)
     const { data } = this.executeQuery()
     if (data.length === 0) return { data: null, error: { message: 'Row not found' } }
     return { data: data[0], error: null }
   }
 
   async maybeSingle() {
+    await simulateLatency(100, 180)
     const { data } = this.executeQuery()
     return { data: data.length > 0 ? data[0] : null, error: null }
   }
 
   async insert(values: any | any[]) {
+    await simulateLatency(400, 600)
     const list = Array.isArray(values) ? values : [values]
     const insertedRows: any[] = []
 
@@ -209,6 +214,7 @@ class MockQueryBuilder {
   }
 
   async update(updates: any) {
+    await simulateLatency(300, 450)
     const targets = this.getTableData().filter((item) => this.filters.every((fn) => fn(item)))
     for (const target of targets) {
       Object.assign(target, updates)
@@ -233,6 +239,7 @@ class MockQueryBuilder {
   async delete() {
     return {
       eq: async (column: string, value: any) => {
+        await simulateLatency(300, 450)
         if (this.tableName === 'orders') {
           mockDb.deleteOrder(+value)
         } else if (this.tableName === 'order_item') {

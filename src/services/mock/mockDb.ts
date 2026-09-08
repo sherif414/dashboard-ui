@@ -49,7 +49,15 @@ class MockDatabase {
     try {
       const stored = localStorage.getItem(DB_STORAGE_KEY)
       if (stored) {
-        return JSON.parse(stored)
+        const parsed: DbSchema = JSON.parse(stored)
+        if (Array.isArray(parsed.users)) {
+          parsed.users.forEach((u) => {
+            if (!u.password && u.email?.toLowerCase() === 'admin@admin.com') {
+              u.password = 'password'
+            }
+          })
+        }
+        return parsed
       }
     } catch (e) {
       console.warn('Failed to load mock DB from localStorage, using initial seeds:', e)
@@ -359,6 +367,11 @@ class MockDatabase {
 
   private scheduleSimulatedReply(conversationId: string, responderId: string, userMessage: string) {
     setTimeout(() => {
+      this.emit(`typing:${conversationId}`, true)
+    }, 350)
+
+    setTimeout(() => {
+      this.emit(`typing:${conversationId}`, false)
       const replies = [
         'Thanks for reaching out! I will check this right away.',
         'Got it. Everything looks good on our end!',
@@ -385,7 +398,7 @@ class MockDatabase {
 
       this.emit(`message:${conversationId}`, replyMsg)
       this.emit('message_any', replyMsg)
-    }, 1200)
+    }, 1550)
   }
 
   // --- Auth & Profiles ---
@@ -412,6 +425,14 @@ class MockDatabase {
     Object.assign(profile, updates)
     this.save()
     return profile
+  }
+
+  public updateUserPassword(userId: string, newPassword: string): boolean {
+    const user = this.data.users.find((u) => u.id === userId)
+    if (!user) return false
+    user.password = newPassword
+    this.save()
+    return true
   }
 }
 

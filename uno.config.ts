@@ -6,11 +6,11 @@ export default defineConfig({
     {
       overlay: 'w-full h-full absolute place-items-center grid bg-opacity-60 dark:bg-opacity-80 surface-1 z-99',
     },
-    { 'summary-icon': 'p2 rounded-3 dark:text-dark-9 bg-accent-3 box-content' },
+    { 'summary-icon': 'p2 rounded-3 dark:bg-dark-2 bg-accent-3/30 text-accent-9 dark:text-accent-6 box-content' },
 
     // typography - colors
     { 'typo-clr-base': 'dark:text-gray-1 text-gray-9' },
-    { 'typo-clr-muted': 'text-gray-4' },
+    { 'typo-clr-muted': 'text-gray-500 dark:text-gray-300' },
     { 'typo-clr-disabled': 'dark:text-gray-7 text-gray-3' },
     { 'typo-clr-on-primary': 'text-gray-1' },
     { 'typo-clr-primary': 'text-indigo-5 dark:text-violet-5' },

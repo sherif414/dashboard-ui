@@ -1,8 +1,10 @@
 import type { getTableDataParams, OrderItem, Product, ProductTable } from 'types'
 import { mockDb } from './mock/mockDb'
+import { simulateLatency } from './delay'
 
 export const productService = {
   async getProducts({ orderOptions, itemsPerPage, page }: getTableDataParams): Promise<{ data: ProductTable[]; count: number }> {
+    await simulateLatency(180, 300)
     let list = [...mockDb.products]
 
     // Sorting
@@ -46,14 +48,17 @@ export const productService = {
   },
 
   async getProductById(id: number): Promise<Product | null> {
+    await simulateLatency(120, 220)
     return mockDb.getProduct(id)
   },
 
   async getProductOrderItems(productId: number): Promise<OrderItem[]> {
+    await simulateLatency(150, 250)
     return mockDb.order_items.filter((item) => item.product_id === productId)
   },
 
   async togglePublishStatus(id: number): Promise<{ data: Product | null; error: null | { message: string } }> {
+    await simulateLatency(300, 450)
     const product = mockDb.getProduct(id)
     if (!product) return { data: null, error: { message: 'Product not found' } }
     const updated = mockDb.updateProduct(id, { published: !product.published })
@@ -61,6 +66,7 @@ export const productService = {
   },
 
   async createProduct(product: Partial<Product>, imageFile?: File | null): Promise<{ data: Product | null; error: null | { message: string } }> {
+    await simulateLatency(450, 650)
     try {
       let imagePath: string | null = null
       if (imageFile) {
@@ -91,11 +97,13 @@ export const productService = {
   },
 
   async insertImage(image: File, _fileName: string): Promise<{ data: { path: string }; error: null }> {
+    await simulateLatency(350, 500)
     const path = await mockDb.fileToBase64(image)
     return { data: { path }, error: null }
   },
 
   async searchProducts(searchTerm: string): Promise<Product[]> {
+    await simulateLatency(150, 250)
     const term = searchTerm.toLowerCase().trim()
     if (!term) return []
     return mockDb.products

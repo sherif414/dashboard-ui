@@ -77,11 +77,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
+import { useAuthStore } from '~/store/auth'
 import { useMessage } from '~/composables/message'
 import Btn from '~/components/Btn.vue'
 import TextField from '~/components/TextField.vue'
 import Toggle from '~/components/Toggle.vue'
 import { ILock, ICheckCircle } from '~/components/icons'
+
+const auth = useAuthStore()
 
 const currentPassword = ref('')
 const newPassword = ref('')
@@ -90,6 +93,10 @@ const isLoading = ref(false)
 const twoFactorEnabled = useLocalStorage('settings_2fa_enabled', false)
 
 async function handleChangePassword() {
+  if (!currentPassword.value) {
+    useMessage('warn', 'Please enter your current password')
+    return
+  }
   if (!newPassword.value || !confirmPassword.value) {
     useMessage('warn', 'Please enter a new password')
     return
@@ -104,11 +111,17 @@ async function handleChangePassword() {
   }
 
   isLoading.value = true
-  await new Promise((resolve) => setTimeout(resolve, 600))
+  const error = await auth.changePassword(currentPassword.value, newPassword.value)
+  isLoading.value = false
+
+  if (error) {
+    useMessage('error', error.message || 'Failed to update password')
+    return
+  }
+
   useMessage('success', 'Password updated successfully!')
   currentPassword.value = ''
   newPassword.value = ''
   confirmPassword.value = ''
-  isLoading.value = false
 }
 </script>

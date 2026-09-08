@@ -23,8 +23,8 @@
     </header>
     <div class="grow relative min-h-200px">
       <TransitionGroup
-        enter-active-class="transition-all duration-300"
-        enter-from-class="translate-y-2rem opacity-0"
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="translate-y-2rem opacity-0 scale-95"
         move-class="transition-all duration-300"
         tag="ul"
         class="w-full h-full overflow-y-auto flex flex-col-reverse gap-4 p-4 sm:p-6 absolute py-2"
@@ -38,6 +38,21 @@
           {{ msg.content }}
         </ConversationMessage>
       </TransitionGroup>
+
+      <!-- Simulated Typing Indicator Bubble -->
+      <Transition name="fade">
+        <div
+          v-if="isTyping"
+          class="absolute bottom-3 left-6 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full surface-2 border border-gray-2 dark:border-dark-3 shadow-xs text-12px typo-clr-muted"
+        >
+          <span class="font-medium text-11px">{{ otherMember?.full_name || 'Contact' }} is typing</span>
+          <span class="inline-flex gap-1.5 items-center">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-5 dark:bg-violet-4 animate-typing-1"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-5 dark:bg-violet-4 animate-typing-2"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-5 dark:bg-violet-4 animate-typing-3"></span>
+          </span>
+        </div>
+      </Transition>
     </div>
     <footer class="p-3 border-t border-gray-2 dark:border-dark-3">
       <form
@@ -61,7 +76,7 @@
         <button
           type="submit"
           :disabled="!formData.trim()"
-          class="flex items-center gap-1.5 py-1.5 px-3.5 fill-primary-2 typo-clr-on-primary rounded font-medium typo-sm cursor-pointer transition disabled:opacity-40 disabled:cursor-not-allowed hover:fill-primary-3 focus:outline-none focus-visible:(ring-2 ring-offset-2 ring-indigo-5 dark:ring-violet-5)"
+          class="flex items-center gap-1.5 py-1.5 px-3.5 fill-primary-2 typo-clr-on-primary rounded-md font-medium typo-sm cursor-pointer transition-all duration-150 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed hover:fill-primary-3 focus:outline-none focus-visible:(ring-2 ring-offset-2 ring-indigo-5 dark:ring-violet-5)"
         >
           <span>Send</span>
           <ISend width="14" height="14" />
@@ -97,7 +112,9 @@ const otherMember = computed(() =>
 )
 
 const messages = ref<Message[]>([])
+const isTyping = ref(false)
 let unsubLive: (() => void) | null = null
+let unsubTyping: (() => void) | null = null
 
 async function loadMessages(conversationId: string) {
   try {
@@ -114,6 +131,12 @@ async function loadMessages(conversationId: string) {
       messages.value.unshift(newMsg)
     }
   })
+
+  // Subscribe to typing indicator
+  if (unsubTyping) unsubTyping()
+  unsubTyping = chatService.subscribeToTyping(conversationId, (status) => {
+    isTyping.value = status
+  })
 }
 
 watch(
@@ -126,6 +149,7 @@ watch(
 
 onUnmounted(() => {
   if (unsubLive) unsubLive()
+  if (unsubTyping) unsubTyping()
 })
 
 const formData = ref('')

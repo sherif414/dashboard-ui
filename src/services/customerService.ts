@@ -1,8 +1,10 @@
 import type { Customer, CustomerTable, getTableDataParams, Order } from 'types'
 import { mockDb } from './mock/mockDb'
+import { simulateLatency } from './delay'
 
 export const customerService = {
   async getCustomers({ orderOptions, itemsPerPage, page }: getTableDataParams): Promise<{ data: CustomerTable[]; count: number }> {
+    await simulateLatency(180, 300)
     let list = [...mockDb.customers]
 
     // Sorting
@@ -40,10 +42,12 @@ export const customerService = {
   },
 
   async getCustomerById(id: number): Promise<Customer | null> {
+    await simulateLatency(120, 220)
     return mockDb.getCustomer(id)
   },
 
   async createCustomer(data: { name: string; email: string; phone: string }): Promise<{ data: Customer | null; error: null | { message: string } }> {
+    await simulateLatency(450, 650)
     try {
       const created = mockDb.insertCustomer({
         name: data.name,
@@ -58,6 +62,7 @@ export const customerService = {
   },
 
   async toggleCustomerStatus(id: number): Promise<{ data: Customer | null; error: null | { message: string } }> {
+    await simulateLatency(300, 450)
     const customer = mockDb.getCustomer(id)
     if (!customer) return { data: null, error: { message: 'Customer not found' } }
     const updated = mockDb.updateCustomer(id, { status: !customer.status })
@@ -65,10 +70,12 @@ export const customerService = {
   },
 
   async getCustomerOrders(customerId: number): Promise<Order[]> {
+    await simulateLatency(150, 250)
     return mockDb.orders.filter((o) => o.owner === customerId)
   },
 
   async searchCustomers(searchTerm: string): Promise<{ id: number; name: string }[]> {
+    await simulateLatency(150, 250)
     const term = searchTerm.toLowerCase().trim()
     if (!term) return []
     return mockDb.customers

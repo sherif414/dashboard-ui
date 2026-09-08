@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/store/auth'
+import { getProfileImageUrl } from '~/services/imageUtils'
 import {
   ILogo,
   IDashboard,
@@ -16,8 +17,12 @@ import {
 const auth = useAuthStore()
 const router = useRouter()
 
-const isExpanded = ref(false)
-const linkNameOpacity = computed(() => (isExpanded.value ? '1' : '0'))
+// Ensure profile data is loaded for the user card
+if (!auth.profile) {
+  auth.getProfile()
+}
+
+const profileImg = computed(() => getProfileImageUrl(auth.profile?.profile_image))
 
 async function signOut() {
   await auth.signOut()
@@ -27,93 +32,134 @@ async function signOut() {
 
 <template>
   <aside
-    :class="isExpanded ? 'w-12rem' : 'w-4rem'"
-    class="sidebar h-screen transition-width duration-300 ease flex flex-col py-2 px-3 surface-1 typo-clr-base border-r border-gray-2 dark:border-dark-3 shrink-0"
+    class="sidebar h-full w-60 min-w-60 max-w-60 flex flex-col surface-1 typo-clr-base border-r border-gray-2 dark:border-dark-3 shrink-0 select-none"
   >
-    <router-link activeClass="" to="/" class="sidebar__link p-0">
-      <ILogo width="45" height="45" />
-      <span class="sidebar__link__name typo-lg font-normal">Metrix</span>
-    </router-link>
-    <nav class="flex flex-col w-full grow gap-y-4 typo-sm pt-2rem">
-      <button
-        type="button"
-        :aria-label="isExpanded ? 'Collapse sidebar' : 'Expand sidebar'"
-        class="ml-2 self-start cursor-pointer bg-transparent border-none p-1 rounded focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5)"
-        @click="isExpanded = !isExpanded"
+    <!-- Brand Header: 58px fixed height perfectly aligned with TheHeader -->
+    <div class="h-58px px-4 flex items-center border-b border-gray-2 dark:border-dark-3 shrink-0">
+      <router-link
+        to="/"
+        class="flex items-center gap-2.5 group focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5 rounded-md p-1)"
+        aria-label="Metrix Dashboard Home"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
+        <ILogo width="30" height="30" class="shrink-0 transition group-hover:scale-105" />
+        <div class="flex flex-col">
+          <span class="font-bold text-1.125rem typo-clr-base tracking-tight leading-none">Metrix</span>
+          <span class="text-10px font-mono typo-clr-muted uppercase tracking-wider mt-0.5">Operations</span>
+        </div>
+      </router-link>
+    </div>
+
+    <!-- Main Navigation Sections -->
+    <nav class="flex flex-col w-full grow p-3 gap-y-5 overflow-y-auto">
+      <!-- Section: Store Operations -->
+      <div class="flex flex-col gap-y-1">
+        <span class="px-3 text-10px font-mono font-semibold uppercase tracking-wider typo-clr-muted mb-1">
+          Store Operations
+        </span>
+
+        <router-link
+          to="/"
+          class="sidebar__link"
+          active-class="sidebar__link--active"
         >
-          <path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-        </svg>
-      </button>
-      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/">
-        <IDashboard />
-        <span class="sidebar__link__name">Dashboard</span>
-      </router-link>
+          <IDashboard width="20" height="20" class="shrink-0" />
+          <span class="font-medium text-14px">Dashboard</span>
+        </router-link>
 
-      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/orders">
-        <IShoppingBag />
-        <span class="sidebar__link__name">Orders</span>
-      </router-link>
+        <router-link
+          to="/orders"
+          class="sidebar__link"
+          active-class="sidebar__link--active"
+        >
+          <IShoppingBag width="20" height="20" class="shrink-0" />
+          <span class="font-medium text-14px">Orders</span>
+        </router-link>
 
-      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/customers">
-        <ICustomers />
-        <span class="sidebar__link__name">Customers</span>
-      </router-link>
+        <router-link
+          to="/customers"
+          class="sidebar__link"
+          active-class="sidebar__link--active"
+        >
+          <ICustomers width="20" height="20" class="shrink-0" />
+          <span class="font-medium text-14px">Customers</span>
+        </router-link>
 
-      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/products">
-        <IInventory />
-        <span class="sidebar__link__name">products</span>
-      </router-link>
+        <router-link
+          to="/products"
+          class="sidebar__link"
+          active-class="sidebar__link--active"
+        >
+          <IInventory width="20" height="20" class="shrink-0" />
+          <span class="font-medium text-14px">Products</span>
+        </router-link>
+      </div>
 
-      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/chat">
-        <IMessage />
-        <span class="sidebar__link__name">Chat</span>
-      </router-link>
+      <!-- Section: Support & Configuration -->
+      <div class="flex flex-col gap-y-1">
+        <span class="px-3 text-10px font-mono font-semibold uppercase tracking-wider typo-clr-muted mb-1">
+          System & Support
+        </span>
 
-      <router-link class="sidebar__link" active-class="sidebar__link--active" to="/settings">
-        <ISetting />
-        <span class="sidebar__link__name">Settings</span>
-      </router-link>
+        <router-link
+          to="/chat"
+          class="sidebar__link"
+          active-class="sidebar__link--active"
+        >
+          <IMessage width="20" height="20" class="shrink-0" />
+          <span class="font-medium text-14px">Live Chat</span>
+        </router-link>
+
+        <router-link
+          to="/settings"
+          class="sidebar__link"
+          active-class="sidebar__link--active"
+        >
+          <ISetting width="20" height="20" class="shrink-0" />
+          <span class="font-medium text-14px">Settings</span>
+        </router-link>
+      </div>
     </nav>
-    <!-- user control -->
-    <div class="flex flex-col justify-end w-full">
-      <button @click="signOut" type="button" class="sidebar__link text-error">
-        <ILogout class="rotate-180 text-error!" />
-        <span class="sidebar__link__name left-3.5rem translate-y--2px">logout</span>
-      </button>
+
+    <!-- User Profile Card & Sign Out Footer -->
+    <div class="p-3 border-t border-gray-2 dark:border-dark-3 mt-auto shrink-0">
+      <div class="flex items-center gap-2.5 p-2 rounded-lg surface-2 border border-gray-2 dark:border-dark-3">
+        <img
+          :src="profileImg"
+          :alt="auth.profile?.full_name ? `${auth.profile.full_name}'s avatar` : 'User profile avatar'"
+          class="w-8 h-8 rounded-full object-cover shrink-0 border border-gray-2 dark:border-dark-3"
+        />
+        <div class="flex flex-col min-w-0 grow">
+          <span class="text-12px font-semibold truncate typo-clr-base leading-tight">
+            {{ auth.profile?.full_name || 'Store Admin' }}
+          </span>
+          <span class="text-10px font-mono typo-clr-muted truncate">
+            {{ auth.profile?.email || 'admin@metrix.store' }}
+          </span>
+        </div>
+        <button
+          type="button"
+          @click="signOut"
+          class="p-1.5 rounded-md typo-clr-muted hover:text-error hover:surface-1 transition cursor-pointer shrink-0 focus:outline-none focus-visible:(ring-2 ring-red-5)"
+          title="Sign out of Metrix"
+          aria-label="Sign out"
+        >
+          <ILogout class="rotate-180 w-4 h-4 text-error" />
+        </button>
+      </div>
     </div>
   </aside>
 </template>
 
-<style>
+<style scoped>
 .sidebar__link {
-  --at-apply: flex items-center justify-start box-content py-2 pl-8px duration-300;
+  --at-apply: flex items-center gap-3 px-3 py-2 rounded-lg text-14px font-medium typo-clr-muted hover:typo-clr-base hover:surface-2 transition group focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5);
 }
-.sidebar__link svg {
-  --at-apply: typo-clr-muted;
-}
-.dark .sidebar__link:hover svg {
-  --at-apply: fill-gray-1 typo-clr-base;
-}
+
 .sidebar__link--active {
-  --at-apply: fill-primary-2 rounded-12px typo-clr-on-primary;
-}
-.sidebar__link--active svg {
-  --at-apply: stroke-none fill-gray-1;
+  --at-apply: fill-primary-2 typo-clr-on-primary font-semibold shadow-xs;
 }
 
-.sidebar__link__name {
-  --at-apply: absolute left-4rem opacity-0 pointer-events-none;
-}
-
-.sidebar__link__name {
-  transition: opacity 0ms 150ms;
-  opacity: v-bind('linkNameOpacity');
+.sidebar__link--active :deep(svg) {
+  --at-apply: text-white stroke-white;
 }
 </style>

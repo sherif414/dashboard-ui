@@ -71,36 +71,38 @@
         </TextField>
 
         <div v-if="orderItemsList.length" class="grow relative min-h-40">
-          <ul
+          <TransitionGroup
+            name="list"
+            tag="ul"
             class="flex flex-col typo-sm divide-y divide-gray-2 dark:divide-dark-3 w-full h-full max-h-60 overflow-y-auto"
           >
             <!-- order item -->
             <li
               v-for="(item, idx) in orderItemsList"
-              :key="idx"
-              class="grid grid-cols-[max-content_max-content_1fr] grid-rows-2 gap-x-2 gap-y-1 items-center p2"
+              :key="item.product.id ?? idx"
+              class="grid grid-cols-[max-content_max-content_1fr] grid-rows-2 gap-x-2 gap-y-1 items-center p2 transition-all duration-200"
             >
               <img class="w-12 h-12 row-span-2 object-cover rounded" :src="getProductImageUrl(item.product.image)" alt="product image" />
               <h3>{{ item.product.name ?? '-' }}</h3>
-              <button type="button" @click="removeItem(item)" class="justify-self-end text-error cursor-pointer">remove</button>
+              <button type="button" @click="removeItem(item)" class="justify-self-end text-error hover:underline active:scale-95 transition cursor-pointer">remove</button>
               <span>${{ item.product.sell_price ?? '-' }}</span>
               <div class="justify-self-end flex gap-3 items-center">
                 <IMinus
                   @click="item.quantity > 1 ? item.quantity-- : removeItem(item)"
-                  class="box-content py-1 px-2 surface-2 rounded-lg cursor-pointer"
+                  class="box-content py-1 px-2 surface-2 hover:surface-3 active:scale-90 transition rounded-lg cursor-pointer"
                   width="12"
                   height="12"
                 />
                 <span class="typo-base">{{ item.quantity }}</span>
                 <IAdd
                   @click="item.quantity++"
-                  class="box-content py-1 px-2 surface-2 rounded-lg cursor-pointer"
+                  class="box-content py-1 px-2 surface-2 hover:surface-3 active:scale-90 transition rounded-lg cursor-pointer"
                   width="12"
                   height="12"
                 />
               </div>
             </li>
-          </ul>
+          </TransitionGroup>
         </div>
 
         <!-- empty state -->

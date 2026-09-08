@@ -54,6 +54,16 @@ export const useAuthStore = defineStore('main', () => {
     return error
   }
 
+  async function changePassword(currentPassword: string, newPassword: string) {
+    if (!user.value) return { message: 'Not logged in' }
+    const res = await authService.changePassword(user.value.id, currentPassword, newPassword)
+    if (res.error) return res.error
+    if (user.value) {
+      user.value.password = newPassword
+    }
+    return null
+  }
+
   authService.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
       user.value = session?.user ?? null
@@ -64,5 +74,5 @@ export const useAuthStore = defineStore('main', () => {
     }
   })
 
-  return { redirectPath, publicPages, getUser, getProfile, updateProfile, signOut, signUp, login, profile, user }
+  return { redirectPath, publicPages, getUser, getProfile, updateProfile, signOut, signUp, login, changePassword, profile, user }
 })

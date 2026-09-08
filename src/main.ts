@@ -16,5 +16,8 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 const app = createApp(App)
 
-app.use(router).use(pinia)
-app.mount('#app')
+app.use(pinia).use(router)
+
+router.isReady().then(() => {
+  app.mount('#app')
+})

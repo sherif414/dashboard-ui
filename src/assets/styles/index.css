@@ -100,12 +100,150 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
-  --at-apply: transition-opacity duration-300;
+  transition: opacity 160ms ease-out;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  --at-apply: opacity-0;
+  opacity: 0;
+}
+
+/* ==========================================================================
+   High-Craft Motion Engine
+   ========================================================================== */
+
+/* Ambient backdrop breathing */
+@keyframes ambient-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -20px) scale(1.08);
+  }
+  100% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+.animate-ambient-drift-1 {
+  animation: ambient-drift 14s ease-in-out infinite alternate;
+}
+
+.animate-ambient-drift-2 {
+  animation: ambient-drift 18s ease-in-out infinite alternate-reverse;
+}
+
+/* Card Bloom Entrance */
+@keyframes card-bloom {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-card-bloom {
+  animation: card-bloom 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Auth Pages Directional Transition (Login <-> Signup) */
+.auth-forward-enter-active,
+.auth-forward-leave-active,
+.auth-backward-enter-active,
+.auth-backward-leave-active {
+  transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-forward-enter-from {
+  opacity: 0;
+  transform: translateX(28px) scale(0.98);
+}
+
+.auth-forward-leave-to {
+  opacity: 0;
+  transform: translateX(-28px) scale(0.98);
+}
+
+.auth-backward-enter-from {
+  opacity: 0;
+  transform: translateX(-28px) scale(0.98);
+}
+
+.auth-backward-leave-to {
+  opacity: 0;
+  transform: translateX(28px) scale(0.98);
+}
+
+/* Portal Unlock Transition (Auth Shell <-> Dashboard Shell) */
+.portal-unlock-enter-active {
+  transition: opacity 320ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-unlock-leave-active {
+  transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-unlock-enter-from {
+  opacity: 0;
+  transform: scale(0.98) translateY(10px);
+}
+
+.portal-unlock-leave-to {
+  opacity: 0;
+  transform: scale(1.03) translateY(-6px);
+}
+
+/* Staggered App Shell Components Reveal */
+.sidebar-slide-enter-active {
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1), opacity 380ms ease-out;
+}
+.sidebar-slide-leave-active {
+  transition: transform 220ms ease-in, opacity 220ms ease-in;
+}
+.sidebar-slide-enter-from,
+.sidebar-slide-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.header-slide-enter-active {
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease-out;
+}
+.header-slide-leave-active {
+  transition: transform 200ms ease-in, opacity 200ms ease-in;
+}
+.header-slide-enter-from,
+.header-slide-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* Dashboard page transitions (dashboard <-> orders, etc.) */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-fade-enter-from,
+.page-fade-leave-to {
+  opacity: 0;
+}
+
+/* Chart Canvas Period Crossfade */
+.chart-fade-enter-active,
+.chart-fade-leave-active {
+  transition: opacity 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chart-fade-enter-from,
+.chart-fade-leave-to {
+  opacity: 0;
 }
 
 .slide-left-enter-active,
@@ -127,17 +265,84 @@ body {
 
 
 dialog[open] {
-  animation: showModal 150ms ease normal;
+  animation: showModal 220ms cubic-bezier(0.16, 1, 0.3, 1) normal;
 }
 
 @keyframes showModal {
   from {
-    scale: 80%;
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
   }
 
   to {
-    scale: 100%;
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  animation: backdropFade 220ms ease-out;
+}
+
+@keyframes backdropFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Button Crossfade (Text <-> Spinner) */
+.btn-crossfade-enter-active,
+.btn-crossfade-leave-active {
+  transition: opacity 150ms ease, transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-crossfade-enter-from,
+.btn-crossfade-leave-to {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+/* Header Icon Spin Transition (Sun <-> Dark) */
+.icon-spin-enter-active,
+.icon-spin-leave-active {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease;
+}
+
+.icon-spin-enter-from {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.7);
+}
+
+.icon-spin-leave-to {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.7);
+}
+
+/* Typing Indicator Wave (Smooth Deceleration) */
+@keyframes typing-wave {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+.animate-typing-1 {
+  animation: typing-wave 1000ms cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+.animate-typing-2 {
+  animation: typing-wave 1000ms cubic-bezier(0.16, 1, 0.3, 1) 160ms infinite;
+}
+.animate-typing-3 {
+  animation: typing-wave 1000ms cubic-bezier(0.16, 1, 0.3, 1) 320ms infinite;
 }
 
 .hide-arrows[type='number']::-webkit-outer-spin-button,
@@ -165,16 +370,14 @@ dialog[open] {
 }
 
 .notification__msg {
-  --at-apply: w-auto h-35px flex shrink-0 items-center justify-center p-4 transition-all duration-300 opacity-0 mt-0 mb-10px translate-y--100% shadow-md text-14px rounded-md surface-3;
+  --at-apply: w-auto h-38px flex shrink-0 items-center justify-center px-4 py-2 transition-all duration-300 opacity-0 mt-0 mb-10px translate-y--100% shadow-lg text-14px rounded-md surface-3 border border-gray-2 dark:border-dark-3;
 }
 
 .msg__content {
-
   --at-apply: max-w-500px text-ellipsis whitespace-nowrap overflow-hidden;
 }
 
 .notification__msg svg {
-
   --at-apply: w-4 h-4 mr-3 !important;
 }
 
@@ -183,19 +386,19 @@ dialog[open] {
 }
 
 .msg--error {
-  --at-apply: text-error;
+  --at-apply: text-error font-medium;
 }
 
 .msg--success {
-  --at-apply: text-success;
+  --at-apply: text-success font-medium;
 }
 
 .msg--info {
-  --at-apply: typo-clr-primary;
+  --at-apply: typo-clr-primary font-medium;
 }
 
 .msg--warn {
-  --at-apply: text-warn;
+  --at-apply: text-warn font-medium;
 }
 
 .msg--icon {
@@ -203,12 +406,25 @@ dialog[open] {
 }
 
 .msg--show {
-
   --at-apply: opacity-100 translate-y-0;
 }
 
 .msg--hide {
-
   --at-apply: opacity-0 mt--45px;
+}
 
+/* Reduced motion accessibility conformance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .loading::after,
+  .loading::before {
+    animation: spin 1500ms linear infinite !important;
+  }
 }

@@ -1,17 +1,21 @@
 import type { ConversationWithProfile, Message, Profile } from 'types'
 import { mockDb } from './mock/mockDb'
+import { simulateLatency } from './delay'
 
 export const chatService = {
   async getConversations(currentUserId: string): Promise<ConversationWithProfile[]> {
+    await simulateLatency(150, 280)
     return mockDb.getConversationsWithProfiles(currentUserId)
   },
 
   async getConversationById(id: string, currentUserId: string): Promise<ConversationWithProfile | null> {
+    await simulateLatency(100, 200)
     const all = mockDb.getConversationsWithProfiles(currentUserId)
     return all.find((c) => c.id === id) ?? null
   },
 
   async findExistingConversation(otherUserId: string, currentUserId: string): Promise<ConversationWithProfile | null> {
+    await simulateLatency(100, 200)
     const all = mockDb.getConversationsWithProfiles(currentUserId)
     const existing = all.find(
       (c) =>
@@ -22,14 +26,17 @@ export const chatService = {
   },
 
   async createConversation(currentUserId: string, otherUserId: string): Promise<ConversationWithProfile> {
+    await simulateLatency(300, 450)
     return mockDb.createConversation(currentUserId, otherUserId)
   },
 
   async getMessages(conversationId: string): Promise<Message[]> {
+    await simulateLatency(120, 220)
     return mockDb.getMessages(conversationId)
   },
 
   async sendMessage(conversationId: string, sentBy: string, content: string): Promise<Message> {
+    await simulateLatency(150, 250)
     return mockDb.sendMessage(conversationId, sentBy, content)
   },
 
@@ -37,7 +44,12 @@ export const chatService = {
     return mockDb.on(`message:${conversationId}`, callback)
   },
 
+  subscribeToTyping(conversationId: string, callback: (isTyping: boolean) => void): () => void {
+    return mockDb.on(`typing:${conversationId}`, callback)
+  },
+
   async searchProfiles(searchTerm: string, excludeUserId?: string): Promise<Profile[]> {
+    await simulateLatency(150, 250)
     const term = searchTerm.toLowerCase().trim()
     if (!term) return []
     return mockDb.profiles

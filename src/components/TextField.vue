@@ -1,6 +1,6 @@
 <template>
   <label :class="wrapperClass" class="flex flex-col gap-1 relative">
-    <div v-if="label" class="capitalize typo-sm font-medium">
+    <div v-if="label" class="capitalize typo-sm font-medium typo-clr-base">
       {{ label }}
     </div>
     <div :class="{ 'text-error': isInvalid }" class="relative w-full">
@@ -12,7 +12,7 @@
           $slots.append ? 'pr-11' : 'pr-4',
           isInvalid ? 'bg-opacity-10! bg-error!' : 'surface-2',
         ]"
-        class="rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none"
+        class="rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none typo-clr-base placeholder:text-gray-4 dark:placeholder:text-gray-5 transition-colors"
         :style="{ height: `${height}rem` }"
         @[eventType]="handleEmit"
         @invalid="isInvalid = true"
@@ -29,15 +29,15 @@
         <slot name="prepend" />
       </div>
       <div
-        class="absolute h-full w-12 grid place-items-center right-0 top-0 pointer-events-none [&_svg]:(w-5 h-5)"
+        class="absolute h-full w-12 grid place-items-center right-0 top-0 pointer-events-none [&_svg]:(w-5 h-5) [&_button]:pointer-events-auto"
         v-if="$slots.append"
       >
         <slot name="append" />
       </div>
-      <div v-show="isInvalid" class="text-error absolute top-110% left-0 text-10px">
-        {{ _errorMsg ?? 'invalid input' }}
-      </div>
       <slot name="dropdown"></slot>
+    </div>
+    <div v-show="isInvalid" class="text-error text-11px mt-0.5 leading-tight">
+      {{ _errorMsg ?? 'invalid input' }}
     </div>
   </label>
 </template>

@@ -3,6 +3,7 @@ export type MaybeArray<T> = T | T[]
 export interface User {
   id: string
   email?: string
+  password?: string
   user_metadata?: {
     full_name?: string
     [key: string]: any
