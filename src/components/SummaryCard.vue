@@ -13,7 +13,8 @@
       </div>
       <span
         v-if="subtitle"
-        class="typo-sm font-medium px-2 py-0.5 rounded surface-2 border border-gray-2 dark:border-dark-3 typo-clr-muted"
+        class="typo-sm font-medium px-2 py-0.5 rounded border"
+        :class="fill === 'primary' ? 'bg-white/15 border-white/20 text-white' : 'surface-2 border-gray-2 dark:border-dark-3 typo-clr-muted'"
       >
         {{ subtitle }}
       </span>
@@ -23,7 +24,8 @@
         v-else-if="filter"
         aria-haspopup="true"
         :aria-expanded="showFilter"
-        class="relative typo-sm typo-clr-muted hover:typo-clr-base transition focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5 rounded)"
+        class="relative typo-sm transition focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5 rounded)"
+        :class="fill === 'primary' ? 'text-white/80 hover:text-white' : 'typo-clr-muted hover:typo-clr-base'"
       >
         this {{ filterBy }}
         <ICaretDown class="ml-1 inline" width="12" height="12" />
@@ -42,22 +44,24 @@
     <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 pt-1 text-left">
       <div v-for="{ name, value, growth } in data" :key="name" class="flex flex-col gap-0.5 min-w-0">
         <p
-          class="typo-sm font-medium typo-clr-muted truncate uppercase tracking-wider text-11px"
-          :class="fill === 'primary' ? 'text-white/80!' : ''"
+          class="typo-sm font-medium truncate uppercase tracking-wider text-11px"
+          :class="fill === 'primary' ? 'text-white/80!' : 'typo-clr-muted'"
         >
           {{ name }}
         </p>
         <div class="flex items-baseline gap-1.5 flex-wrap">
           <p
-            class="text-1.35rem sm:text-1.5rem font-bold font-mono tracking-tight typo-clr-base leading-tight"
-            :class="fill === 'primary' ? 'text-white!' : ''"
+            class="text-1.35rem sm:text-1.5rem font-bold font-mono tracking-tight leading-tight"
+            :class="fill === 'primary' ? 'text-white!' : 'typo-clr-base'"
           >
             {{ !!value || value === 0 ? value : '-' }}
           </p>
           <span
             v-if="growth"
             class="typo-sm font-medium inline-flex items-center text-11px"
-            :class="String(growth).startsWith('-') ? 'text-error dark:text-rose-400' : 'text-success dark:text-emerald-400'"
+            :class="fill === 'primary'
+              ? (String(growth).startsWith('-') ? 'text-rose-200 font-semibold' : 'text-emerald-200 font-semibold')
+              : (String(growth).startsWith('-') ? 'text-rose-600 dark:text-rose-400 font-semibold' : 'text-emerald-700 dark:text-emerald-400 font-semibold')"
           >
             {{ growth }}
           </span>

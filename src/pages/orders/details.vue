@@ -1,6 +1,7 @@
 <template>
-  <!-- 404 / Missing Order State -->
-  <main class="grid place-items-center w-full min-h-[60vh] p8" v-if="hasError">
+  <div class="w-full flex flex-col grow">
+    <!-- 404 / Missing Order State -->
+    <main class="grid place-items-center w-full min-h-[60vh] p8" v-if="hasError">
     <div class="flex flex-col items-center gap-3 text-center max-w-md">
       <IShoppingBag width="48" height="48" class="typo-clr-muted opacity-40" />
       <h1 class="typo-head text-xl font-bold">Order was not found</h1>
@@ -219,7 +220,7 @@
           <div class="flex items-center justify-between text-xs">
             <span class="typo-clr-muted">Customer Since</span>
             <span class="font-mono text-xs typo-clr-base">
-              {{ customer?.created_at ? useDateFormat(customer.created_at, 'DD MMM YYYY').value : '-' }}
+              {{ formattedCustomerSince }}
             </span>
           </div>
         </div>
@@ -369,12 +370,12 @@
       </template>
     </BaseTable>
   </main>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
-import { useDateFormat } from '@vueuse/core'
 import type { Customer, Order } from 'types'
 import { orderService } from '~/services/orderService'
 import { useMessage } from '~/composables/message'
@@ -430,9 +431,15 @@ const nextLifecycleStage = computed(() => {
 })
 
 const formattedDate = computed(() => {
-  return order.value?.created_at
-    ? useDateFormat(order.value.created_at, 'DD MMM YYYY · hh:mm aa').value
-    : '-'
+  if (!order.value?.created_at) return '-'
+  const d = new Date(order.value.created_at)
+  return isNaN(d.getTime()) ? order.value.created_at : d.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
+})
+
+const formattedCustomerSince = computed(() => {
+  if (!customer.value?.created_at) return '-'
+  const d = new Date(customer.value.created_at)
+  return isNaN(d.getTime()) ? customer.value.created_at : d.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
 })
 
 function calculateItemTotal(item: any): string {

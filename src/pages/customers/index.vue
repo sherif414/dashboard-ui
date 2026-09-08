@@ -247,8 +247,8 @@
                   @click="toggleCustomerStatus(customer.id)"
                   class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-11px font-medium capitalize transition-all duration-150 active:scale-95 cursor-pointer border focus:outline-none"
                   :class="customer.status
-                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
-                    : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/20'"
+                    ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
+                    : 'bg-amber-500/10 text-amber-800 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/20'"
                   :title="customer.status ? 'Click to suspend customer' : 'Click to activate customer'"
                 >
                   <span
@@ -264,14 +264,14 @@
                 <div class="flex items-center justify-end gap-1.5">
                   <RouterLink
                     to="/chat"
-                    class="p-1.5 rounded surface-2 hover:bg-indigo-50 dark:hover:bg-violet-950/30 text-indigo-600 dark:text-violet-400 transition-all duration-150 active:scale-95"
+                    class="p-1.5 rounded surface-2 hover:surface-3 border border-gray-2 dark:border-dark-3 text-indigo-600 dark:text-violet-400 transition-all duration-150 active:scale-95"
                     title="Send message to customer"
                   >
                     <IMessage width="14" height="14" />
                   </RouterLink>
                   <RouterLink
                     :to="`/customers/${customer.id}`"
-                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded surface-2 hover:bg-indigo-50 dark:hover:bg-violet-950/30 text-indigo-600 dark:text-violet-400 text-xs font-medium transition-all duration-150 active:scale-95"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded surface-2 hover:surface-3 border border-gray-2 dark:border-dark-3 text-indigo-600 dark:text-violet-400 text-xs font-medium transition-all duration-150 active:scale-95"
                     title="View full customer profile"
                   >
                     <IEye width="13" height="13" />

@@ -98,22 +98,26 @@ onBeforeUnmount(() => {
   stroke: none;
 }
 
-#chart-bar .ct-bar {
+.bar-chart-container .ct-bar {
   stroke: var(--clr-primary) !important;
   stroke-linecap: round;
   stroke-width: 13px;
 }
 
-#chart-bar .ct-label {
+.bar-chart-container .ct-label {
   margin-top: 1rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  --at-apply: typo-clr-muted;
 }
 
-.dark .ct-label {
-  color: white;
+.bar-chart-container .ct-series-a .ct-bar {
+  stroke: var(--clr-primary) !important;
+  stroke-opacity: 0.15;
 }
 
-#chart-bar .ct-series-a .ct-bar {
-  stroke: gray !important;
-  stroke-opacity: 0.1;
+.bar-chart-container .ct-series-b .ct-bar {
+  stroke: var(--clr-primary) !important;
+  stroke-opacity: 1;
 }
 </style>

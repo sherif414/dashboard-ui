@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-screen overflow-hidden surface-2 font-sans typo-clr-base">
+  <div class="h-screen w-screen overflow-hidden surface-canvas font-sans typo-clr-base">
     <transition name="portal-unlock" mode="out-in">
       <!-- Public Auth Layout (Login, Signup, Email Confirmation) -->
       <div
@@ -43,11 +43,7 @@
             <TheHeader />
           </transition>
           <div id="main-content" class="grow overflow-y-scroll relative">
-            <router-view v-slot="{ Component, route: currentRoute }">
-              <transition name="page-fade" mode="out-in">
-                <component :is="Component" :key="(currentRoute.meta.pageKey as string) || currentRoute.path" />
-              </transition>
-            </router-view>
+            <router-view />
           </div>
         </div>
       </div>

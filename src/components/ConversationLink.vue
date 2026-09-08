@@ -1,6 +1,6 @@
 <template>
   <RouterLink
-    exact-active-class="surface-2! font-medium shadow-xs border-l-3 border-indigo-5 dark:border-violet-5"
+    exact-active-class="surface-2! font-medium shadow-xs ring-1 ring-indigo-5/30 dark:ring-violet-5/30 text-indigo-600 dark:text-violet-400"
     :to="`/chat/${conversationId}`"
     class="transition-all duration-150 grid grid-cols-[max-content_1fr] p2 px-3 gap-x-3 rounded-md mx-2 hover:surface-2 group focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5)"
     :aria-label="`Chat with ${title ?? 'Contact'}`"

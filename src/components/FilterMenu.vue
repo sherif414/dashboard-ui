@@ -5,26 +5,26 @@
       :aria-expanded="isOpen"
       aria-haspopup="dialog"
       @click="isOpen = !isOpen"
-      class="border border-gray-2 dark:border-dark-3 p-2 pr-3 rounded-md flex items-center gap-x-2 cursor-pointer select-none text-typo-muted hover:text-typo transition-colors"
-      :class="{ 'dark:bg-dark-6 border-indigo-6! dark:border-indigo-5!': isOpen }"
+      class="border border-gray-2 dark:border-dark-3 p-2 pr-3 rounded-md flex items-center gap-x-2 cursor-pointer select-none typo-clr-muted hover:typo-clr-base transition-colors"
+      :class="{ 'surface-2 border-indigo-6! dark:border-violet-5!': isOpen }"
     >
       <IFilter width="14" height="14" /> Filter
     </button>
     <div
       ref="menuRef"
       v-if="isOpen"
-      class="grid items-start text-left gap-y-4 p4 absolute z-11 surface-1 rounded-md w-16rem mt2 border border-gray-2 dark:border-dark-3 shadow-lg"
+      class="grid items-start text-left gap-y-4 p4 absolute z-11 surface-1 rounded-md w-16rem mt2 border border-gray-2 dark:border-dark-3 shadow-lg typo-clr-base"
     >
-      <h3 class="font-medium text-sm">Order Type</h3>
+      <h3 class="font-medium text-sm typo-clr-base">Order Type</h3>
 
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-x-2">
-          <input id="filter-menu-home-delivery" type="checkbox" class="accent-indigo-6" />
-          <label for="filter-menu-home-delivery" class="text-xs cursor-pointer">Home delivery</label>
+          <input id="filter-menu-home-delivery" type="checkbox" class="accent-indigo-6 dark:accent-violet-5" />
+          <label for="filter-menu-home-delivery" class="text-xs cursor-pointer typo-clr-base">Home delivery</label>
         </div>
         <div class="flex items-center gap-x-2">
-          <input id="filter-menu-pickup" type="checkbox" class="accent-indigo-6" />
-          <label for="filter-menu-pickup" class="text-xs cursor-pointer">Pick Up</label>
+          <input id="filter-menu-pickup" type="checkbox" class="accent-indigo-6 dark:accent-violet-5" />
+          <label for="filter-menu-pickup" class="text-xs cursor-pointer typo-clr-base">Pick Up</label>
         </div>
       </div>
       <Select :options="['published', 'unpublished']" size="sm" v-model="filterData.status"
@@ -39,7 +39,7 @@
           <TextField size="sm" type="number" v-model="filterData.priceMax" label="max price" />
         </div>
       </div>
-      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary cursor-pointer text-xs font-medium hover:opacity-90 transition-opacity">Apply Filter</button>
+      <button class="px2 py-6px rounded-md fill-primary-2 typo-clr-on-primary cursor-pointer text-xs font-medium hover:fill-primary-3 transition-colors">Apply Filter</button>
     </div>
   </div>
 </template>

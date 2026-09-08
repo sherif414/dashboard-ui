@@ -1,6 +1,7 @@
 <template>
-  <!-- 404 / Customer Not Found State -->
-  <main class="grid place-items-center w-full min-h-[60vh] p8" v-if="hasError">
+  <div class="w-full flex flex-col grow">
+    <!-- 404 / Customer Not Found State -->
+    <main class="grid place-items-center w-full min-h-[60vh] p8" v-if="hasError">
     <div class="flex flex-col items-center gap-3 text-center max-w-md">
       <ICustomers width="48" height="48" class="typo-clr-muted opacity-40" />
       <h1 class="typo-head text-xl font-bold">Customer was not found</h1>
@@ -69,9 +70,7 @@
         </Chip>
         <span class="typo-sm typo-clr-muted">
           Customer Since:
-          <span class="font-mono font-medium typo-clr-base ml-1">{{
-            customer?.created_at ? useDateFormat(customer.created_at, 'DD MMM YYYY').value : '-'
-          }}</span>
+          <span class="font-mono font-medium typo-clr-base ml-1">{{ formattedCustomerSince }}</span>
         </span>
       </div>
 
@@ -230,12 +229,12 @@
       </template>
     </BaseTable>
   </main>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import { useDateFormat } from '@vueuse/core'
 import type { Customer, Order } from 'types'
 import { customerService } from '~/services/customerService'
 import { useMessage } from '~/composables/message'
@@ -298,6 +297,12 @@ const totalPurchases = computed(() => {
 
 const totalPurchasesFormatted = computed(() => {
   return Number(totalPurchases.value).toFixed(2)
+})
+
+const formattedCustomerSince = computed(() => {
+  if (!customer.value?.created_at) return '-'
+  const d = new Date(customer.value.created_at)
+  return isNaN(d.getTime()) ? customer.value.created_at : d.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
 })
 
 async function getCustomer(id: string): Promise<Customer | null> {

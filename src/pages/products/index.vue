@@ -232,7 +232,7 @@
           @click="selectCategory(cat)"
           :class="[
             selectedCategory === cat
-              ? 'fill-primary-2 typo-clr-on-primary font-medium shadow-xs'
+              ? 'bg-indigo-50 dark:bg-violet-950/50 border border-indigo-300 dark:border-violet-700/60 text-indigo-700 dark:text-violet-300 font-semibold shadow-xs'
               : 'surface-1 border border-gray-2 dark:border-dark-3 typo-clr-muted hover:typo-clr-base hover:surface-2'
           ]"
           class="px-3 py-1 rounded-full whitespace-nowrap transition cursor-pointer"
@@ -284,12 +284,10 @@
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 rounded-md surface-2 border border-gray-2 dark:border-dark-3 flex items-center justify-center shrink-0 overflow-hidden">
                     <img
-                      v-if="row.image"
-                      :src="row.image"
+                      :src="getProductImageUrl(row.image)"
                       :alt="row.name || 'Product'"
                       class="w-full h-full object-cover"
                     />
-                    <IInventory v-else width="18" height="18" class="typo-clr-muted opacity-60" />
                   </div>
                   <div class="min-w-0">
                     <RouterLink
@@ -357,7 +355,7 @@
               <td class="py-3 px-4 text-right whitespace-nowrap">
                 <RouterLink
                   :to="`/products/${row.id}`"
-                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded surface-2 hover:bg-indigo-50 dark:hover:bg-violet-950/30 text-indigo-600 dark:text-violet-400 text-xs font-medium transition"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded surface-2 hover:surface-3 border border-gray-2 dark:border-dark-3 text-indigo-600 dark:text-violet-400 text-xs font-medium transition"
                   title="View full product details"
                 >
                   <IEye width="13" height="13" />
@@ -455,12 +453,10 @@
             <!-- Image / Media Container -->
             <div class="w-full h-36 rounded-md surface-2 border border-gray-2 dark:border-dark-3 flex items-center justify-center overflow-hidden mb-3 relative">
               <img
-                v-if="row.image"
-                :src="row.image"
+                :src="getProductImageUrl(row.image)"
                 :alt="row.name || 'Product'"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              <IInventory v-else width="32" height="32" class="typo-clr-muted opacity-50" />
 
               <span
                 class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-10px font-mono font-medium border"
@@ -514,7 +510,7 @@
 
               <RouterLink
                 :to="`/products/${row.id}`"
-                class="p-1.5 rounded surface-2 hover:bg-indigo-50 dark:hover:bg-violet-950/30 text-indigo-600 dark:text-violet-400 transition-all duration-150 active:scale-95"
+                class="p-1.5 rounded surface-2 hover:surface-3 border border-gray-2 dark:border-dark-3 text-indigo-600 dark:text-violet-400 transition-all duration-150 active:scale-95"
                 title="Inspect product"
               >
                 <IEye width="14" height="14" />
@@ -569,6 +565,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useProductsStore } from '~/store/products'
+import { getProductImageUrl } from '~/services/imageUtils'
 import { IAdd, IInventory, ISearch, IEye } from '~/components/icons'
 
 const store = useProductsStore()
@@ -656,12 +653,12 @@ async function togglePublish(id: number) {
 function getStockBadgeClass(stock?: number | null) {
   const count = stock ?? 0
   if (count === 0) {
-    return 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
+    return 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20'
   }
   if (count < 20) {
-    return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+    return 'bg-amber-500/10 text-amber-800 dark:text-amber-400 border-amber-500/20'
   }
-  return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+  return 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20'
 }
 
 function getStockDotClass(stock?: number | null) {

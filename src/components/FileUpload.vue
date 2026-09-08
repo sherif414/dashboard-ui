@@ -3,13 +3,13 @@
     <label
       ref="dropzoneEl"
       v-if="!displayUrl && !modelValue"
-      :class="{ 'border-accent-9!': isOverDropZone }"
-      class="border-dashed border grow border-gray-3 cursor-pointer surface-2 hover:dark:border-gray-3 hover:border-gray-9 dark:border-gray-6 p8 rounded-md grid gap-2 place-items-center"
+      :class="{ 'border-indigo-5! dark:border-violet-5! bg-indigo-50/30! dark:bg-violet-950/20!': isOverDropZone }"
+      class="border-dashed border grow border-gray-3 dark:border-dark-3 cursor-pointer surface-2 hover:border-indigo-4 dark:hover:border-violet-4 p8 rounded-md grid gap-2 place-items-center transition"
     >
-      <div v-if="isOverDropZone" class="m-auto typo-head">drop image here</div>
+      <div v-if="isOverDropZone" class="m-auto typo-head text-indigo-600 dark:text-violet-400 font-semibold">Drop image here</div>
       <slot v-else>
-        <div class="bg-indigo-1 dark:bg-inherit rounded-md w-max p-4px">
-          <IImg height="48" width="48" class="typo-clr-primary" />
+        <div class="bg-indigo-50 dark:bg-violet-950/40 rounded-md w-max p-2">
+          <IImg height="40" width="40" class="typo-clr-primary" />
         </div>
         <div>
           <p class="typo-base typo-clr-primary">Upload Image</p>

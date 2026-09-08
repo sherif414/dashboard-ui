@@ -1,5 +1,4 @@
-import { createRouter, createWebHistory, RouterView } from 'vue-router'
-import { h } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import home from '~/pages/home/index.vue'
 
@@ -40,34 +39,41 @@ export const router = createRouter({
     {
       name: 'orders',
       path: '/orders',
-      component: { render: () => h(RouterView) },
-      children: [
-        { name: 'orders list', path: '', component: orders },
-        { name: 'order details', path: ':id', component: OrderDetails },
-      ],
+      component: orders,
+    },
+    {
+      name: 'order details',
+      path: '/orders/:id',
+      component: OrderDetails,
     },
 
     // customers
     {
       name: 'customers',
       path: '/customers',
-      component: { render: () => h(RouterView) },
-      children: [
-        { name: 'customers list', path: '', component: customers },
-        { name: 'customer details', path: ':id', component: customerDetails },
-      ],
+      component: customers,
+    },
+    {
+      name: 'customer details',
+      path: '/customers/:id',
+      component: customerDetails,
     },
 
     // products
     {
       name: 'products',
       path: '/products',
-      component: { render: () => h(RouterView) },
-      children: [
-        { name: 'products list', path: '', component: products },
-        { name: 'product add', path: 'add', component: productAdd },
-        { name: 'product details', path: ':id', component: productDetails },
-      ],
+      component: products,
+    },
+    {
+      name: 'product add',
+      path: '/products/add',
+      component: productAdd,
+    },
+    {
+      name: 'product details',
+      path: '/products/:id',
+      component: productDetails,
     },
 
     // conversations

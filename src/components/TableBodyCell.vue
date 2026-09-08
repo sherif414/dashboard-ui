@@ -1,29 +1,46 @@
 <template>
-  <td v-if="variant === 'text'" class="p2 px-4">{{ value ?? '-' }}</td>
-
-  <td v-else-if="variant === 'link' && to" class="p2 px-4">
-    <RouterLink class="hover:underline flex gap-2 items-center" :to="to">
+  <td class="p2 px-4">
+    <RouterLink v-if="variant === 'link' && to" class="hover:underline flex gap-2 items-center" :to="to">
       <IExternalLink width="12" height="12" />
-      {{ value ?? '-' }}
+      <span>{{ value ?? '-' }}</span>
     </RouterLink>
-  </td>
 
-  <td v-else-if="variant === 'date'" class="p2 px-4">{{ useDateFormat(value || '', 'DD MMM YYYY').value || '-' }}</td>
+    <span v-else-if="variant === 'date'">
+      {{ formattedDate }}
+    </span>
 
-  <td v-else-if="variant === 'chip'" class="p2 px-4">
-    <Chip :status="chipStatus || false">{{ value ?? '-' }}</Chip>
+    <Chip v-else-if="variant === 'chip'" :status="chipStatus || false">
+      {{ value ?? '-' }}
+    </Chip>
+
+    <template v-else>
+      {{ value ?? '-' }}
+    </template>
   </td>
 </template>
 
 <script setup lang="ts">
-import { useDateFormat } from '@vueuse/core'
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { IExternalLink } from '~/components/icons'
 import Chip from '~/components/Chip.vue'
 
-defineProps<{
-  variant?: 'date' | 'text' | 'link' | 'chip'
-  chipStatus?: boolean | string | null
-  value: string | number | null
-  to?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    variant?: 'date' | 'text' | 'link' | 'chip'
+    chipStatus?: boolean | string | null
+    value?: string | number | null
+    to?: string
+  }>(),
+  {
+    variant: 'text',
+    value: null,
+  }
+)
+
+const formattedDate = computed(() => {
+  if (!props.value) return '-'
+  const d = new Date(props.value)
+  return isNaN(d.getTime()) ? String(props.value) : d.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
+})
 </script>

@@ -347,7 +347,7 @@
               <td class="py-3 px-4 text-right whitespace-nowrap">
                 <RouterLink
                   :to="`/orders/${order.id}`"
-                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded surface-2 hover:bg-indigo-50 dark:hover:bg-violet-950/30 text-indigo-600 dark:text-violet-400 text-xs font-medium transition"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded surface-2 hover:surface-3 border border-gray-2 dark:border-dark-3 text-indigo-600 dark:text-violet-400 text-xs font-medium transition"
                   title="View order details"
                 >
                   <IEye width="13" height="13" />
@@ -547,11 +547,11 @@ function getCustomerColor(name: string) {
 function getStatusBadgeClass(status?: string | null) {
   switch (status) {
     case 'completed':
-      return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
+      return 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
     case 'canceled':
-      return 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20 hover:bg-rose-500/20'
+      return 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20 hover:bg-rose-500/20'
     default:
-      return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/20'
+      return 'bg-amber-500/10 text-amber-800 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/20'
   }
 }
 

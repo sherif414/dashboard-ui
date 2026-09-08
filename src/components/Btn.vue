@@ -5,8 +5,8 @@
     :type="type"
     :class="{
       'typo-clr-on-primary fill-primary-2 hover:fill-primary-3 active:fill-primary-1 active:scale-[0.98] cursor-pointer shadow-xs': variant === 'primary' && !isDisabled,
-      'hover:surface-2 active:scale-[0.98] cursor-pointer': variant === 'text' && !isDisabled,
-      'fill-primary-3 opacity-70 cursor-not-allowed': isDisabled && variant === 'primary',
+      'typo-clr-primary hover:surface-2 active:scale-[0.98] cursor-pointer': variant === 'text' && !isDisabled,
+      'fill-primary-3 typo-clr-on-primary opacity-70 cursor-not-allowed': isDisabled && variant === 'primary',
       'typo-clr-disabled cursor-not-allowed opacity-60': isDisabled && variant === 'text',
     }"
   >

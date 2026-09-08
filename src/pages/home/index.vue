@@ -238,10 +238,10 @@
             <div class="relative flex-1 h-full min-w-0 overflow-hidden">
               <!-- Background Horizontal Grid Lines -->
               <div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-25 dark:opacity-15 py-1" aria-hidden="true">
-                <div class="border-b border-dashed border-gray-4 dark:border-gray-2 w-full h-0"></div>
-                <div class="border-b border-dashed border-gray-4 dark:border-gray-2 w-full h-0"></div>
-                <div class="border-b border-dashed border-gray-4 dark:border-gray-2 w-full h-0"></div>
-                <div class="border-b border-dashed border-gray-4 dark:border-gray-2 w-full h-0"></div>
+                <div class="border-b border-dashed border-gray-4 dark:border-dark-3 w-full h-0"></div>
+                <div class="border-b border-dashed border-gray-4 dark:border-dark-3 w-full h-0"></div>
+                <div class="border-b border-dashed border-gray-4 dark:border-dark-3 w-full h-0"></div>
+                <div class="border-b border-dashed border-gray-4 dark:border-dark-3 w-full h-0"></div>
               </div>
 
               <!-- Empty State (if no orders in selected period and not loading) -->

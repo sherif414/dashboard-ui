@@ -15,7 +15,7 @@
           isInvalid ? 'bg-opacity-10! bg-error!' : 'surface-2',
           'disabled:(opacity-60 cursor-not-allowed)',
         ]"
-        class="rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none typo-clr-base placeholder:text-gray-4 dark:placeholder:text-gray-5 transition-colors"
+        class="rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none typo-clr-base placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors"
         :style="{ height: `${height}rem` }"
         @[eventType]="handleEmit"
         @invalid="isInvalid = true"

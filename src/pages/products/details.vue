@@ -1,5 +1,6 @@
 <template>
-  <main class="grid place-items-center w-full h-full p8" v-if="hasError">
+  <div class="w-full flex flex-col grow">
+    <main class="grid place-items-center w-full h-full p8" v-if="hasError">
     <div class="flex flex-col items-center gap-3 text-center">
       <IInventory width="48" height="48" class="typo-clr-muted opacity-40" />
       <h1 class="typo-head text-xl font-bold">Product was not found</h1>
@@ -93,9 +94,7 @@
         </Chip>
         <span class="typo-sm typo-clr-muted">
           Date Added:
-          <span class="font-mono font-medium typo-clr-base ml-1">{{
-            product?.created_at ? useDateFormat(product.created_at, 'DD MMM YYYY').value : '-'
-          }}</span>
+          <span class="font-mono font-medium typo-clr-base ml-1">{{ formattedDateAdded }}</span>
         </span>
       </div>
 
@@ -226,12 +225,12 @@
       </BaseTable>
     </section>
   </main>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
-import { useDateFormat } from '@vueuse/core'
 import type { OrderItem, Product } from 'types'
 import { productService } from '~/services/productService'
 import { getProductImageUrl } from '~/services/imageUtils'
@@ -254,6 +253,12 @@ const isLoading = ref(false)
 const isDeleting = ref(false)
 const dialogUnpublish = ref<HTMLDialogElement | null>(null)
 const dialogDelete = ref<HTMLDialogElement | null>(null)
+
+const formattedDateAdded = computed(() => {
+  if (!product.value?.created_at) return '-'
+  const d = new Date(product.value.created_at)
+  return isNaN(d.getTime()) ? product.value.created_at : d.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
+})
 
 const sortColumn = ref('created_at')
 const sortAscending = ref(false)

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col grow p-4 sm:p-6 gap-y-4 surface-1 rounded-md overflow-hidden border border-gray-2 dark:border-dark-3">
     <!-- header  -->
-    <caption v-if="!hideHeader" class="flex flex-wrap items-center gap-4 typo-sm">
+    <header v-if="!hideHeader" class="flex flex-wrap items-center gap-4 typo-sm">
       <!-- search box -->
       <h2 class="typo-head capitalize">{{ tableTitle ?? tableName }}</h2>
       <TextField v-if="showSearch" wrapper-class="ml-0 sm:ml-4" size="sm" placeholder="search" v-model.noLazy="searchValue">
@@ -29,7 +29,7 @@
           </ul>
         </template>
       </TextField>
-    </caption>
+    </header>
 
     <!-- table -->
     <div class="overflow-x-auto overflow-y-hidden grow relative min-h-180px">

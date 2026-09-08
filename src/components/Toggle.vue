@@ -9,14 +9,11 @@
     @keydown.enter.prevent="$emit('update:modelValue', !modelValue)"
     :style="{ transform: scale ? `scale(${scale})` : undefined }"
     class="w-42px h-24px rounded-full relative select-none cursor-pointer inline-block transition-all duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-95 focus:outline-none focus-visible:(ring-2 ring-offset-2 ring-indigo-5 dark:ring-violet-5)"
-    :class="{ 'fill-primary-3': modelValue, 'bg-gray-3 dark:bg-dark-1': !modelValue }"
+    :class="modelValue ? 'fill-primary-2' : 'bg-gray-3 dark:bg-dark-3'"
   >
     <span
-      :class="{
-        'fill-primary-2 translate-x-20px border-indigo-6 dark:border-violet-6': modelValue,
-        'surface-1 border-white dark:border-dark-9 translate-x-3px': !modelValue,
-      }"
-      class="h-18px absolute w-18px left-0 top-0 rounded-full transition-all duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] select-none border-2px translate-y-3px shadow-sm"
+      :class="modelValue ? 'translate-x-20px' : 'translate-x-3px'"
+      class="h-18px absolute w-18px left-0 top-0 rounded-full transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] select-none bg-white shadow-md translate-y-3px"
     ></span>
   </div>
 </template>

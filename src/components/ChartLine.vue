@@ -13,8 +13,11 @@ onMounted(() => {
   const ctx = (document.getElementById('line-chart') as HTMLCanvasElement).getContext('2d')!
   graident = ctx.createLinearGradient(0, 0, 0, ctx.canvas.width)
 
-  graident.addColorStop(0, 'rgba(124, 58, 237, 1)')
-  graident.addColorStop(1, 'rgba(124, 58, 237, 0)')
+  const isDarkMode = document.documentElement.classList.contains('dark')
+  const primaryColor = isDarkMode ? 'rgb(124, 58, 237)' : 'rgb(79, 70, 229)'
+
+  graident.addColorStop(0, isDarkMode ? 'rgba(124, 58, 237, 0.4)' : 'rgba(79, 70, 229, 0.35)')
+  graident.addColorStop(1, isDarkMode ? 'rgba(124, 58, 237, 0)' : 'rgba(79, 70, 229, 0)')
   chart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -25,7 +28,7 @@ onMounted(() => {
           data: [10, 25, 15, 35],
           cubicInterpolationMode: 'monotone',
           backgroundColor: [graident, graident, graident, graident],
-          borderColor: 'violet',
+          borderColor: primaryColor,
           borderWidth: 2,
           fill: true,
         },
