@@ -4,18 +4,18 @@ import { simulateLatency } from './delay'
 
 export const chatService = {
   async getConversations(currentUserId: string): Promise<ConversationWithProfile[]> {
-    await simulateLatency(150, 280)
+    await simulateLatency(600, 900)
     return mockDb.getConversationsWithProfiles(currentUserId)
   },
 
   async getConversationById(id: string, currentUserId: string): Promise<ConversationWithProfile | null> {
-    await simulateLatency(100, 200)
+    await simulateLatency(450, 700)
     const all = mockDb.getConversationsWithProfiles(currentUserId)
     return all.find((c) => c.id === id) ?? null
   },
 
   async findExistingConversation(otherUserId: string, currentUserId: string): Promise<ConversationWithProfile | null> {
-    await simulateLatency(100, 200)
+    await simulateLatency(450, 700)
     const all = mockDb.getConversationsWithProfiles(currentUserId)
     const existing = all.find(
       (c) =>
@@ -26,17 +26,17 @@ export const chatService = {
   },
 
   async createConversation(currentUserId: string, otherUserId: string): Promise<ConversationWithProfile> {
-    await simulateLatency(300, 450)
+    await simulateLatency(700, 1050)
     return mockDb.createConversation(currentUserId, otherUserId)
   },
 
   async getMessages(conversationId: string): Promise<Message[]> {
-    await simulateLatency(120, 220)
+    await simulateLatency(600, 900)
     return mockDb.getMessages(conversationId)
   },
 
   async sendMessage(conversationId: string, sentBy: string, content: string): Promise<Message> {
-    await simulateLatency(150, 250)
+    await simulateLatency(500, 750)
     return mockDb.sendMessage(conversationId, sentBy, content)
   },
 
@@ -49,7 +49,7 @@ export const chatService = {
   },
 
   async searchProfiles(searchTerm: string, excludeUserId?: string): Promise<Profile[]> {
-    await simulateLatency(150, 250)
+    await simulateLatency(450, 700)
     const term = searchTerm.toLowerCase().trim()
     if (!term) return []
     return mockDb.profiles

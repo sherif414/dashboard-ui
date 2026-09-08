@@ -22,7 +22,7 @@ import Chip from '~/components/Chip.vue'
 
 defineProps<{
   variant?: 'date' | 'text' | 'link' | 'chip'
-  chipStatus?: boolean | null
+  chipStatus?: boolean | string | null
   value: string | number | null
   to?: string
 }>()

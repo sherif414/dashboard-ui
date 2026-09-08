@@ -36,6 +36,44 @@ export const useOrderStore = defineStore('order', () => {
     }
   }
 
+  async function updateOrderStatus(id: number, status: string) {
+    try {
+      const { error } = await orderService.updateOrderStatus(id, status)
+      if (error) {
+        useMessage('error', error.message)
+        return false
+      }
+      if (orderList.value) {
+        const found = orderList.value.find((o) => o.id === id)
+        if (found) found.status = status
+      }
+      useMessage('success', `Order #${id} marked as ${status}`)
+      return true
+    } catch (e: any) {
+      useMessage('error', e.message ?? 'Failed to update order status')
+      return false
+    }
+  }
+
+  async function deleteOrder(id: number) {
+    try {
+      const { success, error } = await orderService.deleteOrder(id)
+      if (error || !success) {
+        useMessage('error', error?.message ?? 'Failed to delete order')
+        return false
+      }
+      if (orderList.value) {
+        orderList.value = orderList.value.filter((o) => o.id !== id)
+        if (countAll.value !== null) countAll.value--
+      }
+      useMessage('success', `Order #${id} deleted`)
+      return true
+    } catch (e: any) {
+      useMessage('error', e.message ?? 'Failed to delete order')
+      return false
+    }
+  }
+
   return {
     orderList,
     countAll,
@@ -44,5 +82,7 @@ export const useOrderStore = defineStore('order', () => {
     isLoadingOrders,
     getOrders,
     loadMetrics,
+    updateOrderStatus,
+    deleteOrder,
   }
 })

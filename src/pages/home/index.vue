@@ -2,22 +2,18 @@
   <main class="flex flex-col gap-6 p-4 sm:p-6 lg:p-8 overflow-y-auto overflow-x-hidden w-full">
     <!-- 1. Hero Command & Store Overview Header -->
     <header class="surface-1 rounded-lg p-5 sm:p-6 border border-gray-2 dark:border-dark-3 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
-      <!-- Ambient Glow Subtle Accent -->
-      <div class="absolute -right-20 -top-20 w-60 h-60 rounded-full bg-indigo-5/10 dark:bg-violet-6/15 blur-60px pointer-events-none" aria-hidden="true" />
-
       <div class="flex flex-col gap-1.5 z-1">
-        <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-3 flex-wrap">
+          <h1 class="text-1.5rem sm:text-1.75rem font-bold typo-clr-base tracking-tight font-sans">
+            Store Operations Hub
+          </h1>
           <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-11px font-mono font-medium surface-2 border border-gray-2 dark:border-dark-3 typo-clr-base">
-            <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
-            STORE OVERVIEW
-          </span>
-          <span class="typo-sm typo-clr-muted text-12px font-mono">
-            {{ activePeriodLabel }}
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse motion-reduce:animate-none"></span>
+            <span>Live System</span>
+            <span class="text-gray-4 dark:text-dark-3">·</span>
+            <span class="typo-clr-muted">{{ activePeriodLabel }}</span>
           </span>
         </div>
-        <h1 class="text-1.5rem sm:text-1.75rem font-bold typo-clr-base tracking-tight font-sans">
-          Store Operations Hub
-        </h1>
         <p class="typo-sm typo-clr-muted max-w-xl">
           Real-time sales performance, fulfillment throughput, and live catalog inventory joined in-browser.
         </p>
@@ -26,9 +22,15 @@
       <!-- Controls & Primary Action -->
       <div class="flex items-center gap-3 flex-wrap z-1">
         <!-- Period Segmented Switcher -->
-        <div class="inline-flex p-1 rounded-md surface-2 border border-gray-2 dark:border-dark-3 typo-sm font-medium">
+        <div
+          role="tablist"
+          aria-label="Timeline interval selector"
+          class="inline-flex p-1 rounded-md surface-2 border border-gray-2 dark:border-dark-3 typo-sm font-medium"
+        >
           <button
             type="button"
+            role="tab"
+            :aria-selected="selectedPeriod === period"
             v-for="period in (['all', 'month', 'week', 'day'] as const)"
             :key="period"
             @click="handlePeriodChange(period)"
@@ -41,7 +43,7 @@
           >
             <span
               v-if="selectedPeriod === period && orderStore.isLoadingMetrics"
-              class="w-1.5 h-1.5 rounded-full bg-indigo-6 dark:bg-violet-4 animate-ping shrink-0"
+              class="w-1.5 h-1.5 rounded-full bg-indigo-6 dark:bg-violet-4 animate-ping motion-reduce:animate-none shrink-0"
               aria-hidden="true"
             />
             <span>{{ periodOptionsMap[period] }}</span>
@@ -62,7 +64,7 @@
     <!-- 2. Visual KPI Matrix (Tabular Monospace Stat Tiles with Mini-Metrics) -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <!-- Total Gross Revenue (Anchor Metric Card) -->
-      <div class="surface-1 rounded-lg p-5 border border-indigo-5/30 dark:border-violet-5/30 bg-gradient-to-br from-indigo-5/5 via-surface-1 to-surface-1 dark:from-violet-5/10 dark:via-surface-1 dark:to-surface-1 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-indigo-5/60 dark:hover:border-violet-5/60">
+      <div class="surface-1 rounded-lg p-5 border border-indigo-5/30 dark:border-violet-5/30 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-indigo-5/60 dark:hover:border-violet-5/60">
         <div class="flex items-center justify-between">
           <span class="text-11px font-mono font-bold uppercase tracking-wider typo-clr-primary">Total Revenue</span>
           <div class="w-8 h-8 rounded-md bg-indigo-6 dark:bg-violet-6 text-white flex items-center justify-center shadow-xs">
@@ -71,8 +73,8 @@
         </div>
         <div class="h-[62px] flex flex-col justify-between my-1">
           <template v-if="orderStore.isLoadingMetrics">
-            <div class="h-7 w-36 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
-            <div class="h-3.5 w-28 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
+            <div class="h-7 w-36 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
+            <div class="h-3.5 w-28 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
           </template>
           <template v-else>
             <div class="text-1.75rem sm:text-2rem font-bold font-mono tracking-tight typo-clr-base leading-none">
@@ -80,8 +82,8 @@
             </div>
             <div class="flex items-center gap-1.5 text-12px leading-none">
               <span
-                :class="orderStore.metrics?.revenueDelta?.isPositive ? 'text-success' : 'text-error'"
-                class="font-semibold inline-flex items-center gap-0.5"
+                :class="orderStore.metrics?.revenueDelta?.isPositive ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'"
+                class="font-semibold inline-flex items-center gap-0.5 tabular-nums"
               >
                 {{ orderStore.metrics?.revenueDelta?.isPositive ? '↑' : '↓' }} {{ orderStore.metrics?.revenueDelta?.formatted ?? '+0%' }}
               </span>
@@ -99,14 +101,14 @@
       <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-gray-4 dark:hover:border-dark-1">
         <div class="flex items-center justify-between">
           <span class="text-11px font-mono font-bold uppercase tracking-wider typo-clr-muted">Units Sold</span>
-          <div class="w-8 h-8 rounded-md bg-amber-5/10 dark:bg-amber-5/15 flex items-center justify-center text-warn">
+          <div class="w-8 h-8 rounded-md bg-amber-5/10 dark:bg-amber-5/15 flex items-center justify-center text-amber-700 dark:text-amber-400">
             <ICart width="18" height="18" />
           </div>
         </div>
         <div class="h-[62px] flex flex-col justify-between my-1">
           <template v-if="orderStore.isLoadingMetrics">
-            <div class="h-7 w-24 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
-            <div class="h-3.5 w-28 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
+            <div class="h-7 w-24 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
+            <div class="h-3.5 w-28 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
           </template>
           <template v-else>
             <div class="text-1.75rem sm:text-2rem font-bold font-mono tracking-tight typo-clr-base leading-none">
@@ -114,8 +116,8 @@
             </div>
             <div class="flex items-center gap-1.5 text-12px leading-none">
               <span
-                :class="orderStore.metrics?.unitsDelta?.isPositive ? 'text-success' : 'text-error'"
-                class="font-medium inline-flex items-center gap-0.5"
+                :class="orderStore.metrics?.unitsDelta?.isPositive ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'"
+                class="font-semibold inline-flex items-center gap-0.5 tabular-nums"
               >
                 {{ orderStore.metrics?.unitsDelta?.isPositive ? '↑' : '↓' }} {{ orderStore.metrics?.unitsDelta?.formatted ?? '+0%' }}
               </span>
@@ -133,28 +135,28 @@
       <div class="surface-1 rounded-lg p-5 border border-gray-2 dark:border-dark-3 shadow-xs flex flex-col justify-between min-h-[190px] transition-colors duration-150 hover:border-gray-4 dark:hover:border-dark-1">
         <div class="flex items-center justify-between">
           <span class="text-11px font-mono font-bold uppercase tracking-wider typo-clr-muted">Fulfillment Rate</span>
-          <div class="w-8 h-8 rounded-md bg-success/10 dark:bg-success/15 flex items-center justify-center text-success">
+          <div class="w-8 h-8 rounded-md bg-emerald-500/10 dark:bg-emerald-500/15 flex items-center justify-center text-emerald-700 dark:text-emerald-400">
             <ICheckCircle width="18" height="18" />
           </div>
         </div>
         <div class="h-[62px] flex flex-col justify-between my-1">
           <template v-if="orderStore.isLoadingMetrics">
-            <div class="h-7 w-20 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
-            <div class="h-3.5 w-32 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
+            <div class="h-7 w-20 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
+            <div class="h-3.5 w-32 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
           </template>
           <template v-else>
             <div class="text-1.75rem sm:text-2rem font-bold font-mono tracking-tight typo-clr-base leading-none">
               {{ fulfillmentRatePct }}%
             </div>
             <div class="flex items-center gap-1.5 text-12px leading-none">
-              <span class="text-success font-medium">{{ orderStore.metrics?.completedCount ?? 0 }} fulfilled</span>
+              <span class="text-emerald-700 dark:text-emerald-400 font-semibold">{{ orderStore.metrics?.completedCount ?? 0 }} fulfilled</span>
               <span class="typo-clr-muted">· {{ orderStore.metrics?.pendingCount ?? 0 }} pending</span>
             </div>
           </template>
         </div>
         <div class="pt-2 border-t border-gray-2 dark:border-dark-3 flex justify-between text-11px font-mono typo-clr-muted">
           <span>Cancellation Rate</span>
-          <span class="text-error font-bold tabular-nums">{{ cancelledRatePct }}%</span>
+          <span class="text-rose-600 dark:text-rose-400 font-bold tabular-nums">{{ cancelledRatePct }}%</span>
         </div>
       </div>
 
@@ -168,8 +170,8 @@
         </div>
         <div class="h-[62px] flex flex-col justify-between my-1">
           <template v-if="orderStore.isLoadingMetrics">
-            <div class="h-7 w-28 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
-            <div class="h-3.5 w-30 rounded bg-gray-2 dark:bg-dark-3 animate-pulse" />
+            <div class="h-7 w-28 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
+            <div class="h-3.5 w-30 rounded bg-gray-2 dark:bg-dark-3 animate-pulse motion-reduce:animate-none" />
           </template>
           <template v-else>
             <div class="text-1.75rem sm:text-2rem font-bold font-mono tracking-tight typo-clr-base leading-none">
@@ -177,14 +179,14 @@
               <span class="text-1rem font-normal typo-clr-muted">/ {{ productStore.countAll ?? 0 }}</span>
             </div>
             <div class="flex items-center gap-1.5 text-12px leading-none">
-              <span class="text-success font-medium">{{ orderStore.metrics?.inStockPct ?? 100 }}% In-Stock</span>
+              <span class="text-emerald-700 dark:text-emerald-400 font-semibold">{{ orderStore.metrics?.inStockPct ?? 100 }}% In-Stock</span>
               <span class="typo-clr-muted">active in store</span>
             </div>
           </template>
         </div>
         <div class="pt-2 border-t border-gray-2 dark:border-dark-3 flex justify-between text-11px font-mono typo-clr-muted">
-          <span>Customer Accounts</span>
-          <span class="typo-clr-base font-bold tabular-nums">{{ customerStore.countAll ?? 0 }} registered</span>
+          <span>Catalog Health</span>
+          <span class="typo-clr-base font-bold tabular-nums">{{ orderStore.metrics?.inStockPct ?? 100 }}% optimal</span>
         </div>
       </div>
     </section>
@@ -209,7 +211,10 @@
           </div>
 
           <!-- Scrub Highlight Box -->
-          <div class="flex items-center gap-2 px-3 py-1.5 rounded surface-2 border border-gray-2 dark:border-dark-3 font-mono text-12px">
+          <div
+            aria-live="polite"
+            class="flex items-center gap-2 px-3 py-1.5 rounded surface-2 border border-gray-2 dark:border-dark-3 font-mono text-12px"
+          >
             <span class="typo-clr-muted text-11px uppercase">Inspector:</span>
             <span v-if="hoveredPoint" class="font-bold typo-clr-primary tabular-nums">
               Order #{{ hoveredPoint.orderId }} · ${{ hoveredPoint.amount.toFixed(2) }}
@@ -327,15 +332,48 @@
                 <!-- Incoming / Active Data Points (Blooming into Place) -->
                 <g v-for="(pt, idx) in incomingDots" :key="`in-${idx}-${pt.raw.orderId}`">
                   <circle
+                    :ref="(el) => setDotRef(el, idx)"
+                    role="button"
+                    tabindex="0"
+                    :aria-label="`Order #${pt.raw.orderId}, $${pt.raw.amount.toFixed(2)} at ${pt.raw.time}`"
                     :cx="pt.x"
                     :cy="pt.y"
                     :r="hoveredPoint?.orderId === pt.raw.orderId ? 7 : Math.max(0, 5 * morphProgress)"
                     :opacity="morphProgress"
-                    class="chart-dot fill-white dark:fill-dark-4 stroke-indigo-6 dark:stroke-violet-4 cursor-pointer"
+                    class="chart-dot fill-white dark:fill-dark-4 stroke-indigo-6 dark:stroke-violet-4 cursor-pointer focus:outline-none focus-visible:(stroke-indigo-4 dark:stroke-violet-3 stroke-5)"
                     :stroke-width="hoveredPoint?.orderId === pt.raw.orderId ? 4 : 3"
                     @mouseenter="hoveredPoint = pt.raw"
                     @mouseleave="hoveredPoint = null"
+                    @focus="hoveredPoint = pt.raw"
+                    @blur="hoveredPoint = null"
+                    @keydown.left.prevent="focusNeighborDot(idx - 1)"
+                    @keydown.right.prevent="focusNeighborDot(idx + 1)"
                   />
+                </g>
+                <!-- Floating Anchored Tooltip over active data point -->
+                <g
+                  v-if="hoveredNormalizedPoint"
+                  class="pointer-events-none transition-transform duration-100 ease-out"
+                  :transform="`translate(${Math.min(Math.max(hoveredNormalizedPoint.x, 75), 625)}, ${hoveredNormalizedPoint.y < 45 ? hoveredNormalizedPoint.y + 40 : hoveredNormalizedPoint.y - 30})`"
+                >
+                  <rect
+                    x="-70"
+                    y="-15"
+                    width="140"
+                    height="30"
+                    rx="6"
+                    class="fill-white dark:fill-dark-2 stroke-gray-3 dark:stroke-dark-3"
+                    stroke-width="1"
+                    filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
+                  />
+                  <text
+                    x="0"
+                    y="4"
+                    text-anchor="middle"
+                    class="font-mono text-11px font-bold fill-gray-9 dark:fill-gray-1"
+                  >
+                    Order #{{ hoveredNormalizedPoint.raw.orderId }} · ${{ hoveredNormalizedPoint.raw.amount.toFixed(2) }}
+                  </text>
                 </g>
               </svg>
             </div>
@@ -363,11 +401,11 @@
           </div>
           <div class="flex flex-col">
             <span class="typo-clr-muted text-11px uppercase">Fulfillment Rate</span>
-            <span class="font-bold text-success tabular-nums">{{ fulfillmentRatePct }}%</span>
+            <span class="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">{{ fulfillmentRatePct }}%</span>
           </div>
           <div class="flex flex-col">
-            <span class="typo-clr-muted text-11px uppercase">Data Engine</span>
-            <span class="font-bold typo-clr-primary">mockDb (Local-First)</span>
+            <span class="typo-clr-muted text-11px uppercase">Avg Items / Order</span>
+            <span class="font-bold typo-clr-primary tabular-nums">{{ avgItemsPerOrder }} units</span>
           </div>
         </div>
       </article>
@@ -385,20 +423,27 @@
         </div>
 
         <!-- Proportional Pipeline Progress Rail -->
-        <div class="flex flex-col gap-2">
+        <div
+          role="progressbar"
+          aria-label="Order fulfillment pipeline ratio"
+          :aria-valuenow="fulfillmentRatio.completed"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          class="flex flex-col gap-2"
+        >
           <div class="w-full h-4 rounded-full overflow-hidden flex bg-gray-2 dark:bg-dark-3 border border-gray-2 dark:border-dark-3">
             <div
-              class="h-full bg-success transition-all duration-500"
+              class="h-full bg-emerald-500 transition-all duration-500"
               :style="{ width: `${fulfillmentRatio.completed}%` }"
               :title="`Fulfilled: ${fulfillmentRatio.completed}%`"
             />
             <div
-              class="h-full bg-warn transition-all duration-500"
+              class="h-full bg-amber-500 transition-all duration-500"
               :style="{ width: `${fulfillmentRatio.pending}%` }"
               :title="`Pending: ${fulfillmentRatio.pending}%`"
             />
             <div
-              class="h-full bg-error transition-all duration-500"
+              class="h-full bg-rose-500 transition-all duration-500"
               :style="{ width: `${fulfillmentRatio.cancelled}%` }"
               :title="`Cancelled: ${fulfillmentRatio.cancelled}%`"
             />
@@ -414,7 +459,7 @@
         <div class="flex flex-col gap-2.5">
           <div class="flex items-center justify-between p-2.5 rounded-md surface-2 border border-gray-2 dark:border-dark-3">
             <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-success"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
               <span class="typo-sm font-medium typo-clr-base">Fulfilled Orders</span>
             </div>
             <div class="flex items-center gap-2 font-mono text-12px">
@@ -425,7 +470,7 @@
 
           <div class="flex items-center justify-between p-2.5 rounded-md surface-2 border border-gray-2 dark:border-dark-3">
             <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-warn"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
               <span class="typo-sm font-medium typo-clr-base">Pending Fulfillment</span>
             </div>
             <div class="flex items-center gap-2 font-mono text-12px">
@@ -436,7 +481,7 @@
 
           <div class="flex items-center justify-between p-2.5 rounded-md surface-2 border border-gray-2 dark:border-dark-3">
             <div class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-error"></span>
+              <span class="w-3 h-3 rounded-full bg-rose-500"></span>
               <span class="typo-sm font-medium typo-clr-base">Cancelled Orders</span>
             </div>
             <div class="flex items-center gap-2 font-mono text-12px">
@@ -447,13 +492,13 @@
         </div>
 
         <!-- Quick Route to Fulfillment Queue -->
-        <router-link
+        <RouterLink
           to="/orders"
           class="w-full py-2 px-3 text-center rounded-md surface-2 hover:surface-3 border border-gray-2 dark:border-dark-3 typo-sm font-medium typo-clr-primary transition flex items-center justify-center gap-1.5 focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5)"
         >
           <span>Open Orders Manager</span>
           <IExternalLink width="14" height="14" />
-        </router-link>
+        </RouterLink>
       </article>
     </section>
 
@@ -467,16 +512,16 @@
               <h2 class="typo-head typo-clr-base text-1.15rem">Top Selling Products</h2>
               <p class="typo-sm typo-clr-muted">Ranked by sales revenue</p>
             </div>
-            <router-link to="/products" class="typo-sm typo-clr-primary hover:underline text-12px">
+            <RouterLink to="/products" class="typo-sm typo-clr-primary hover:underline text-12px">
               Catalog →
-            </router-link>
+            </RouterLink>
           </div>
 
-          <div class="flex flex-col divide-y dark:divide-dark-3 divide-gray-2 mt-2">
+          <div v-if="topProductsList.length" class="flex flex-col divide-y dark:divide-dark-3 divide-gray-2 mt-2">
             <div
               v-for="prod in topProductsList"
               :key="prod.id"
-              class="py-3 flex items-center justify-between gap-3 group"
+              class="py-2.5 px-2 -mx-2 rounded-md hover:surface-2 transition-colors flex items-center justify-between gap-3 group"
             >
               <div class="flex items-center gap-3 min-w-0">
                 <img
@@ -485,12 +530,12 @@
                   class="w-10 h-10 rounded-md object-cover border border-gray-2 dark:border-dark-3 group-hover:scale-105 transition shrink-0"
                 />
                 <div class="flex flex-col min-w-0">
-                  <router-link
-                    :to="`/products`"
+                  <RouterLink
+                    :to="`/products/${prod.id}`"
                     class="typo-sm font-medium typo-clr-base group-hover:typo-clr-primary truncate transition"
                   >
                     {{ prod.name }}
-                  </router-link>
+                  </RouterLink>
                   <div class="flex items-center gap-2 text-11px typo-clr-muted font-mono">
                     <span>{{ prod.category }}</span>
                     <span>·</span>
@@ -503,18 +548,23 @@
                 <span class="typo-sm font-bold typo-clr-base tabular-nums">
                   ${{ prod.revenue.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
                 </span>
-                <span class="text-11px text-success tabular-nums">
+                <span class="text-11px text-emerald-700 dark:text-emerald-400 font-semibold tabular-nums">
                   {{ prod.ordersCount }} orders
                 </span>
               </div>
             </div>
+          </div>
+          <div v-else class="py-8 text-center typo-clr-muted typo-sm flex flex-col items-center justify-center gap-1.5">
+            <p class="font-medium typo-clr-base">No product sales in this period</p>
+            <p class="text-11px typo-clr-muted">Top products appear dynamically as store transactions occur.</p>
+            <RouterLink to="/products" class="typo-clr-primary hover:underline text-12px mt-1">Browse Catalog →</RouterLink>
           </div>
         </div>
 
         <!-- Catalog Health Summary Footer -->
         <div class="pt-3 border-t border-gray-2 dark:border-dark-3 flex justify-between items-center text-11px font-mono typo-clr-muted">
           <span>Catalog Health</span>
-          <span class="text-success font-bold tabular-nums">{{ orderStore.metrics?.inStockPct ?? 100 }}% in stock</span>
+          <span class="text-emerald-700 dark:text-emerald-400 font-bold tabular-nums">{{ orderStore.metrics?.inStockPct ?? 100 }}% in stock</span>
         </div>
       </article>
 
@@ -531,6 +581,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useProductsStore } from '~/store/products'
 import { useCustomersStore } from '~/store/customers'
 import { useOrderStore } from '~/store/orders'
@@ -581,6 +632,13 @@ const avgOrderValue = computed(() => {
   const rev = orderStore.metrics?.totalRevenue || 0
   if (!count) return '0.00'
   return (rev / count).toFixed(2)
+})
+
+const avgItemsPerOrder = computed(() => {
+  const count = orderStore.metrics?.allOrdersCount || 0
+  const units = orderStore.metrics?.salesVolume || 0
+  if (!count) return '0.0'
+  return (units / count).toFixed(1)
 })
 
 const fulfillmentRatePct = computed(() => {
@@ -764,10 +822,33 @@ function buildPathFromSamples(samples: number[]): string {
   return path
 }
 
+const dotRefs = ref<(SVGCircleElement | null)[]>([])
+function setDotRef(el: any, idx: number) {
+  if (el) dotRefs.value[idx] = el as SVGCircleElement
+}
+
+function focusNeighborDot(targetIdx: number) {
+  if (!incomingDots.value.length) return
+  const clamped = Math.max(0, Math.min(targetIdx, incomingDots.value.length - 1))
+  const targetEl = dotRefs.value[clamped]
+  if (targetEl && typeof targetEl.focus === 'function') {
+    targetEl.focus()
+    hoveredPoint.value = incomingDots.value[clamped]?.raw || null
+  }
+}
+
 function animateMorph(fromSamples: number[], toSamples: number[], duration = 380) {
   if (morphAnimId !== null) {
     cancelAnimationFrame(morphAnimId)
     morphAnimId = null
+  }
+
+  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (prefersReducedMotion) {
+    activeSamples.value = [...toSamples]
+    morphProgress.value = 1
+    outgoingDots.value = []
+    return
   }
 
   const startTime = performance.now()

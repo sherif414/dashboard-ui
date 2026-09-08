@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col grow p-4 sm:p-6 gap-y-4 surface-1 rounded-md overflow-auto border border-gray-2 dark:border-dark-3">
+  <div class="flex flex-col grow p-4 sm:p-6 gap-y-4 surface-1 rounded-md overflow-hidden border border-gray-2 dark:border-dark-3">
     <!-- header  -->
     <caption v-if="!hideHeader" class="flex flex-wrap items-center gap-4 typo-sm">
       <!-- search box -->
@@ -32,7 +32,7 @@
     </caption>
 
     <!-- table -->
-    <div class="overflow-auto grow relative min-h-180px">
+    <div class="overflow-x-auto overflow-y-hidden grow relative min-h-180px">
       <!-- Progress shimmer line across top of table when loading -->
       <div
         v-if="isTableLoading"

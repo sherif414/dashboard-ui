@@ -17,18 +17,18 @@ const props = defineProps<{
 const chipClass = computed(() => {
   if (typeof props.status === 'boolean') {
     return props.status
-      ? 'bg-success/15 text-success dark:text-emerald-400'
-      : 'bg-warn/15 text-warn dark:text-amber-400'
+      ? 'bg-emerald-100/70 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300 border border-emerald-300/40 dark:border-emerald-500/20'
+      : 'bg-amber-100/70 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300 border border-amber-300/40 dark:border-amber-500/20'
   }
 
   const s = String(props.status ?? '').toLowerCase()
   if (s === 'completed' || s === 'active' || s === 'published') {
-    return 'bg-success/15 text-success dark:text-emerald-400'
+    return 'bg-emerald-100/70 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300 border border-emerald-300/40 dark:border-emerald-500/20'
   }
   if (s === 'cancelled' || s === 'canceled' || s === 'damaged' || s === 'inactive') {
-    return 'bg-error/15 text-error dark:text-rose-400'
+    return 'bg-rose-100/70 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300 border border-rose-300/40 dark:border-rose-500/20'
   }
   // Default pending / in-progress / other
-  return 'bg-warn/15 text-warn dark:text-amber-400'
+  return 'bg-amber-100/70 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300 border border-amber-300/40 dark:border-amber-500/20'
 })
 </script>

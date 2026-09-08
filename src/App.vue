@@ -42,10 +42,10 @@
           <transition name="header-slide" appear>
             <TheHeader />
           </transition>
-          <div class="grow overflow-y-auto relative">
+          <div id="main-content" class="grow overflow-y-scroll relative">
             <router-view v-slot="{ Component, route: currentRoute }">
               <transition name="page-fade" mode="out-in">
-                <component :is="Component" :key="currentRoute.path" />
+                <component :is="Component" :key="(currentRoute.meta.pageKey as string) || currentRoute.path" />
               </transition>
             </router-view>
           </div>

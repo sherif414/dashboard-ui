@@ -3,7 +3,8 @@ import { mockDb } from './mock/mockDb'
 import { simulateLatency } from './delay'
 
 export interface OrderWithCustomer extends Order {
-  customers: { name: string | null } | null
+  customers: { name: string | null; email?: string | null; phone?: string | null } | null
+  itemsCount?: number
 }
 
 export interface OrderDetailsResponse extends Order {
@@ -61,9 +62,33 @@ export interface DashboardMetrics {
 }
 
 export const orderService = {
-  async getOrders({ orderOptions, itemsPerPage, page }: getTableDataParams): Promise<{ data: OrderWithCustomer[]; count: number }> {
-    await simulateLatency(180, 300)
+  async getOrders({ orderOptions, itemsPerPage, page, filter }: getTableDataParams): Promise<{ data: OrderWithCustomer[]; count: number }> {
+    await simulateLatency(650, 950)
     let list = [...mockDb.orders]
+
+    // Filtering
+    if (filter) {
+      if (filter.status && filter.status !== 'all') {
+        list = list.filter((o) => o.status === filter.status)
+      }
+      if (filter.type && filter.type !== 'all') {
+        list = list.filter((o) => o.type?.toLowerCase() === filter.type?.toLowerCase())
+      }
+      if (filter.query) {
+        const q = filter.query.toLowerCase().trim()
+        list = list.filter((o) => {
+          const customer = mockDb.getCustomer(o.owner)
+          return (
+            String(o.id).includes(q) ||
+            (customer?.name && customer.name.toLowerCase().includes(q)) ||
+            (customer?.email && customer.email.toLowerCase().includes(q)) ||
+            (o.note && o.note.toLowerCase().includes(q)) ||
+            (o.type && o.type.toLowerCase().includes(q)) ||
+            (o.status && o.status.toLowerCase().includes(q))
+          )
+        })
+      }
+    }
 
     // Sorting
     const { column, ascending } = orderOptions
@@ -85,9 +110,11 @@ export const orderService = {
     const from = (page - 1) * itemsPerPage
     const paginated = list.slice(from, from + itemsPerPage).map((order) => {
       const customer = mockDb.getCustomer(order.owner)
+      const items = mockDb.order_items.filter((item) => item.order_id === order.id)
       return {
         ...order,
-        customers: customer ? { name: customer.name } : null,
+        customers: customer ? { name: customer.name, email: customer.email, phone: customer.phone } : null,
+        itemsCount: items.length,
       }
     })
 
@@ -95,7 +122,7 @@ export const orderService = {
   },
 
   async getOrderById(id: number): Promise<OrderDetailsResponse | null> {
-    await simulateLatency(120, 220)
+    await simulateLatency(500, 800)
     const order = mockDb.getOrder(id)
     if (!order) return null
 
@@ -120,7 +147,7 @@ export const orderService = {
     },
     items: Omit<OrderItem, 'order_id' | 'created_at'>[]
   ): Promise<{ data: Order | null; error: null | { message: string } }> {
-    await simulateLatency(450, 650)
+    await simulateLatency(850, 1300)
     try {
       const newOrder = mockDb.insertOrder({
         owner: orderData.owner,
@@ -149,7 +176,7 @@ export const orderService = {
   },
 
   async updateOrderStatus(id: number, status: string): Promise<{ data: Order | null; error: null | { message: string } }> {
-    await simulateLatency(300, 450)
+    await simulateLatency(700, 1050)
     const order = mockDb.getOrder(id)
     if (!order) return { data: null, error: { message: 'Order not found' } }
 
@@ -164,14 +191,14 @@ export const orderService = {
   },
 
   async deleteOrder(id: number): Promise<{ success: boolean; error: null | { message: string } }> {
-    await simulateLatency(350, 500)
+    await simulateLatency(750, 1100)
     const success = mockDb.deleteOrder(id)
     if (!success) return { success: false, error: { message: 'Order could not be found or deleted' } }
     return { success: true, error: null }
   },
 
   async getRecentOrders(limit: number = 20): Promise<RecentOrderItem[]> {
-    await simulateLatency(180, 280)
+    await simulateLatency(600, 900)
     const sortedItems = [...mockDb.order_items].sort(
       (a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime()
     )
@@ -195,7 +222,7 @@ export const orderService = {
   },
 
   async getDashboardMetrics(period: 'day' | 'week' | 'month' | 'all' = 'all'): Promise<DashboardMetrics> {
-    await simulateLatency(220, 360)
+    await simulateLatency(700, 1050)
     const allOrders = [...mockDb.orders]
     const allItems = [...mockDb.order_items]
 

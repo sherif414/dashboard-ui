@@ -7,10 +7,13 @@
       <input
         ref="inputEl"
         :aria-label="!label ? ($attrs['aria-label'] as string || $attrs['placeholder'] as string) : undefined"
+        :aria-invalid="isInvalid ? 'true' : undefined"
+        :aria-describedby="isInvalid ? errorId : undefined"
         :class="[
           $slots.prepend ? 'pl-11' : 'pl-4',
           $slots.append ? 'pr-11' : 'pr-4',
           isInvalid ? 'bg-opacity-10! bg-error!' : 'surface-2',
+          'disabled:(opacity-60 cursor-not-allowed)',
         ]"
         class="rounded-md outline-none outline-offset-0! focus:(dark:outline-violet outline-indigo-4) w-full resize-none typo-clr-base placeholder:text-gray-4 dark:placeholder:text-gray-5 transition-colors"
         :style="{ height: `${height}rem` }"
@@ -36,7 +39,7 @@
       </div>
       <slot name="dropdown"></slot>
     </div>
-    <div v-show="isInvalid" class="text-error text-11px mt-0.5 leading-tight">
+    <div :id="errorId" v-show="isInvalid" class="text-error text-11px mt-0.5 leading-tight">
       {{ _errorMsg ?? 'invalid input' }}
     </div>
   </label>
@@ -65,6 +68,7 @@ const height = computed(() => {
 })
 const eventType = computed(() => (modelModifiers?.noLazy ? 'input' : 'change'))
 const isInvalid = ref(false)
+const errorId = `tf-err-${Math.random().toString(36).slice(2, 8)}`
 
 function handleEmit(e: Event) {
   let value: string | number | undefined = (e.target as HTMLInputElement)?.value

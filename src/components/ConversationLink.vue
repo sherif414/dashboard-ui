@@ -1,23 +1,24 @@
 <template>
   <RouterLink
-    exact-active-class="surface-2! font-medium shadow-xs"
+    exact-active-class="surface-2! font-medium shadow-xs border-l-3 border-indigo-5 dark:border-violet-5"
     :to="`/chat/${conversationId}`"
-    class="transition-colors duration-150 grid grid-cols-[max-content_1fr] p2 px-4 gap-x-3 rounded-md mx-2 hover:surface-2"
+    class="transition-all duration-150 grid grid-cols-[max-content_1fr] p2 px-3 gap-x-3 rounded-md mx-2 hover:surface-2 group focus:outline-none focus-visible:(ring-2 ring-indigo-5 dark:ring-violet-5)"
+    :aria-label="`Chat with ${title ?? 'Contact'}`"
   >
     <img
-      class="w-10 self-center h-10 rounded-full overflow-hidden object-cover"
+      class="w-10 self-center h-10 rounded-full overflow-hidden object-cover border border-gray-2 dark:border-dark-3 shrink-0"
       :src="avatarLink"
-      alt="avatar"
+      :alt="title ? `${title}'s avatar` : ''"
     />
-    <div class="flex flex-col gap-2 justify-center typo-sm min-w-0">
-      <h3 class="truncate">{{ title ?? 'user name' }}</h3>
-      <div class="typo-clr-muted flex justify-between gap-4 min-w-0">
-        <span class="truncate">
-          <slot></slot>
+    <div class="flex flex-col gap-1 justify-center typo-sm min-w-0">
+      <div class="flex justify-between items-center gap-2 min-w-0">
+        <h3 class="truncate font-medium typo-clr-base">{{ title ?? 'User' }}</h3>
+        <span class="shrink-0 text-11px typo-clr-muted tabular-nums" v-if="relativeTime">
+          {{ relativeTime }}
         </span>
-        <span class="shrink-0" v-if="lastMessageDate">
-          {{ useTimeAgo(new Date(lastMessageDate)).value }}
-        </span>
+      </div>
+      <div class="typo-clr-muted text-xs truncate">
+        <slot></slot>
       </div>
     </div>
   </RouterLink>
@@ -25,15 +26,34 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTimeAgo } from '@vueuse/core'
 import { getProfileImageUrl } from '~/services/imageUtils'
 
-const { avatar = '' } = defineProps<{
+const props = defineProps<{
   conversationId: string
   title?: string | null
   avatar?: string | null
   lastMessageDate?: string | null
 }>()
 
-const avatarLink = computed(() => getProfileImageUrl(avatar))
+const avatarLink = computed(() => getProfileImageUrl(props.avatar))
+
+const relativeTime = computed(() => {
+  if (!props.lastMessageDate) return ''
+  try {
+    const d = new Date(props.lastMessageDate)
+    if (isNaN(d.getTime())) return ''
+    const now = Date.now()
+    const diffMs = now - d.getTime()
+    const diffMins = Math.floor(diffMs / 60000)
+    if (diffMins < 1) return 'just now'
+    if (diffMins < 60) return `${diffMins}m ago`
+    const diffHours = Math.floor(diffMins / 60)
+    if (diffHours < 24) return `${diffHours}h ago`
+    const diffDays = Math.floor(diffHours / 24)
+    if (diffDays < 7) return `${diffDays}d ago`
+    return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
+  } catch {
+    return ''
+  }
+})
 </script>

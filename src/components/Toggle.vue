@@ -2,6 +2,7 @@
   <div
     role="switch"
     :aria-checked="modelValue"
+    :aria-label="ariaLabel || ($attrs['aria-label'] as string)"
     tabindex="0"
     @click="$emit('update:modelValue', !modelValue)"
     @keydown.space.prevent="$emit('update:modelValue', !modelValue)"
@@ -25,6 +26,7 @@ withDefaults(
   defineProps<{
     modelValue?: boolean
     scale?: number
+    ariaLabel?: string
   }>(),
   {
     modelValue: false,

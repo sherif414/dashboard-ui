@@ -4,7 +4,7 @@ import { simulateLatency } from './delay'
 
 export const authService = {
   async login(email: string, password?: string): Promise<{ user: User; profile: Profile } | { error: { message: string } }> {
-    await simulateLatency(450, 650)
+    await simulateLatency(800, 1200)
     const trimmedEmail = email?.trim()
     if (!trimmedEmail || !password) {
       return { error: { message: 'Please provide both email and password' } }
@@ -43,7 +43,7 @@ export const authService = {
   },
 
   async signUp(email: string, password: string, fullName: string): Promise<{ error: null | { message: string } }> {
-    await simulateLatency(500, 750)
+    await simulateLatency(850, 1300)
     const trimmedEmail = email?.trim()
     const trimmedName = fullName?.trim()
 
@@ -74,7 +74,7 @@ export const authService = {
   },
 
   async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<{ error: null | { message: string } }> {
-    await simulateLatency(450, 650)
+    await simulateLatency(800, 1200)
     const user = mockDb.users.find((u) => u.id === userId)
     if (!user) {
       return { error: { message: 'User not found' } }
@@ -90,23 +90,23 @@ export const authService = {
   },
 
   async signOut(): Promise<{ error: null }> {
-    await simulateLatency(200, 350)
+    await simulateLatency(500, 750)
     mockDb.emit('auth_state_change', { event: 'SIGNED_OUT', session: null })
     return { error: null }
   },
 
   async getUser(userId: string): Promise<User | null> {
-    await simulateLatency(80, 150)
+    await simulateLatency(450, 650)
     return mockDb.users.find((u) => u.id === userId) ?? null
   },
 
   async getProfile(userId: string): Promise<Profile | null> {
-    await simulateLatency(80, 150)
+    await simulateLatency(450, 650)
     return mockDb.getProfile(userId)
   },
 
   async updateProfile(userId: string, userProfile: Partial<Profile>, imageFile?: File | null): Promise<{ profile: Profile | null; error: null | { message: string } }> {
-    await simulateLatency(450, 650)
+    await simulateLatency(800, 1200)
     let imagePath: string | null = null
     if (imageFile) {
       try {

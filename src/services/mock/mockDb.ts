@@ -215,6 +215,14 @@ class MockDatabase {
     return product
   }
 
+  public deleteProduct(id: number): boolean {
+    const index = this.data.products.findIndex((p) => p.id === id)
+    if (index === -1) return false
+    this.data.products.splice(index, 1)
+    this.save()
+    return true
+  }
+
   // --- Orders & Items ---
   public getOrder(id: number): Order | null {
     return this.data.orders.find((o) => o.id === id) ?? null
@@ -355,8 +363,8 @@ class MockDatabase {
     this.emit('message_any', newMessage)
 
     // Interactive Demo feature: Trigger simulated auto-reply from contact after 1.2 seconds
-    if (conv && sentBy === conv.created_by) {
-      const contactId = conv.other_member_id
+    if (conv) {
+      const contactId = conv.created_by === sentBy ? conv.other_member_id : conv.created_by
       if (contactId && contactId !== sentBy) {
         this.scheduleSimulatedReply(conversationId, contactId, content)
       }

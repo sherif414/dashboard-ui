@@ -44,25 +44,30 @@
           </template>
           <template #dropdown>
             <ul
-              class="absolute z-9 max-h-56 w-full rounded-md overflow-auto divide-y-1 dark:divide-dark-3 surface-2 shadow-md top-115% border border-gray-2 dark:border-dark-3 left-0 hidden [input:active~&]:block [input:focus~&]:block"
+              class="absolute z-20 max-h-56 w-full rounded-md overflow-auto divide-y-1 dark:divide-dark-3 surface-2 shadow-lg top-115% border border-gray-2 dark:border-dark-3 left-0"
               v-if="searchResults?.length"
+              role="listbox"
+              aria-label="Product search results"
             >
               <li
-                class="p2 grid grid-cols-[max-content_1fr] grid-rows-2 gap-1 gap-x-2 typo-sm typo-clr-muted hover:surface-1 cursor-pointer"
+                class="p2 grid grid-cols-[max-content_1fr] grid-rows-2 gap-1 gap-x-2 typo-sm typo-clr-muted hover:surface-1 focus:surface-1 focus:outline-none cursor-pointer transition"
                 v-for="product in searchResults"
                 :key="product.id"
-                @click="handleSearchResultClick(product)"
+                role="option"
+                tabindex="0"
+                @mousedown.prevent="handleSearchResultClick(product)"
+                @keydown.enter.prevent="handleSearchResultClick(product)"
               >
                 <img
                   class="w-8 h-8 rounded-full row-span-2 col-span-1 self-center overflow-hidden object-cover"
                   :src="getProductImageUrl(product.image)"
-                  :alt="`${product.name}'s image'`"
+                  :alt="`${product.name} thumbnail`"
                 />
-                <span class="row-span-1 col-span-1 typo-clr-base">
+                <span class="row-span-1 col-span-1 typo-clr-base font-medium">
                   {{ product.name }}
                 </span>
-                <div class="flex justify-between items-center gap-x-12">
-                  <span>Price: ${{ product.sell_price }}</span>
+                <div class="flex justify-between items-center gap-x-12 text-11px font-mono">
+                  <span>Price: ${{ Number(product.sell_price ?? 0).toFixed(2) }}</span>
                   <span>Stock: {{ product.stock }}</span>
                 </div>
               </li>
@@ -82,10 +87,10 @@
               :key="item.product.id ?? idx"
               class="grid grid-cols-[max-content_max-content_1fr] grid-rows-2 gap-x-2 gap-y-1 items-center p2 transition-all duration-200"
             >
-              <img class="w-12 h-12 row-span-2 object-cover rounded" :src="getProductImageUrl(item.product.image)" alt="product image" />
-              <h3>{{ item.product.name ?? '-' }}</h3>
-              <button type="button" @click="removeItem(item)" class="justify-self-end text-error hover:underline active:scale-95 transition cursor-pointer">remove</button>
-              <span>${{ item.product.sell_price ?? '-' }}</span>
+              <img class="w-12 h-12 row-span-2 object-cover rounded border border-gray-2 dark:border-dark-3" :src="getProductImageUrl(item.product.image)" :alt="item.product.name ?? 'Product'" />
+              <h3 class="font-medium typo-clr-base">{{ item.product.name ?? '-' }}</h3>
+              <button type="button" @click="removeItem(item)" class="justify-self-end text-rose-600 dark:text-rose-400 hover:underline active:scale-95 transition cursor-pointer text-12px font-medium">Remove</button>
+              <span class="font-mono tabular-nums typo-clr-muted">${{ Number(item.product.sell_price ?? 0).toFixed(2) }}</span>
               <div class="justify-self-end flex gap-3 items-center">
                 <IMinus
                   @click="item.quantity > 1 ? item.quantity-- : removeItem(item)"
@@ -93,7 +98,7 @@
                   width="12"
                   height="12"
                 />
-                <span class="typo-base">{{ item.quantity }}</span>
+                <span class="typo-base font-mono tabular-nums font-bold">{{ item.quantity }}</span>
                 <IAdd
                   @click="item.quantity++"
                   class="box-content py-1 px-2 surface-2 hover:surface-3 active:scale-90 transition rounded-lg cursor-pointer"
@@ -112,14 +117,21 @@
             height="48"
             class="surface-2 [&_path]:stroke-gray-4 stroke-width-2 p-6 box-content rounded-full mx-auto"
           />
-          <h3 class="typo-head text-center">Add Products To Your Order</h3>
+          <h3 class="typo-head text-center font-semibold">Add Products To Your Order</h3>
+          <p class="text-11px typo-clr-muted text-center max-w-xs -mt-2">Search the product catalog above to select items for this order.</p>
         </div>
       </section>
 
       <!-- dialog submission -->
-      <div class="md:col-span-2 flex justify-end gap-3 pt-4 border-t border-gray-2 dark:border-dark-3">
-        <Btn type="button" variant="text" @click="target?.close()">cancel</Btn>
-        <Btn :loading="isSubmitting" :disabled="!orderItemsList.length" type="submit">Create Order</Btn>
+      <div class="md:col-span-2 flex items-center justify-between gap-3 pt-4 border-t border-gray-2 dark:border-dark-3">
+        <div class="font-mono">
+          <span class="typo-clr-muted text-11px uppercase block">Order Total</span>
+          <span class="typo-head font-bold typo-clr-base tabular-nums">${{ getTotalPrice().toFixed(2) }}</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <Btn type="button" variant="text" @click="target?.close()">Cancel</Btn>
+          <Btn :loading="isSubmitting" :disabled="!orderItemsList.length" type="submit">Create Order</Btn>
+        </div>
       </div>
     </form>
   </dialog>

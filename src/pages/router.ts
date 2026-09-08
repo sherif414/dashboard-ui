@@ -54,7 +54,7 @@ export const router = createRouter({
       component: { render: () => h(RouterView) },
       children: [
         { name: 'customers list', path: '', component: customers },
-        { name: 'customer add', path: ':id', component: customerDetails },
+        { name: 'customer details', path: ':id', component: customerDetails },
       ],
     },
 
@@ -75,6 +75,7 @@ export const router = createRouter({
       name: 'chat',
       path: '/chat',
       component: chat,
+      meta: { pageKey: 'chat' },
       children: [{ name: 'conversation view', path: ':id', component: ConversationView }],
     },
 
@@ -83,7 +84,8 @@ export const router = createRouter({
       name: 'settings',
       path: '/settings',
       component: settings,
-      redirect: '/settings/personalize',
+      redirect: '/settings/edit-info',
+      meta: { pageKey: 'settings' },
       children: [
         { name: 'edit info', path: 'edit-info', component: SettingsEditInfo },
         { name: 'personalize', path: 'personalize', component: SettingsPersonalize },

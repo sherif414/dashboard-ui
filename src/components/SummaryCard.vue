@@ -41,11 +41,17 @@
 
     <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 pt-1 text-left">
       <div v-for="{ name, value, growth } in data" :key="name" class="flex flex-col gap-0.5 min-w-0">
-        <p class="typo-sm font-medium typo-clr-muted truncate uppercase tracking-wider text-11px">
+        <p
+          class="typo-sm font-medium typo-clr-muted truncate uppercase tracking-wider text-11px"
+          :class="fill === 'primary' ? 'text-white/80!' : ''"
+        >
           {{ name }}
         </p>
         <div class="flex items-baseline gap-1.5 flex-wrap">
-          <p class="text-1.35rem sm:text-1.5rem font-bold font-mono tracking-tight typo-clr-base leading-tight">
+          <p
+            class="text-1.35rem sm:text-1.5rem font-bold font-mono tracking-tight typo-clr-base leading-tight"
+            :class="fill === 'primary' ? 'text-white!' : ''"
+          >
             {{ !!value || value === 0 ? value : '-' }}
           </p>
           <span

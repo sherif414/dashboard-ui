@@ -30,6 +30,7 @@ export interface Customer {
   phone: string | null
   status: boolean | null
   email: string | null
+  address?: string | null
 }
 
 export interface CustomerTable {
@@ -39,6 +40,8 @@ export interface CustomerTable {
   created_at: string | null
   phone: string | null
   status: boolean | null
+  ordersCount?: number
+  totalSpent?: number
 }
 
 export interface Product {
@@ -66,6 +69,8 @@ export interface ProductTable {
   category: string | null
   stock: number | null
   sell_price: number | null
+  cost_price?: number | null
+  image?: string | null
   delivery_type: string[] | null
   published: boolean | null
 }
@@ -133,4 +138,19 @@ export interface getTableDataParams {
   itemsPerPage: number
   page: number
   orderOptions: { column: string; foreignTable: string; ascending: boolean }
+  filter?: {
+    status?: string | boolean
+    type?: string
+    category?: string
+    published?: string | boolean
+    stockStatus?: string
+    query?: string
+  }
 }
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    pageKey?: string
+  }
+}
+
